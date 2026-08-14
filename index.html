@@ -121,6 +121,18 @@
       font-size: 20px;
     }
 
+    .icon-button svg {
+      width: 21px;
+      height: 21px;
+      display: block;
+      margin: auto;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .back-button {
       display: none;
       font-size: 30px;
@@ -595,8 +607,18 @@
     <header class="topbar">
       <button class="back-button" type="button" aria-label="뒤로">‹</button>
       <div class="title">요매거진</div>
-      <button class="icon-button" type="button" data-open="settings" aria-label="알림">♡</button>
-      <button class="icon-button" type="button" data-open="write" aria-label="글쓰기">✎</button>
+      <button class="icon-button" type="button" data-open="community" aria-label="검색">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4-4"></path>
+        </svg>
+      </button>
+      <button class="icon-button" type="button" data-open="settings" aria-label="알림">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+          <path d="M10 21h4"></path>
+        </svg>
+      </button>
     </header>
 
     <main class="screen active" data-screen="home">
