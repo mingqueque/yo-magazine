@@ -343,7 +343,7 @@
       font-size: 16px;
       line-height: 1.55;
     }
-    .comment-input { display: flex; gap: 8px; flex-wrap: wrap; }
+    .comment-input { display: flex; gap: 8px; flex-wrap: nowrap; }
     .comment {
       padding: 14px 0;
       border-bottom: 1px solid var(--line);
@@ -361,6 +361,16 @@
       padding: 10px 12px;
       border-top: 1px solid var(--line);
       background: #ffffff;
+    }
+    .comment-input input {
+      flex: 1;
+      min-width: 0;
+      height: 48px;
+    }
+    .comment-input .btn {
+      flex: 0 0 62px;
+      height: 48px;
+      padding: 0;
     }
     input, textarea, select {
       width: 100%;
