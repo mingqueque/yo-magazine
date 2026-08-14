@@ -591,7 +591,6 @@
 
     <main class="screen" data-screen="community">
       <div class="chips" id="community-chips"></div>
-      <div class="section-head"><h3 id="community-title">전체</h3></div>
       <div class="sort"><button class="active" type="button">최신순</button><button type="button">좋아요순</button></div>
       <div data-post-list="community"></div>
       <button class="fab" type="button" data-open="write" aria-label="글쓰기">✎</button>
@@ -818,7 +817,6 @@
       document.getElementById('community-chips').innerHTML = all.map(name =>
         `<button class="chip ${name === selectedCategory ? 'active' : ''}" type="button" data-chip="${name}">${name}</button>`
       ).join('');
-      document.getElementById('community-title').textContent = selectedCategory;
       renderPosts('community', selectedCategory === '전체' ? posts : posts.filter(post => post.category === selectedCategory));
     }
     function renderNotifications() {
