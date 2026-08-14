@@ -110,6 +110,19 @@
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+    .topbar .kebab {
+      display: none;
+      color: #ffffff;
+    }
+    .topbar.detail-mode .title {
+      color: transparent;
+    }
+    .topbar.detail-mode .icon {
+      display: none;
+    }
+    .topbar.detail-mode .kebab {
+      display: grid;
+    }
 
     .screen {
       display: none;
@@ -312,12 +325,7 @@
       border-bottom: 1px solid var(--line);
       margin-bottom: 14px;
     }
-    .detail-head {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    .detail-head .meta { flex: 1; min-width: 0; }
+    .detail-head { margin-bottom: 7px; }
     .kebab {
       width: 34px;
       height: 34px;
@@ -347,6 +355,9 @@
     .comment {
       padding: 14px 0;
       border-bottom: 1px solid var(--line);
+    }
+    .comment .thread-action {
+      margin-top: 10px;
     }
     .deleted {
       color: var(--muted);
@@ -574,6 +585,7 @@
       <button class="icon" type="button" data-open="notifications" aria-label="알림">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
       </button>
+      <button class="kebab" type="button" data-open="report" aria-label="게시글 더보기">⋮</button>
     </header>
 
     <main class="screen active" data-screen="home">
@@ -600,7 +612,6 @@
       <article class="detail">
         <div class="detail-head">
           <div class="meta"><strong id="detail-author"></strong><span id="detail-time"></span></div>
-          <button class="kebab" type="button" data-open="report" aria-label="게시글 더보기">⋮</button>
         </div>
         <h2 id="detail-title"></h2>
         <p id="detail-body"></p>
@@ -614,13 +625,17 @@
       <div class="comment">
         <div class="meta"><strong>익명8</strong><span>3분 전</span></div>
         <div class="post-body">시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.</div>
-        <button class="btn" type="button">좋아요 2</button>
+        <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>2</span>
+        </button>
       </div>
       <div class="comment deleted">삭제된 댓글입니다.</div>
       <div class="comment">
         <div class="meta"><strong>익명9</strong><span>10분 전</span><span>수정됨</span></div>
         <div class="post-body">저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.</div>
-        <button class="btn" type="button">좋아요 5</button>
+        <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>5</span>
+        </button>
       </div>
       <div class="comment-input">
         <input aria-label="댓글 입력" placeholder="댓글을 입력하세요">
@@ -749,7 +764,7 @@
     const titles = {
       home: 'Yo!',
       community: '커뮤니티',
-      detail: '게시글 상세',
+      detail: '',
       write: '글쓰기',
       mypage: '마이페이지',
       account: '계정 정보',
@@ -837,6 +852,7 @@
         if (active) screen.scrollTop = 0;
       });
       document.querySelector('.title').textContent = titles[name] || 'Yo!';
+      document.querySelector('.topbar').classList.toggle('detail-mode', name === 'detail');
       document.querySelector('.back').style.display = ['home', 'community', 'mypage'].includes(name) ? 'none' : 'block';
       document.querySelector('.tabs').style.display = name === 'detail' ? 'none' : 'grid';
       document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name));
