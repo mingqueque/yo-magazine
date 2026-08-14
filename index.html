@@ -200,58 +200,6 @@
       border-color: var(--active-press);
     }
 
-    .search-pill {
-      height: 64px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 48px;
-      align-items: center;
-      gap: 0;
-      margin: 0 0 18px;
-      padding: 8px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-    }
-
-    .search-segment {
-      border: 0;
-      border-right: 1px solid var(--line-soft);
-      background: transparent;
-      color: var(--text);
-      text-align: left;
-      padding: 5px 14px;
-      min-width: 0;
-      cursor: pointer;
-    }
-
-    .search-segment strong {
-      display: block;
-      font-size: 12px;
-      line-height: 1.33;
-      font-weight: 700;
-    }
-
-    .search-segment span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.23;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .search-action {
-      width: 48px;
-      height: 48px;
-      border: 0;
-      border-radius: 50%;
-      background: var(--active);
-      color: #ffffff;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
     .section-head {
       display: flex;
       align-items: center;
@@ -274,21 +222,22 @@
     }
 
     .category-grid {
-      display: block;
-      border-top: 1px solid var(--line-soft);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .category {
       width: 100%;
-      min-height: 58px;
-      border: 0;
-      border-bottom: 1px solid var(--line-soft);
+      min-height: 38px;
+      border: 1px solid var(--line);
       background: var(--surface);
       color: var(--text);
-      border-radius: 0;
-      padding: 12px 0;
+      border-radius: 999px;
+      padding: 0 12px;
       cursor: pointer;
-      text-align: left;
+      text-align: center;
     }
 
     .category:hover,
@@ -300,13 +249,6 @@
       display: block;
       font-size: 14px;
       font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .category span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -666,18 +608,6 @@
         <button class="button" type="button" data-open="links">외부 연결</button>
       </section>
 
-      <section class="search-pill" aria-label="커뮤니티 탐색">
-        <button class="search-segment" type="button" data-open="community">
-          <strong>상황</strong>
-          <span>썸, 짝사랑, 전애인</span>
-        </button>
-        <button class="search-segment" type="button" data-open="community">
-          <strong>정렬</strong>
-          <span>최신순 · 좋아요순</span>
-        </button>
-        <button class="search-action" type="button" data-open="community" aria-label="검색">⌕</button>
-      </section>
-
       <div class="section-head">
         <div class="section-title">카테고리별 게시판</div>
         <button class="text-link" type="button" data-open="community">전체</button>
@@ -1003,10 +933,9 @@
     }
 
     function renderCategories() {
-      document.getElementById('home-categories').innerHTML = categories.map(([name, description]) => `
+      document.getElementById('home-categories').innerHTML = categories.map(([name]) => `
         <button class="category" type="button" data-filter="${name}">
           <strong>${name}</strong>
-          <span>${description}</span>
         </button>
       `).join('');
 
