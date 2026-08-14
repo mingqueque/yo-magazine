@@ -1,6 +1,6 @@
-# 요매거진 Flutter MVP 목업
+# 요매거진 MVP 프로토타입
 
-하단 내비게이션 3개 탭 기준의 유저앱 프로토타입입니다.
+GitHub Pages에서 바로 볼 수 있는 정적 웹 프로토타입입니다.
 
 - 홈: 메인 배너, 카테고리, 인기 고민
 - 커뮤니티: 카테고리 필터, 최신순/좋아요순, 게시글 목록, 글쓰기
@@ -8,15 +8,8 @@
 
 ## 실행
 
-Flutter SDK가 설치된 환경에서 아래 명령을 실행합니다.
+브라우저에서 `index.html`을 열면 됩니다.
 
-```sh
-flutter pub get
-flutter run
-```
+GitHub Pages 배포 후에는 아래 주소에서 확인할 수 있습니다.
 
-이 저장소에는 앱 구조 확인용 목업 코드만 포함되어 있습니다. iOS/Android 플랫폼 폴더가 필요하면 Flutter SDK 설치 후 다음 명령으로 생성할 수 있습니다.
-
-```sh
-flutter create .
-```
+https://mingqueque.github.io/yo-magazine/
