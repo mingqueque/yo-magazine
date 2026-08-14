@@ -73,6 +73,8 @@
       font-size: 12px;
       font-weight: 700;
       flex: 0 0 auto;
+      background: #111111;
+      color: #ffffff;
     }
 
     .status-dots {
@@ -84,7 +86,7 @@
       width: 5px;
       height: 5px;
       border-radius: 50%;
-      background: var(--text);
+      background: #ffffff;
       opacity: 0.72;
     }
 
@@ -94,9 +96,10 @@
       align-items: center;
       gap: 8px;
       padding: 0 14px;
-      border-bottom: 1px solid var(--line-soft);
+      border-bottom: 1px solid #111111;
       flex: 0 0 auto;
-      background: var(--phone);
+      background: #111111;
+      color: #ffffff;
     }
 
     .title {
@@ -115,7 +118,7 @@
       height: 36px;
       border: 0;
       background: transparent;
-      color: var(--text);
+      color: inherit;
       border-radius: 999px;
       cursor: pointer;
       font-size: 20px;
@@ -168,7 +171,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 16px 0;
+      padding: 22px 0;
       margin-bottom: 16px;
       border-width: 0 0 1px;
     }
@@ -441,13 +444,14 @@
     }
 
     .comment-input {
-      position: sticky;
-      bottom: -18px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
       gap: 8px;
       background: var(--phone);
       border-top: 1px solid var(--line);
-      margin: 16px -14px -18px;
       padding: 10px 12px;
     }
 
@@ -992,6 +996,7 @@
       });
       document.querySelector('.title').textContent = titles[name] || '요매거진';
       document.querySelector('.back-button').style.display = ['home', 'community', 'mypage'].includes(name) ? 'none' : 'block';
+      document.querySelector('.tabs').style.display = name === 'detail' ? 'none' : 'grid';
       document.querySelectorAll('.tab').forEach((tab) => {
         tab.classList.toggle('active', tab.dataset.tab === name);
       });
