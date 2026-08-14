@@ -170,26 +170,7 @@
       color: var(--muted);
       font-size: 13px;
     }
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .category {
-      min-height: 38px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #ffffff;
-      color: var(--ink);
-      padding: 0 12px;
-      font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .category:hover, .post:hover, .menu button:hover { background: var(--soft); }
+    .post:hover, .menu button:hover { background: var(--soft); }
 
     .chips {
       display: flex;
@@ -236,6 +217,28 @@
       color: var(--ink);
       padding: 14px 0;
       text-align: left;
+      cursor: pointer;
+    }
+    .post-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 7px;
+    }
+    .post-category {
+      min-width: 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .post-time {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
     }
     .meta {
       display: flex;
@@ -246,8 +249,6 @@
       margin-bottom: 7px;
     }
     .meta strong { color: var(--ink); }
-    .heart { margin-left: auto; color: var(--ink); font-size: 16px; }
-    .saved .heart { color: var(--active); }
     .post-title {
       margin-bottom: 5px;
       font-size: 15px;
@@ -266,20 +267,70 @@
       overflow: hidden;
       margin-bottom: 10px;
     }
-    .counts {
+    .thread-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 18px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 13px;
     }
-    .counts .author { margin-right: auto; }
+    .thread-action {
+      min-width: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 0;
+      font-size: 13px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .thread-action svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .thread-action.liked {
+      color: var(--active);
+      font-weight: 800;
+    }
+    .thread-action.liked svg { fill: currentColor; }
+    .detail-thread-actions {
+      gap: 22px;
+      margin-top: 12px;
+    }
 
     .detail {
+      position: relative;
       padding: 16px 0 18px;
       border-bottom: 1px solid var(--line);
       margin-bottom: 14px;
     }
+    .detail-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .detail-head .meta { flex: 1; min-width: 0; }
+    .kebab {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink);
+      font-size: 22px;
+      line-height: 1;
+    }
+    .kebab:hover { background: var(--soft); }
     .detail h2 {
       margin: 10px 0;
       font-size: 22px;
@@ -292,7 +343,7 @@
       font-size: 16px;
       line-height: 1.55;
     }
-    .actions, .comment-input { display: flex; gap: 8px; flex-wrap: wrap; }
+    .comment-input { display: flex; gap: 8px; flex-wrap: wrap; }
     .comment {
       padding: 14px 0;
       border-bottom: 1px solid var(--line);
@@ -341,6 +392,106 @@
     }
     .profile-main { flex: 1; min-width: 0; }
     .profile-name { font-size: 18px; font-weight: 800; }
+    .profile-link {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .mypage-profile {
+      margin: 0;
+      padding: 20px 0;
+      border-bottom: 0;
+    }
+    .mypage-group {
+      padding: 8px 0;
+      border-top: 8px solid var(--soft);
+    }
+    .mypage-group:first-of-type { border-top: 0; }
+    .mypage-group .menu {
+      margin-bottom: 0;
+      border-top: 0;
+    }
+    .mypage-group .menu button {
+      min-height: 48px;
+      border-bottom: 0;
+      padding: 0 2px;
+    }
+    .account-detail {
+      display: grid;
+      gap: 16px;
+      padding-top: 8px;
+    }
+    .account-card {
+      display: grid;
+      gap: 12px;
+      padding: 16px 0;
+      border-bottom: 8px solid var(--soft);
+    }
+    .account-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 34px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .account-row strong {
+      color: var(--ink);
+      font-size: 15px;
+    }
+    .text-actions {
+      margin-top: auto;
+      display: grid;
+      gap: 2px;
+      padding-top: 28px;
+    }
+    .text-btn {
+      min-height: 48px;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      font-weight: 700;
+    }
+    .text-btn.danger { color: var(--active); }
+    .notice {
+      width: 100%;
+      display: grid;
+      gap: 6px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 15px 0;
+      text-align: left;
+    }
+    .notice:hover { background: var(--soft); }
+    .notice-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .notice-type {
+      color: var(--active);
+      font-weight: 800;
+    }
+    .notice-time { margin-left: auto; }
+    .notice-title {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+    .notice-body {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
     .menu {
       margin-bottom: 10px;
       border-top: 1px solid var(--line);
@@ -406,11 +557,11 @@
 
     <header class="topbar">
       <button class="back" type="button" aria-label="뒤로">‹</button>
-      <div class="title">요매거진</div>
+      <div class="title">Yo!</div>
       <button class="icon" type="button" data-open="community" aria-label="검색">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
       </button>
-      <button class="icon" type="button" data-open="settings" aria-label="알림">
+      <button class="icon" type="button" data-open="notifications" aria-label="알림">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
       </button>
     </header>
@@ -423,11 +574,6 @@
         </div>
         <button class="btn" type="button" data-open="links">외부 연결</button>
       </section>
-      <div class="section-head">
-        <h3>카테고리별 게시판</h3>
-        <button class="link" type="button" data-open="community">전체</button>
-      </div>
-      <div class="categories" id="home-categories"></div>
       <div class="section-head"><h3>인기 고민</h3></div>
       <div data-post-list="home"></div>
       <button class="fab" type="button" data-open="write" aria-label="글쓰기">✎</button>
@@ -443,14 +589,16 @@
 
     <main class="screen" data-screen="detail">
       <article class="detail">
-        <div class="meta"><strong id="detail-author"></strong><span id="detail-time"></span></div>
+        <div class="detail-head">
+          <div class="meta"><strong id="detail-author"></strong><span id="detail-time"></span></div>
+          <button class="kebab" type="button" data-open="report" aria-label="게시글 더보기">⋮</button>
+        </div>
         <h2 id="detail-title"></h2>
         <p id="detail-body"></p>
-        <div class="actions">
-          <button class="btn" type="button" id="detail-like"></button>
-          <button class="btn" type="button">북마크</button>
-          <button class="btn" type="button">공유</button>
-          <button class="btn" type="button" data-open="report">신고/차단</button>
+        <div class="thread-actions detail-thread-actions">
+          <button class="thread-action liked" type="button" id="detail-like"></button>
+          <button class="thread-action" type="button" id="detail-comment-count"></button>
+          <button class="thread-action" type="button" aria-label="공유" id="detail-share"></button>
         </div>
       </article>
       <div class="section-head"><h3>댓글</h3></div>
@@ -481,23 +629,51 @@
     </main>
 
     <main class="screen" data-screen="mypage">
-      <section class="profile">
-        <div class="avatar">익</div>
-        <div class="profile-main">
-          <div class="profile-name">익명</div>
-          <p class="muted">카카오 간편로그인 연결됨</p>
+      <button class="profile profile-link mypage-profile" type="button" data-open="account">
+        <span class="avatar">익</span>
+        <span class="profile-main">
+          <span class="profile-name">익명</span>
+          <span class="muted">카카오 간편로그인 연결됨</span>
+        </span>
+        <span class="chev">›</span>
+      </button>
+      <section class="mypage-group">
+        <div class="menu">
+          <button type="button" data-open="my-posts">내가 작성한 글 <span class="chev">›</span></button>
+          <button type="button" data-open="my-comments">내가 작성한 댓글 <span class="chev">›</span></button>
+          <button type="button" data-open="likes">좋아요한 글 <span class="chev">›</span></button>
         </div>
-        <button class="btn" type="button">탈퇴</button>
       </section>
-      <section class="menu">
-        <button type="button" data-open="my-posts">내가 작성한 글 <span class="chev">›</span></button>
-        <button type="button" data-open="my-comments">내가 작성한 댓글 <span class="chev">›</span></button>
-        <button type="button" data-open="bookmarks">북마크한 글 <span class="chev">›</span></button>
+      <section class="mypage-group">
+        <div class="menu">
+          <button type="button" data-open="blocks">신고/차단 관리 <span class="chev">›</span></button>
+          <button type="button" data-open="settings">알림 설정 <span class="chev">›</span></button>
+        </div>
       </section>
-      <section class="menu">
-        <button type="button" data-open="blocks">신고/차단 관리 <span class="chev">›</span></button>
-        <button type="button" data-open="settings">알림 설정 <span class="chev">›</span></button>
-        <button type="button" data-open="links">외부 연결 <span class="chev">›</span></button>
+      <section class="mypage-group">
+        <div class="menu">
+          <button type="button" data-open="links">외부 연결 <span class="chev">›</span></button>
+        </div>
+      </section>
+    </main>
+
+    <main class="screen" data-screen="account">
+      <section class="account-detail">
+        <div class="account-card">
+          <div class="profile mypage-profile">
+            <div class="avatar">익</div>
+            <div class="profile-main">
+              <div class="profile-name">익명</div>
+              <p class="muted">카카오 간편로그인 연결됨</p>
+            </div>
+          </div>
+          <div class="account-row"><strong>로그인 방식</strong><span>카카오 간편 로그인</span></div>
+          <div class="account-row"><strong>가입 이메일</strong><span>yo.user@kakao.com</span></div>
+        </div>
+        <div class="text-actions">
+          <button class="text-btn" type="button">로그아웃하기</button>
+          <button class="text-btn danger" type="button">탈퇴하기</button>
+        </div>
       </section>
     </main>
 
@@ -507,6 +683,10 @@
         <div class="menu-row"><strong>인기글 알림</strong><span class="chev">켜짐</span></div>
         <button type="button" data-open="blocks">신고/차단 관련 관리 <span class="chev">›</span></button>
       </section>
+    </main>
+
+    <main class="screen" data-screen="notifications">
+      <div data-notification-list></div>
     </main>
 
     <main class="screen" data-screen="blocks">
@@ -537,7 +717,7 @@
     </main>
 
     <main class="screen" data-screen="my-posts"><div data-post-list="my-posts"></div></main>
-    <main class="screen" data-screen="bookmarks"><div data-post-list="bookmarks"></div></main>
+    <main class="screen" data-screen="likes"><div data-post-list="likes"></div></main>
     <main class="screen" data-screen="my-comments">
       <div class="comment">
         <div class="meta"><strong>익명7</strong><span>내 댓글</span></div>
@@ -558,21 +738,29 @@
 
   <script>
     const titles = {
-      home: '요매거진',
+      home: 'Yo!',
       community: '커뮤니티',
       detail: '게시글 상세',
       write: '글쓰기',
       mypage: '마이페이지',
+      account: '계정 정보',
+      notifications: '알림',
       settings: '설정',
       blocks: '신고/차단 관리',
       links: '외부 연결',
       report: '신고하기',
       'my-posts': '내가 작성한 글',
       'my-comments': '내가 작성한 댓글',
-      bookmarks: '북마크한 글'
+      likes: '좋아요한 글'
     };
 
     const categories = ['썸/소개팅', '짝사랑', '연애중', '재회', '이별/권태기/장기연애', '결혼 고민', '연애 잡담'];
+    const icons = {
+      heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg>',
+      comment: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.8 8.4 8.9 8.9 0 0 1-3.8-.9L3 20l1.3-4.3a8.2 8.2 0 0 1-.9-3.8A8.4 8.4 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8Z"></path></svg>',
+      share: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path></svg>'
+    };
+
     const posts = [
       ['썸/소개팅', '과팅에서 만난 사람이 스토리는 보는데 답장을 안 해요', '처음엔 새벽까지 카톡했는데 어제부터 답장이 6시간씩 늦어요. 근데 제 스토리는 바로 봐서 더 신경 쓰입니다. 그냥 관심 식은 걸까요?', '익명', '5분 전', 28, 17],
       ['짝사랑', '같은 과 선배가 자꾸 챙겨주는데 착각인지 모르겠어요', '수업 끝나고 같이 밥 먹자고 하고 과제도 먼저 도와주는데, 원래 후배들한테 다 친절한 사람이라 헷갈려요. 고백은 너무 빠르겠죠?', '익명', '18분 전', 41, 26, true],
@@ -582,29 +770,37 @@
       ['이별/권태기/장기연애', '고3 때부터 만났는데 대학 오고 생활이 너무 달라졌어요', '저는 통학이고 상대는 자취하면서 새 친구도 많아졌어요. 예전처럼 매일 붙어있는 게 불가능한데 서운함을 어떻게 줄여야 할까요?', '익명', '3시간 전', 15, 9],
       ['결혼 고민', '어린 나이에 결혼 얘기 꺼내면 너무 부담일까요', '아직 취업 준비도 남았는데 서로 미래 얘기를 자주 하게 돼요. 좋아하는 마음이랑 현실적인 준비는 다른 문제 같아서 고민입니다.', '익명', '어제', 37, 18],
       ['연애 잡담', '연락할 때 ㅋㅋ만 오는 거 관심 없는 신호인가요', '질문하면 답은 하는데 대화가 계속 제가 끌고 가는 느낌이에요. 친구들은 그냥 접으라는데 아직 미련이 남아요.', '익명', '어제', 52, 40]
-    ].map(([category, title, body, author, time, likes, comments, bookmarked]) => ({ category, title, body, author, time, likes, comments, bookmarked }));
+    ].map(([category, title, body, author, time, likes, comments, liked]) => ({ category, title, body, author, time, likes, comments, liked }));
+
+    const notifications = [
+      { postIndex: 0, type: '좋아요', time: '3분 전', body: '내가 쓴 글이 좋아요를 받았어요.' },
+      { postIndex: 1, type: '댓글', time: '18분 전', body: '내가 쓴 글에 새 댓글이 달렸어요.' },
+      { postIndex: 2, type: '좋아요', time: '52분 전', body: '내가 쓴 글이 좋아요를 받았어요.' },
+      { postIndex: 4, type: '댓글', time: '26.08.13', body: '내가 쓴 글에 새 댓글이 달렸어요.' },
+      { postIndex: 6, type: '좋아요', time: '26.08.02', body: '내가 쓴 글이 좋아요를 받았어요.' }
+    ];
 
     let stack = ['home'];
     let selectedCategory = '전체';
 
     function postMarkup(post, index) {
       return `
-        <button class="post ${post.bookmarked ? 'saved' : ''}" type="button" data-post="${index}">
-          <div class="meta"><strong>${post.category}</strong><span>${post.time}</span><span class="heart">${post.bookmarked ? '♥' : '♡'}</span></div>
+        <article class="post" data-post="${index}">
+          <div class="post-top"><span class="post-category">${post.category}</span><span class="post-time">${post.time}</span></div>
           <div class="post-title">${post.title}</div>
           <div class="post-body">${post.body}</div>
-          <div class="counts"><span class="author">${post.author}</span><span>좋아요 ${post.likes}</span><span>댓글 ${post.comments}</span></div>
-        </button>`;
+          <div class="thread-actions">
+            <button class="thread-action ${post.liked ? 'liked' : ''}" type="button" data-like="${index}" aria-label="좋아요">${icons.heart}<span>${post.likes}</span></button>
+            <span class="thread-action">${icons.comment}<span>${post.comments}</span></span>
+          </div>
+        </article>`;
     }
 
     function renderPosts(target, list) {
       const node = document.querySelector(`[data-post-list="${target}"]`);
-      if (node) node.innerHTML = list.map(postMarkup).join('');
+      if (node) node.innerHTML = list.map(post => postMarkup(post, posts.indexOf(post))).join('');
     }
     function renderCategories() {
-      document.getElementById('home-categories').innerHTML = categories.map(name =>
-        `<button class="category" type="button" data-filter="${name}">${name}</button>`
-      ).join('');
       document.getElementById('category-select').innerHTML = categories.map(name => `<option>${name}</option>`).join('');
     }
     function renderCommunity() {
@@ -615,42 +811,77 @@
       document.getElementById('community-title').textContent = selectedCategory;
       renderPosts('community', selectedCategory === '전체' ? posts : posts.filter(post => post.category === selectedCategory));
     }
+    function renderNotifications() {
+      document.querySelector('[data-notification-list]').innerHTML = notifications.map(item => {
+        const post = posts[item.postIndex];
+        return `
+          <button class="notice" type="button" data-post="${item.postIndex}">
+            <div class="notice-top"><span class="notice-type">${item.type}</span><span>${post.category}</span><span class="notice-time">${item.time}</span></div>
+            <div class="notice-title">${post.title}</div>
+            <div class="notice-body">${item.body}</div>
+          </button>`;
+      }).join('');
+    }
     function show(name, push = true) {
       document.querySelectorAll('.screen').forEach(screen => {
         const active = screen.dataset.screen === name;
         screen.classList.toggle('active', active);
         if (active) screen.scrollTop = 0;
       });
-      document.querySelector('.title').textContent = titles[name] || '요매거진';
+      document.querySelector('.title').textContent = titles[name] || 'Yo!';
       document.querySelector('.back').style.display = ['home', 'community', 'mypage'].includes(name) ? 'none' : 'block';
       document.querySelector('.tabs').style.display = name === 'detail' ? 'none' : 'grid';
       document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name));
       if (push) stack.push(name);
     }
-    function openPost(index) {
+    function openPost(index, push = true) {
       const post = posts[index] || posts[0];
+      document.querySelector('[data-screen="detail"]').dataset.currentPost = String(index);
       document.getElementById('detail-author').textContent = post.author;
       document.getElementById('detail-time').textContent = post.time;
       document.getElementById('detail-title').textContent = post.title;
       document.getElementById('detail-body').textContent = post.body;
-      document.getElementById('detail-like').textContent = `좋아요 ${post.likes}`;
-      show('detail');
+      document.getElementById('detail-like').classList.toggle('liked', Boolean(post.liked));
+      document.getElementById('detail-like').innerHTML = `${icons.heart}<span>${post.likes}</span>`;
+      document.getElementById('detail-comment-count').innerHTML = `${icons.comment}<span>${post.comments}</span>`;
+      document.getElementById('detail-share').innerHTML = icons.share;
+      show('detail', push);
+    }
+    function toggleLike(index) {
+      const post = posts[index];
+      if (!post) return;
+      post.liked = !post.liked;
+      post.likes += post.liked ? 1 : -1;
+      renderPosts('home', posts);
+      renderPosts('my-posts', posts.slice(0, 2));
+      renderPosts('likes', posts.filter(post => post.liked));
+      renderCommunity();
+      if (document.querySelector('[data-screen="detail"]').classList.contains('active')) {
+        openPost(index, false);
+      }
     }
 
     renderCategories();
     renderPosts('home', posts);
     renderPosts('my-posts', posts.slice(0, 2));
-    renderPosts('bookmarks', posts.filter(post => post.bookmarked));
+    renderPosts('likes', posts.filter(post => post.liked));
     renderCommunity();
+    renderNotifications();
 
     document.addEventListener('click', event => {
       const tab = event.target.closest('[data-tab]');
       const open = event.target.closest('[data-open]');
+      const like = event.target.closest('[data-like]');
       const post = event.target.closest('[data-post]');
-      const filter = event.target.closest('[data-filter]');
       const chip = event.target.closest('[data-chip]');
       const back = event.target.closest('.back');
-      if (tab) {
+      if (like) {
+        event.stopPropagation();
+        toggleLike(Number(like.dataset.like));
+      } else if (event.target.closest('#detail-like')) {
+        const current = Number(document.querySelector('[data-screen="detail"]').dataset.currentPost || 0);
+        toggleLike(current);
+      } else if (tab) {
         stack = [tab.dataset.tab];
         show(tab.dataset.tab, false);
       } else if (open) {
@@ -658,11 +889,6 @@
         show(open.dataset.open, open.dataset.open !== 'community');
       } else if (post) {
         openPost(Number(post.dataset.post));
-      } else if (filter) {
-        selectedCategory = filter.dataset.filter;
-        renderCommunity();
-        stack = ['community'];
-        show('community', false);
       } else if (chip) {
         selectedCategory = chip.dataset.chip;
         renderCommunity();
