@@ -22,7 +22,6 @@
       --active-press: #e00b41;
       --active-soft: #ffd1da;
       --danger: #c13515;
-      --shadow: rgba(0, 0, 0, 0.02) 0 0 0 1px, rgba(0, 0, 0, 0.04) 0 2px 6px 0, rgba(0, 0, 0, 0.1) 0 4px 8px 0;
     }
 
     * {
@@ -62,7 +61,6 @@
         height: 820px;
         border: 1px solid var(--line);
         border-radius: 32px;
-        box-shadow: var(--shadow);
       }
     }
 
@@ -150,16 +148,16 @@
     .profile {
       background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 0;
     }
 
     .banner {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 18px;
+      padding: 16px 0;
       margin-bottom: 16px;
-      box-shadow: var(--shadow);
+      border-width: 0 0 1px;
     }
 
     .banner-text {
@@ -213,7 +211,6 @@
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 999px;
-      box-shadow: var(--shadow);
     }
 
     .search-segment {
@@ -277,25 +274,26 @@
     }
 
     .category-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      display: block;
+      border-top: 1px solid var(--line-soft);
     }
 
     .category {
-      min-height: 76px;
-      border: 1px solid var(--line);
+      width: 100%;
+      min-height: 58px;
+      border: 0;
+      border-bottom: 1px solid var(--line-soft);
       background: var(--surface);
       color: var(--text);
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 0;
+      padding: 12px 0;
       cursor: pointer;
       text-align: left;
     }
 
     .category:hover,
     .post:hover {
-      box-shadow: var(--shadow);
+      background: var(--soft);
     }
 
     .category strong {
@@ -318,49 +316,21 @@
       width: 100%;
       color: var(--text);
       text-align: left;
-      padding: 13px;
-      margin-bottom: 14px;
+      padding: 14px 0;
+      margin-bottom: 0;
+      border-width: 0 0 1px;
+      border-color: var(--line-soft);
       cursor: pointer;
       overflow: hidden;
     }
 
-    .post-visual {
-      height: 128px;
-      margin: -1px -1px 12px;
-      border-radius: 14px 14px 0 0;
-      background: linear-gradient(135deg, #fff0f3 0%, #ffd1da 36%, #f7f7f7 100%);
-      position: relative;
-    }
-
-    .post-visual::before {
-      content: attr(data-category);
-      position: absolute;
-      left: 12px;
-      top: 12px;
-      max-width: calc(100% - 64px);
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.92);
-      color: var(--text);
-      font-size: 11px;
-      line-height: 1.18;
-      font-weight: 600;
-      box-shadow: var(--shadow);
-    }
-
     .save-heart {
-      position: absolute;
-      right: 12px;
-      top: 12px;
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: rgba(255, 255, 255, 0.92);
       color: var(--text);
       font-size: 16px;
-      box-shadow: var(--shadow);
+      margin-left: auto;
     }
 
     .post.saved .save-heart {
@@ -479,8 +449,9 @@
     }
 
     .detail {
-      padding: 20px;
+      padding: 16px 0 18px;
       margin-bottom: 14px;
+      border-width: 0 0 1px;
     }
 
     .detail h2 {
@@ -503,8 +474,10 @@
     }
 
     .comment {
-      padding: 14px;
-      margin-bottom: 8px;
+      padding: 14px 0;
+      margin-bottom: 0;
+      border-width: 0 0 1px;
+      border-color: var(--line-soft);
     }
 
     .deleted {
@@ -688,7 +661,7 @@
       <section class="banner">
         <div class="banner-text">
           <div class="banner-title">이번 주 연애 고민</div>
-          <div class="muted">같은 상황의 사람들과 이야기를 나눠보세요.</div>
+          <div class="muted">학교, 알바, 동아리, DM 사이에서 헷갈리는 마음을 나눠보세요.</div>
         </div>
         <button class="button" type="button" data-open="links">외부 연결</button>
       </section>
@@ -696,7 +669,7 @@
       <section class="search-pill" aria-label="커뮤니티 탐색">
         <button class="search-segment" type="button" data-open="community">
           <strong>상황</strong>
-          <span>썸, 연애, 이별</span>
+          <span>썸, 짝사랑, 전애인</span>
         </button>
         <button class="search-segment" type="button" data-open="community">
           <strong>정렬</strong>
@@ -752,13 +725,13 @@
       </div>
       <div class="comment">
         <div class="meta"><strong>익명8</strong><span>3분 전</span></div>
-        <div class="post-body">상대가 바쁜 상황인지 먼저 확인해보는 게 좋을 것 같아요.</div>
+        <div class="post-body">시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.</div>
         <button class="button" type="button">좋아요 2</button>
       </div>
       <div class="comment deleted">삭제된 댓글입니다.</div>
       <div class="comment">
         <div class="meta"><strong>익명9</strong><span>10분 전</span><span>수정됨</span></div>
-        <div class="post-body">저라면 한 번만 더 자연스럽게 연락해볼 것 같아요.</div>
+        <div class="post-body">저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.</div>
         <button class="button" type="button">좋아요 5</button>
       </div>
       <div class="comment-input">
@@ -859,11 +832,11 @@
     <main class="screen" data-screen="my-comments">
       <div class="comment">
         <div class="meta"><strong>익명7</strong><span>내 댓글</span></div>
-        <div class="post-body">저도 비슷한 상황이었는데 먼저 확인해보는 게 제일 낫더라고요.</div>
+        <div class="post-body">읽씹인지 바쁜 건지 계속 추측하면 나만 힘들어서, 저는 한 번만 직접 물어봤어요.</div>
       </div>
       <div class="comment">
         <div class="meta"><strong>익명7</strong><span>수정됨</span></div>
-        <div class="post-body">재회는 마음보다 타이밍도 중요한 것 같아요.</div>
+        <div class="post-body">전애인 연락은 반가워도 바로 흔들리면 또 같은 이유로 싸우더라고요. 천천히 보는 게 맞는 듯.</div>
       </div>
     </main>
 
@@ -911,54 +884,91 @@
     };
 
     const categories = [
-      ['썸/소개팅', '불확실한 첫 만남과 썸'],
-      ['짝사랑', '혼자 좋아하는 마음'],
-      ['연애', '연락, 데이트, 서운함'],
-      ['재회', '전애인 연락과 가능성'],
-      ['이별', '이별 직전과 회복'],
-      ['권태기/장기연애', '오래된 관계와 미래'],
-      ['연애 고민', '분류하기 어려운 고민'],
-      ['연애 잡담', '가벼운 질문과 경험담']
+      ['썸/소개팅', 'DM, 과팅, 소개팅 후 연락'],
+      ['짝사랑', '같은 반, 같은 과, 동아리 crush'],
+      ['연애', '카톡, 데이트비, 서운함'],
+      ['재회', '전애인 연락과 다시 만남'],
+      ['이별', '손절, 언팔, 마음 정리'],
+      ['권태기/장기연애', '오래 만난 사이의 고민'],
+      ['연애 고민', '딱 잘라 말하기 어려운 일'],
+      ['연애 잡담', '친구들이랑 하던 그 얘기']
     ];
 
     const posts = [
       {
         category: '썸/소개팅',
-        title: '소개팅 후 연락 텀이 갑자기 길어졌어요',
-        body: '처음에는 답장이 빠른 편이었는데 어제부터 반나절씩 늦어져요. 제가 먼저 한 번 더 연락해도 될까요?',
+        title: '과팅에서 만난 사람이 스토리는 보는데 답장을 안 해요',
+        body: '처음엔 새벽까지 카톡했는데 어제부터 답장이 6시간씩 늦어요. 근데 제 스토리는 바로 봐서 더 신경 쓰입니다. 그냥 관심 식은 걸까요?',
         author: '익명1',
         time: '5분 전',
-        likes: 12,
-        comments: 8
+        likes: 28,
+        comments: 17
       },
       {
-        category: '연애',
-        title: '애인이 이성 친구랑 단둘이 술 마시는 거',
-        body: '가능하다고 보는 편인가요? 저는 괜찮다고 생각했는데 막상 들으니 기분이 이상해요.',
+        category: '짝사랑',
+        title: '같은 과 선배가 자꾸 챙겨주는데 착각인지 모르겠어요',
+        body: '수업 끝나고 같이 밥 먹자고 하고 과제도 먼저 도와주는데, 원래 후배들한테 다 친절한 사람이라 헷갈려요. 고백은 너무 빠르겠죠?',
         author: '익명2',
         time: '18분 전',
-        likes: 34,
-        comments: 21,
+        likes: 41,
+        comments: 26,
         bookmarked: true
       },
       {
-        category: '이별',
-        title: '헤어진 지 일주일인데 계속 SNS를 보게 돼요',
-        body: '안 봐야 하는 걸 아는데 습관처럼 확인하게 됩니다. 다들 어떻게 끊었나요?',
+        category: '연애',
+        title: '애인이 시험기간마다 연락이 거의 끊겨요',
+        body: '공부하는 건 이해하는데 하루에 잘자 한 마디도 없는 날이 많아요. 제가 너무 연락에 집착하는 건지, 최소한의 표현은 필요한 건지 모르겠어요.',
         author: '익명3',
         time: '42분 전',
-        likes: 19,
-        comments: 14,
+        likes: 33,
+        comments: 22,
         edited: true
       },
       {
-        category: '권태기/장기연애',
-        title: '장기연애 중 결혼 이야기가 부담스러워요',
-        body: '좋아하는 마음은 있는데 미래 얘기가 나올 때마다 제가 준비가 안 된 것 같아요.',
+        category: '이별',
+        title: '헤어진 뒤에 맞팔 유지하는 거 다들 가능해요?',
+        body: '헤어진 지 2주 됐는데 서로 언팔은 안 했어요. 새 글 올라올 때마다 마음이 흔들려서 차단까지 해야 하나 고민 중입니다.',
         author: '익명4',
         time: '1시간 전',
-        likes: 7,
-        comments: 5
+        likes: 19,
+        comments: 14
+      },
+      {
+        category: '재회',
+        title: '전애인이 생일 축하한다고 연락 왔어요',
+        body: '좋게 헤어진 건 아니었는데 생일 되자마자 장문 카톡이 왔어요. 그냥 예의인지 다시 얘기해보고 싶은 건지 감이 안 옵니다.',
+        author: '익명5',
+        time: '2시간 전',
+        likes: 24,
+        comments: 31,
+        bookmarked: true
+      },
+      {
+        category: '권태기/장기연애',
+        title: '고3 때부터 만났는데 대학 오고 생활이 너무 달라졌어요',
+        body: '저는 통학이고 상대는 자취하면서 새 친구도 많아졌어요. 예전처럼 매일 붙어있는 게 불가능한데 서운함을 어떻게 줄여야 할까요?',
+        author: '익명6',
+        time: '3시간 전',
+        likes: 15,
+        comments: 9
+      },
+      {
+        category: '연애 고민',
+        title: '알바 같이 하는 사람이랑 썸 타면 그만둘 각오 해야 하나요',
+        body: '마감 같이 하면서 친해졌는데 사귀었다가 깨지면 너무 불편할 것 같아요. 그래도 좋아지는 마음은 못 멈추겠어요.',
+        author: '익명7',
+        time: '어제',
+        likes: 37,
+        comments: 18
+      },
+      {
+        category: '연애 잡담',
+        title: '연락할 때 ㅋㅋ만 오는 거 관심 없는 신호인가요',
+        body: '질문하면 답은 하는데 대화가 계속 제가 끌고 가는 느낌이에요. 친구들은 그냥 접으라는데 아직 미련이 남아요.',
+        author: '익명8',
+        time: '어제',
+        likes: 52,
+        comments: 40
       }
     ];
 
@@ -971,10 +981,7 @@
       const saved = post.bookmarked ? ' saved' : '';
       return `
         <button class="post${saved}" type="button" data-post="${index}">
-          <div class="post-visual" data-category="${post.category}">
-            <span class="save-heart">${post.bookmarked ? '♥' : '♡'}</span>
-          </div>
-          <div class="meta"><strong>${post.category}</strong><span>${post.time}</span>${edited}</div>
+          <div class="meta"><strong>${post.category}</strong><span>${post.time}</span>${edited}<span class="save-heart">${post.bookmarked ? '♥' : '♡'}</span></div>
           <div class="post-title">${post.title}</div>
           <div class="post-body">${post.body}</div>
           <div class="counts">
