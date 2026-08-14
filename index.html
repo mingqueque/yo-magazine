@@ -6,56 +6,39 @@
   <title>요매거진 MVP 프로토타입</title>
   <style>
     :root {
-      color-scheme: light;
       --page: #ffffff;
-      --phone: #ffffff;
-      --surface: #ffffff;
-      --soft: #f6f6f6;
-      --strong-soft: #eeeeee;
-      --line: #d8d8d8;
-      --line-soft: #eeeeee;
-      --text: #111111;
+      --ink: #111111;
       --body: #333333;
       --muted: #707070;
-      --muted-soft: #9a9a9a;
+      --line: #dedede;
+      --soft: #f6f6f6;
       --active: #ff385c;
       --active-press: #e31c50;
-      --active-soft: #f6f6f6;
-      --danger: #111111;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--page);
-      color: var(--text);
-      font-family: "Airbnb Cereal VF", Circular, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", Roboto, "Helvetica Neue", sans-serif;
       display: grid;
       place-items: center;
+      background: var(--page);
+      color: var(--ink);
+      font-family: "Airbnb Cereal VF", Circular, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
     }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
 
     .phone {
       width: min(430px, 100vw);
       height: min(860px, 100vh);
-      background: var(--phone);
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      border-left: 1px solid var(--line-soft);
-      border-right: 1px solid var(--line-soft);
+      overflow: hidden;
+      background: #ffffff;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
     }
-
     @media (min-width: 520px) {
       .phone {
         height: 820px;
@@ -64,6 +47,11 @@
       }
     }
 
+    .status, .topbar {
+      flex: 0 0 auto;
+      background: #111111;
+      color: #ffffff;
+    }
     .status {
       height: 34px;
       display: flex;
@@ -72,149 +60,103 @@
       padding: 0 22px;
       font-size: 12px;
       font-weight: 700;
-      flex: 0 0 auto;
-      background: #111111;
-      color: #ffffff;
     }
-
-    .status-dots {
-      display: flex;
-      gap: 5px;
-    }
-
-    .status-dots span {
+    .dots { display: flex; gap: 5px; }
+    .dots span {
       width: 5px;
       height: 5px;
       border-radius: 50%;
       background: #ffffff;
-      opacity: 0.72;
+      opacity: .72;
     }
-
     .topbar {
       height: 54px;
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 0 14px;
-      border-bottom: 1px solid #111111;
-      flex: 0 0 auto;
-      background: #111111;
-      color: #ffffff;
     }
-
     .title {
       flex: 1;
       min-width: 0;
       font-size: 20px;
-      font-weight: 700;
+      font-weight: 800;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
-    .icon-button,
-    .back-button {
+    .icon, .back {
       width: 36px;
       height: 36px;
       border: 0;
+      border-radius: 50%;
       background: transparent;
       color: inherit;
-      border-radius: 999px;
-      cursor: pointer;
       font-size: 20px;
     }
-
-    .icon-button svg {
-      width: 21px;
-      height: 21px;
-      display: block;
-      margin: auto;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .back-button {
+    .back {
       display: none;
       font-size: 30px;
       line-height: 1;
     }
+    .icon svg {
+      width: 21px;
+      height: 21px;
+      display: block;
+      margin: auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
     .screen {
       display: none;
+      position: relative;
       flex: 1;
       min-height: 0;
       overflow-y: auto;
       padding: 12px 14px 82px;
-      background: var(--page);
-      position: relative;
+      background: #ffffff;
     }
+    .screen.active { display: block; }
 
-    .screen.active {
-      display: block;
-    }
-
-    .banner,
-    .panel,
-    .post,
-    .comment,
-    .menu,
-    .profile {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 0;
-    }
-
-    .banner {
+    .hero {
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 22px 0;
+      border-bottom: 1px solid var(--line);
       margin-bottom: 16px;
-      border-width: 0 0 1px;
     }
-
-    .banner-text {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .banner-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-
+    .hero-main { flex: 1; min-width: 0; }
+    h2, h3, p { margin: 0; }
+    h2 { font-size: 18px; line-height: 1.35; }
+    h3 { font-size: 17px; line-height: 1.35; }
     .muted {
+      margin-top: 5px;
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.43;
+      line-height: 1.45;
     }
 
-    .button {
+    .btn {
       border: 1px solid var(--line);
-      background: var(--soft);
-      color: var(--text);
       border-radius: 999px;
+      background: var(--soft);
+      color: var(--ink);
       padding: 10px 14px;
       font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
+      font-weight: 600;
       white-space: nowrap;
     }
-
-    .button.primary {
-      background: var(--active);
+    .btn.primary {
       border-color: var(--active);
+      background: var(--active);
       color: #ffffff;
     }
-
-    .button.primary:active {
-      background: var(--active-press);
-      border-color: var(--active-press);
-    }
+    .btn.primary:active { background: var(--active-press); }
 
     .section-head {
       display: flex;
@@ -222,362 +164,224 @@
       justify-content: space-between;
       margin: 16px 0 8px;
     }
-
-    .section-title {
-      font-size: 17px;
-      font-weight: 600;
-    }
-
-    .text-link {
+    .link {
       border: 0;
       background: transparent;
       color: var(--muted);
       font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
     }
-
-    .category-grid {
+    .categories {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 14px;
     }
-
     .category {
-      width: 100%;
       min-height: 38px;
       border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--text);
       border-radius: 999px;
+      background: #ffffff;
+      color: var(--ink);
       padding: 0 12px;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .category:hover,
-    .post:hover {
-      background: var(--soft);
-    }
-
-    .category strong {
-      display: block;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .category:hover, .post:hover, .menu button:hover { background: var(--soft); }
 
-    .post {
-      width: 100%;
-      color: var(--text);
-      text-align: left;
-      padding: 14px 0;
-      margin-bottom: 0;
-      border-width: 0 0 1px;
-      border-color: var(--line-soft);
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    .save-heart {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      color: var(--text);
-      font-size: 16px;
-      margin-left: auto;
-    }
-
-    .post.saved .save-heart {
-      color: var(--active);
-    }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .meta strong {
-      color: var(--text);
-    }
-
-    .post-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .post-body {
-      color: var(--body);
-      font-size: 14px;
-      line-height: 1.42;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-
-    .counts {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .author {
-      margin-right: auto;
-    }
-
-    .chip-row {
+    .chips {
       display: flex;
       gap: 6px;
       overflow-x: auto;
       padding-bottom: 8px;
       margin-bottom: 8px;
     }
-
     .chip {
       border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--text);
       border-radius: 999px;
+      background: #ffffff;
+      color: var(--ink);
       padding: 9px 14px;
       font-size: 14px;
       white-space: nowrap;
-      cursor: pointer;
     }
-
     .chip.active {
-      background: var(--active);
       border-color: var(--active);
+      background: var(--active);
       color: #ffffff;
-      font-weight: 500;
     }
-
-    .sort-row {
+    .sort {
       display: flex;
       justify-content: flex-end;
       gap: 4px;
-      margin: 0 0 10px;
+      margin-bottom: 8px;
     }
-
-    .sort-row button {
+    .sort button {
       border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--muted);
       border-radius: 999px;
-      padding: 8px 12px;
+      background: #ffffff;
+      color: var(--muted);
+      padding: 7px 12px;
       font-size: 14px;
-      cursor: pointer;
     }
+    .sort .active { color: var(--ink); font-weight: 700; }
 
-    .sort-row button.active {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .floating {
-      position: absolute;
-      right: 16px;
-      bottom: 18px;
-      width: 52px;
-      height: 52px;
+    .post {
+      width: 100%;
       border: 0;
-      border-radius: 50%;
-      background: var(--active);
-      color: #ffffff;
-      font-size: 22px;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 14px 0;
+      text-align: left;
+    }
+    .meta {
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 7px;
     }
+    .meta strong { color: var(--ink); }
+    .heart { margin-left: auto; color: var(--ink); font-size: 16px; }
+    .saved .heart { color: var(--active); }
+    .post-title {
+      margin-bottom: 5px;
+      font-size: 15px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .post-body {
+      color: var(--body);
+      font-size: 14px;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .counts {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .counts .author { margin-right: auto; }
 
     .detail {
       padding: 16px 0 18px;
+      border-bottom: 1px solid var(--line);
       margin-bottom: 14px;
-      border-width: 0 0 1px;
     }
-
     .detail h2 {
       margin: 10px 0;
       font-size: 22px;
-      font-weight: 500;
       line-height: 1.25;
+      font-weight: 700;
     }
-
     .detail p {
-      margin: 0 0 14px;
+      margin-bottom: 14px;
+      color: var(--body);
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.55;
     }
-
-    .action-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
+    .actions, .comment-input { display: flex; gap: 8px; flex-wrap: wrap; }
     .comment {
       padding: 14px 0;
-      margin-bottom: 0;
-      border-width: 0 0 1px;
-      border-color: var(--line-soft);
+      border-bottom: 1px solid var(--line);
     }
-
     .deleted {
       color: var(--muted);
       background: var(--soft);
+      padding-left: 10px;
     }
-
     .comment-input {
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
-      display: flex;
-      gap: 8px;
-      background: var(--phone);
-      border-top: 1px solid var(--line);
       padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
     }
-
-    .field,
-    .area,
-    .select,
-    .comment-input input {
+    input, textarea, select {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--surface);
-      color: var(--text);
+      background: #ffffff;
+      color: var(--ink);
       padding: 14px 12px;
     }
-
-    .area {
-      min-height: 160px;
-      resize: none;
-    }
-
-    .write-form {
-      display: grid;
-      gap: 10px;
-    }
+    textarea { min-height: 160px; resize: none; }
+    form { display: grid; gap: 10px; }
 
     .profile {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 18px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
       margin-bottom: 12px;
     }
-
     .avatar {
       width: 54px;
       height: 54px;
-      border-radius: 50%;
-      background: var(--strong-soft);
       display: grid;
       place-items: center;
+      border-radius: 50%;
+      background: var(--soft);
       font-weight: 900;
     }
-
-    .profile-main {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .profile-name {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
+    .profile-main { flex: 1; min-width: 0; }
+    .profile-name { font-size: 18px; font-weight: 800; }
     .menu {
-      overflow: hidden;
       margin-bottom: 10px;
+      border-top: 1px solid var(--line);
     }
-
-    .menu button,
-    .menu-row {
+    .menu button, .menu-row {
       width: 100%;
       min-height: 50px;
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 0 13px;
       border: 0;
       border-bottom: 1px solid var(--line);
       background: transparent;
-      color: var(--text);
+      color: var(--ink);
       text-align: left;
-      cursor: pointer;
+      padding: 0;
     }
+    .chev { margin-left: auto; color: var(--muted); }
 
-    .menu button:last-child,
-    .menu-row:last-child {
-      border-bottom: 0;
-    }
-
-    .chevron {
-      margin-left: auto;
-      color: var(--muted);
-    }
-
-    .toggle {
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .switch {
-      width: 43px;
-      height: 24px;
-      border-radius: 14px;
-      background: var(--active);
-      position: relative;
-    }
-
-    .switch::after {
-      content: "";
+    .fab {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      right: 16px;
+      bottom: 18px;
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 0;
       border-radius: 50%;
-      background: #ffffff;
-      right: 2px;
-      top: 2px;
+      background: var(--active);
+      color: #ffffff;
+      font-size: 22px;
     }
-
-    .empty {
-      text-align: center;
-      padding: 46px 16px;
-    }
-
     .tabs {
       height: 66px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       border-top: 1px solid var(--line);
-      background: var(--phone);
+      background: #ffffff;
       flex: 0 0 auto;
     }
-
     .tab {
       border: 0;
       background: transparent;
@@ -588,122 +392,91 @@
       justify-content: center;
       gap: 3px;
       font-size: 11px;
-      cursor: pointer;
     }
-
-    .tab .symbol {
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .tab.active {
-      color: var(--active);
-      font-weight: 700;
-    }
+    .symbol { font-size: 22px; line-height: 1; }
+    .tab.active { color: var(--active); font-weight: 800; }
   </style>
 </head>
 <body>
   <div class="phone" role="application" aria-label="요매거진 MVP 프로토타입">
     <div class="status">
       <span>15:03</span>
-      <span class="status-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="dots" aria-hidden="true"><span></span><span></span><span></span></span>
     </div>
 
     <header class="topbar">
-      <button class="back-button" type="button" aria-label="뒤로">‹</button>
+      <button class="back" type="button" aria-label="뒤로">‹</button>
       <div class="title">요매거진</div>
-      <button class="icon-button" type="button" data-open="community" aria-label="검색">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="11" cy="11" r="7"></circle>
-          <path d="m20 20-4-4"></path>
-        </svg>
+      <button class="icon" type="button" data-open="community" aria-label="검색">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
       </button>
-      <button class="icon-button" type="button" data-open="settings" aria-label="알림">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-          <path d="M10 21h4"></path>
-        </svg>
+      <button class="icon" type="button" data-open="settings" aria-label="알림">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
       </button>
     </header>
 
     <main class="screen active" data-screen="home">
-      <section class="banner">
-        <div class="banner-text">
-          <div class="banner-title">이번 주 연애 고민</div>
-          <div class="muted">학교, 알바, 동아리, DM 사이에서 헷갈리는 마음을 나눠보세요.</div>
+      <section class="hero">
+        <div class="hero-main">
+          <h2>이번 주 연애 고민</h2>
+          <p class="muted">학교, 알바, 동아리, DM 사이에서 헷갈리는 마음을 나눠보세요.</p>
         </div>
-        <button class="button" type="button" data-open="links">외부 연결</button>
+        <button class="btn" type="button" data-open="links">외부 연결</button>
       </section>
-
       <div class="section-head">
-        <div class="section-title">카테고리별 게시판</div>
-        <button class="text-link" type="button" data-open="community">전체</button>
+        <h3>카테고리별 게시판</h3>
+        <button class="link" type="button" data-open="community">전체</button>
       </div>
-      <div class="category-grid" id="home-categories"></div>
-
-      <div class="section-head">
-        <div class="section-title">인기 고민</div>
-      </div>
+      <div class="categories" id="home-categories"></div>
+      <div class="section-head"><h3>인기 고민</h3></div>
       <div data-post-list="home"></div>
-      <button class="floating" type="button" data-open="write" aria-label="글쓰기">✎</button>
+      <button class="fab" type="button" data-open="write" aria-label="글쓰기">✎</button>
     </main>
 
     <main class="screen" data-screen="community">
-      <div class="chip-row" id="community-chips"></div>
-      <div class="section-head">
-        <div class="section-title" id="community-title">전체</div>
-      </div>
-      <div class="sort-row">
-        <button class="active" type="button">최신순</button>
-        <button type="button">좋아요순</button>
-      </div>
+      <div class="chips" id="community-chips"></div>
+      <div class="section-head"><h3 id="community-title">전체</h3></div>
+      <div class="sort"><button class="active" type="button">최신순</button><button type="button">좋아요순</button></div>
       <div data-post-list="community"></div>
-      <button class="floating" type="button" data-open="write" aria-label="글쓰기">✎</button>
+      <button class="fab" type="button" data-open="write" aria-label="글쓰기">✎</button>
     </main>
 
     <main class="screen" data-screen="detail">
-      <article class="panel detail">
-        <div class="meta">
-          <strong id="detail-author"></strong>
-          <span id="detail-time"></span>
-          <span id="detail-edited"></span>
-        </div>
+      <article class="detail">
+        <div class="meta"><strong id="detail-author"></strong><span id="detail-time"></span></div>
         <h2 id="detail-title"></h2>
         <p id="detail-body"></p>
-        <div class="action-row">
-          <button class="button" type="button" id="detail-like"></button>
-          <button class="button" type="button">북마크</button>
-          <button class="button" type="button">공유</button>
-          <button class="button" type="button" data-open="report">신고/차단</button>
+        <div class="actions">
+          <button class="btn" type="button" id="detail-like"></button>
+          <button class="btn" type="button">북마크</button>
+          <button class="btn" type="button">공유</button>
+          <button class="btn" type="button" data-open="report">신고/차단</button>
         </div>
       </article>
-
-      <div class="section-head">
-        <div class="section-title">댓글</div>
-      </div>
+      <div class="section-head"><h3>댓글</h3></div>
       <div class="comment">
         <div class="meta"><strong>익명8</strong><span>3분 전</span></div>
         <div class="post-body">시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.</div>
-        <button class="button" type="button">좋아요 2</button>
+        <button class="btn" type="button">좋아요 2</button>
       </div>
       <div class="comment deleted">삭제된 댓글입니다.</div>
       <div class="comment">
         <div class="meta"><strong>익명9</strong><span>10분 전</span><span>수정됨</span></div>
         <div class="post-body">저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.</div>
-        <button class="button" type="button">좋아요 5</button>
+        <button class="btn" type="button">좋아요 5</button>
       </div>
       <div class="comment-input">
         <input aria-label="댓글 입력" placeholder="댓글을 입력하세요">
-        <button class="button primary" type="button">등록</button>
+        <button class="btn primary" type="button">등록</button>
       </div>
     </main>
 
     <main class="screen" data-screen="write">
-      <form class="write-form">
-        <select class="select" aria-label="카테고리 선택" id="category-select"></select>
-        <input class="field" aria-label="제목" placeholder="제목">
-        <textarea class="area" aria-label="내용" placeholder="상황을 자세히 적어주세요."></textarea>
-        <button class="button primary" type="button" data-open="community">등록</button>
+      <form>
+        <select aria-label="카테고리 선택" id="category-select"></select>
+        <input aria-label="제목" placeholder="제목">
+        <textarea aria-label="내용" placeholder="상황을 자세히 적어주세요."></textarea>
+        <button class="btn primary" type="button" data-open="community">등록</button>
       </form>
     </main>
 
@@ -712,67 +485,47 @@
         <div class="avatar">익</div>
         <div class="profile-main">
           <div class="profile-name">익명7</div>
-          <div class="muted">카카오 간편로그인 연결됨</div>
+          <p class="muted">카카오 간편로그인 연결됨</p>
         </div>
-        <button class="button" type="button">탈퇴</button>
+        <button class="btn" type="button">탈퇴</button>
       </section>
       <section class="menu">
-        <button type="button" data-open="my-posts">내가 작성한 글 <span class="chevron">›</span></button>
-        <button type="button" data-open="my-comments">내가 작성한 댓글 <span class="chevron">›</span></button>
-        <button type="button" data-open="bookmarks">북마크한 글 <span class="chevron">›</span></button>
+        <button type="button" data-open="my-posts">내가 작성한 글 <span class="chev">›</span></button>
+        <button type="button" data-open="my-comments">내가 작성한 댓글 <span class="chev">›</span></button>
+        <button type="button" data-open="bookmarks">북마크한 글 <span class="chev">›</span></button>
       </section>
       <section class="menu">
-        <button type="button" data-open="blocks">신고/차단 관리 <span class="chevron">›</span></button>
-        <button type="button" data-open="settings">알림 설정 <span class="chevron">›</span></button>
-        <button type="button" data-open="links">외부 연결 <span class="chevron">›</span></button>
-      </section>
-      <section class="menu">
-        <button type="button" data-open="terms">이용약관 <span class="chevron">›</span></button>
-        <button type="button" data-open="privacy">개인정보처리방침 <span class="chevron">›</span></button>
+        <button type="button" data-open="blocks">신고/차단 관리 <span class="chev">›</span></button>
+        <button type="button" data-open="settings">알림 설정 <span class="chev">›</span></button>
+        <button type="button" data-open="links">외부 연결 <span class="chev">›</span></button>
       </section>
     </main>
 
     <main class="screen" data-screen="settings">
-      <div class="panel toggle">
-        <div>
-          <strong>댓글 알림</strong>
-          <div class="muted">내 글에 댓글이 달리면 알림을 받습니다.</div>
-        </div>
-        <div class="switch" aria-hidden="true"></div>
-      </div>
-      <div class="panel toggle">
-        <div>
-          <strong>인기글 알림</strong>
-          <div class="muted">인기 고민과 공지 알림을 받습니다.</div>
-        </div>
-        <div class="switch" aria-hidden="true"></div>
-      </div>
       <section class="menu">
-        <button type="button" data-open="blocks">신고/차단 관련 관리 <span class="chevron">›</span></button>
+        <div class="menu-row"><strong>댓글 알림</strong><span class="chev">켜짐</span></div>
+        <div class="menu-row"><strong>인기글 알림</strong><span class="chev">켜짐</span></div>
+        <button type="button" data-open="blocks">신고/차단 관련 관리 <span class="chev">›</span></button>
       </section>
     </main>
 
     <main class="screen" data-screen="blocks">
-      <div class="section-head"><div class="section-title">차단한 사용자</div></div>
-      <section class="menu">
-        <div class="menu-row">익명12 <span class="chevron">차단 해제</span></div>
-      </section>
-      <div class="section-head"><div class="section-title">최근 신고 내역</div></div>
-      <section class="menu">
-        <div class="menu-row">욕설/비방 <span class="chevron">검토 중</span></div>
-      </section>
+      <div class="section-head"><h3>차단한 사용자</h3></div>
+      <section class="menu"><div class="menu-row">익명12 <span class="chev">차단 해제</span></div></section>
+      <div class="section-head"><h3>최근 신고 내역</h3></div>
+      <section class="menu"><div class="menu-row">욕설/비방 <span class="chev">검토 중</span></div></section>
     </main>
 
     <main class="screen" data-screen="links">
       <section class="menu">
-        <div class="menu-row">요매거진 Instagram 이동 <span class="chevron">↗</span></div>
-        <div class="menu-row">마플샵 이동 <span class="chevron">↗</span></div>
-        <div class="menu-row">요매거진 카카오 문의톡 이동 <span class="chevron">↗</span></div>
+        <div class="menu-row">요매거진 Instagram 이동 <span class="chev">↗</span></div>
+        <div class="menu-row">마플샵 이동 <span class="chev">↗</span></div>
+        <div class="menu-row">요매거진 카카오 문의톡 이동 <span class="chev">↗</span></div>
       </section>
     </main>
 
     <main class="screen" data-screen="report">
-      <div class="section-title" style="margin-bottom:10px">객관식 신고 사유</div>
+      <div class="section-head"><h3>객관식 신고 사유</h3></div>
       <section class="menu">
         <button type="button">욕설/비방</button>
         <button type="button">개인정보 노출</button>
@@ -780,13 +533,11 @@
         <button type="button">도배/광고</button>
         <button type="button">외부 연락처 유도</button>
       </section>
-      <button class="button primary" type="button" data-open="detail">신고 접수</button>
+      <button class="btn primary" type="button" data-open="detail">신고 접수</button>
     </main>
 
-    <main class="screen" data-screen="my-posts">
-      <div data-post-list="my-posts"></div>
-    </main>
-
+    <main class="screen" data-screen="my-posts"><div data-post-list="my-posts"></div></main>
+    <main class="screen" data-screen="bookmarks"><div data-post-list="bookmarks"></div></main>
     <main class="screen" data-screen="my-comments">
       <div class="comment">
         <div class="meta"><strong>익명7</strong><span>내 댓글</span></div>
@@ -796,24 +547,6 @@
         <div class="meta"><strong>익명7</strong><span>수정됨</span></div>
         <div class="post-body">전애인 연락은 반가워도 바로 흔들리면 또 같은 이유로 싸우더라고요. 천천히 보는 게 맞는 듯.</div>
       </div>
-    </main>
-
-    <main class="screen" data-screen="bookmarks">
-      <div data-post-list="bookmarks"></div>
-    </main>
-
-    <main class="screen" data-screen="terms">
-      <section class="panel detail">
-        <h2>이용약관</h2>
-        <p>정책 문서 영역입니다. 실제 약관 문구가 들어갑니다.</p>
-      </section>
-    </main>
-
-    <main class="screen" data-screen="privacy">
-      <section class="panel detail">
-        <h2>개인정보처리방침</h2>
-        <p>정책 문서 영역입니다. 실제 개인정보처리방침 문구가 들어갑니다.</p>
-      </section>
     </main>
 
     <nav class="tabs" aria-label="하단 네비게이션">
@@ -836,177 +569,68 @@
       report: '신고하기',
       'my-posts': '내가 작성한 글',
       'my-comments': '내가 작성한 댓글',
-      bookmarks: '북마크한 글',
-      terms: '이용약관',
-      privacy: '개인정보처리방침'
+      bookmarks: '북마크한 글'
     };
 
-    const categories = [
-      ['썸/소개팅', 'DM, 과팅, 소개팅 후 연락'],
-      ['짝사랑', '같은 반, 같은 과, 동아리 crush'],
-      ['연애중', '카톡, 데이트비, 서운함'],
-      ['재회', '전애인 연락과 다시 만남'],
-      ['이별/권태기/장기연애', '손절, 언팔, 오래 만난 사이'],
-      ['결혼 고민', '미래, 결혼, 현실적인 고민'],
-      ['연애 잡담', '친구들이랑 하던 그 얘기']
-    ];
-
+    const categories = ['썸/소개팅', '짝사랑', '연애중', '재회', '이별/권태기/장기연애', '결혼 고민', '연애 잡담'];
     const posts = [
-      {
-        category: '썸/소개팅',
-        title: '과팅에서 만난 사람이 스토리는 보는데 답장을 안 해요',
-        body: '처음엔 새벽까지 카톡했는데 어제부터 답장이 6시간씩 늦어요. 근데 제 스토리는 바로 봐서 더 신경 쓰입니다. 그냥 관심 식은 걸까요?',
-        author: '익명1',
-        time: '5분 전',
-        likes: 28,
-        comments: 17
-      },
-      {
-        category: '짝사랑',
-        title: '같은 과 선배가 자꾸 챙겨주는데 착각인지 모르겠어요',
-        body: '수업 끝나고 같이 밥 먹자고 하고 과제도 먼저 도와주는데, 원래 후배들한테 다 친절한 사람이라 헷갈려요. 고백은 너무 빠르겠죠?',
-        author: '익명2',
-        time: '18분 전',
-        likes: 41,
-        comments: 26,
-        bookmarked: true
-      },
-      {
-        category: '연애중',
-        title: '애인이 시험기간마다 연락이 거의 끊겨요',
-        body: '공부하는 건 이해하는데 하루에 잘자 한 마디도 없는 날이 많아요. 제가 너무 연락에 집착하는 건지, 최소한의 표현은 필요한 건지 모르겠어요.',
-        author: '익명3',
-        time: '42분 전',
-        likes: 33,
-        comments: 22,
-        edited: true
-      },
-      {
-        category: '이별/권태기/장기연애',
-        title: '헤어진 뒤에 맞팔 유지하는 거 다들 가능해요?',
-        body: '헤어진 지 2주 됐는데 서로 언팔은 안 했어요. 새 글 올라올 때마다 마음이 흔들려서 차단까지 해야 하나 고민 중입니다.',
-        author: '익명4',
-        time: '1시간 전',
-        likes: 19,
-        comments: 14
-      },
-      {
-        category: '재회',
-        title: '전애인이 생일 축하한다고 연락 왔어요',
-        body: '좋게 헤어진 건 아니었는데 생일 되자마자 장문 카톡이 왔어요. 그냥 예의인지 다시 얘기해보고 싶은 건지 감이 안 옵니다.',
-        author: '익명5',
-        time: '2시간 전',
-        likes: 24,
-        comments: 31,
-        bookmarked: true
-      },
-      {
-        category: '이별/권태기/장기연애',
-        title: '고3 때부터 만났는데 대학 오고 생활이 너무 달라졌어요',
-        body: '저는 통학이고 상대는 자취하면서 새 친구도 많아졌어요. 예전처럼 매일 붙어있는 게 불가능한데 서운함을 어떻게 줄여야 할까요?',
-        author: '익명6',
-        time: '3시간 전',
-        likes: 15,
-        comments: 9
-      },
-      {
-        category: '결혼 고민',
-        title: '어린 나이에 결혼 얘기 꺼내면 너무 부담일까요',
-        body: '아직 취업 준비도 남았는데 서로 미래 얘기를 자주 하게 돼요. 좋아하는 마음이랑 현실적인 준비는 다른 문제 같아서 고민입니다.',
-        author: '익명7',
-        time: '어제',
-        likes: 37,
-        comments: 18
-      },
-      {
-        category: '연애 잡담',
-        title: '연락할 때 ㅋㅋ만 오는 거 관심 없는 신호인가요',
-        body: '질문하면 답은 하는데 대화가 계속 제가 끌고 가는 느낌이에요. 친구들은 그냥 접으라는데 아직 미련이 남아요.',
-        author: '익명8',
-        time: '어제',
-        likes: 52,
-        comments: 40
-      }
-    ];
+      ['썸/소개팅', '과팅에서 만난 사람이 스토리는 보는데 답장을 안 해요', '처음엔 새벽까지 카톡했는데 어제부터 답장이 6시간씩 늦어요. 근데 제 스토리는 바로 봐서 더 신경 쓰입니다. 그냥 관심 식은 걸까요?', '익명1', '5분 전', 28, 17],
+      ['짝사랑', '같은 과 선배가 자꾸 챙겨주는데 착각인지 모르겠어요', '수업 끝나고 같이 밥 먹자고 하고 과제도 먼저 도와주는데, 원래 후배들한테 다 친절한 사람이라 헷갈려요. 고백은 너무 빠르겠죠?', '익명2', '18분 전', 41, 26, true],
+      ['연애중', '애인이 시험기간마다 연락이 거의 끊겨요', '공부하는 건 이해하는데 하루에 잘자 한 마디도 없는 날이 많아요. 제가 너무 연락에 집착하는 건지, 최소한의 표현은 필요한 건지 모르겠어요.', '익명3', '42분 전', 33, 22],
+      ['이별/권태기/장기연애', '헤어진 뒤에 맞팔 유지하는 거 다들 가능해요?', '헤어진 지 2주 됐는데 서로 언팔은 안 했어요. 새 글 올라올 때마다 마음이 흔들려서 차단까지 해야 하나 고민 중입니다.', '익명4', '1시간 전', 19, 14],
+      ['재회', '전애인이 생일 축하한다고 연락 왔어요', '좋게 헤어진 건 아니었는데 생일 되자마자 장문 카톡이 왔어요. 그냥 예의인지 다시 얘기해보고 싶은 건지 감이 안 옵니다.', '익명5', '2시간 전', 24, 31, true],
+      ['이별/권태기/장기연애', '고3 때부터 만났는데 대학 오고 생활이 너무 달라졌어요', '저는 통학이고 상대는 자취하면서 새 친구도 많아졌어요. 예전처럼 매일 붙어있는 게 불가능한데 서운함을 어떻게 줄여야 할까요?', '익명6', '3시간 전', 15, 9],
+      ['결혼 고민', '어린 나이에 결혼 얘기 꺼내면 너무 부담일까요', '아직 취업 준비도 남았는데 서로 미래 얘기를 자주 하게 돼요. 좋아하는 마음이랑 현실적인 준비는 다른 문제 같아서 고민입니다.', '익명7', '어제', 37, 18],
+      ['연애 잡담', '연락할 때 ㅋㅋ만 오는 거 관심 없는 신호인가요', '질문하면 답은 하는데 대화가 계속 제가 끌고 가는 느낌이에요. 친구들은 그냥 접으라는데 아직 미련이 남아요.', '익명8', '어제', 52, 40]
+    ].map(([category, title, body, author, time, likes, comments, bookmarked]) => ({ category, title, body, author, time, likes, comments, bookmarked }));
 
     let stack = ['home'];
     let selectedCategory = '전체';
 
     function postMarkup(post, index) {
-      const edited = post.edited ? '<span>수정됨</span>' : '';
-      const bookmarked = post.bookmarked ? '<span>북마크</span>' : '';
-      const saved = post.bookmarked ? ' saved' : '';
       return `
-        <button class="post${saved}" type="button" data-post="${index}">
-          <div class="meta"><strong>${post.category}</strong><span>${post.time}</span>${edited}<span class="save-heart">${post.bookmarked ? '♥' : '♡'}</span></div>
+        <button class="post ${post.bookmarked ? 'saved' : ''}" type="button" data-post="${index}">
+          <div class="meta"><strong>${post.category}</strong><span>${post.time}</span><span class="heart">${post.bookmarked ? '♥' : '♡'}</span></div>
           <div class="post-title">${post.title}</div>
           <div class="post-body">${post.body}</div>
-          <div class="counts">
-            <span class="author">${post.author}</span>
-            <span>좋아요 ${post.likes}</span>
-            <span>댓글 ${post.comments}</span>
-            ${bookmarked}
-          </div>
-        </button>
-      `;
+          <div class="counts"><span class="author">${post.author}</span><span>좋아요 ${post.likes}</span><span>댓글 ${post.comments}</span></div>
+        </button>`;
     }
 
     function renderPosts(target, list) {
-      const container = document.querySelector(`[data-post-list="${target}"]`);
-      if (!container) return;
-      container.innerHTML = list.length
-        ? list.map(postMarkup).join('')
-        : '<div class="panel empty"><strong>아직 게시글이 없습니다.</strong><div class="muted">첫 고민을 작성해보세요.</div></div>';
+      const node = document.querySelector(`[data-post-list="${target}"]`);
+      if (node) node.innerHTML = list.map(postMarkup).join('');
     }
-
     function renderCategories() {
-      document.getElementById('home-categories').innerHTML = categories.map(([name]) => `
-        <button class="category" type="button" data-filter="${name}">
-          <strong>${name}</strong>
-        </button>
-      `).join('');
-
-      document.getElementById('category-select').innerHTML = categories.map(([name]) => `
-        <option>${name}</option>
-      `).join('');
+      document.getElementById('home-categories').innerHTML = categories.map(name =>
+        `<button class="category" type="button" data-filter="${name}">${name}</button>`
+      ).join('');
+      document.getElementById('category-select').innerHTML = categories.map(name => `<option>${name}</option>`).join('');
     }
-
-    function renderChips() {
-      const all = ['전체', ...categories.map(([name]) => name)];
-      document.getElementById('community-chips').innerHTML = all.map((name) => `
-        <button class="chip ${name === selectedCategory ? 'active' : ''}" type="button" data-chip="${name}">${name}</button>
-      `).join('');
-    }
-
     function renderCommunity() {
-      const list = selectedCategory === '전체'
-        ? posts
-        : posts.filter((post) => post.category === selectedCategory);
+      const all = ['전체', ...categories];
+      document.getElementById('community-chips').innerHTML = all.map(name =>
+        `<button class="chip ${name === selectedCategory ? 'active' : ''}" type="button" data-chip="${name}">${name}</button>`
+      ).join('');
       document.getElementById('community-title').textContent = selectedCategory;
-      renderChips();
-      renderPosts('community', list);
+      renderPosts('community', selectedCategory === '전체' ? posts : posts.filter(post => post.category === selectedCategory));
     }
-
     function show(name, push = true) {
-      document.querySelectorAll('.screen').forEach((screen) => {
+      document.querySelectorAll('.screen').forEach(screen => {
         const active = screen.dataset.screen === name;
         screen.classList.toggle('active', active);
         if (active) screen.scrollTop = 0;
       });
       document.querySelector('.title').textContent = titles[name] || '요매거진';
-      document.querySelector('.back-button').style.display = ['home', 'community', 'mypage'].includes(name) ? 'none' : 'block';
+      document.querySelector('.back').style.display = ['home', 'community', 'mypage'].includes(name) ? 'none' : 'block';
       document.querySelector('.tabs').style.display = name === 'detail' ? 'none' : 'grid';
-      document.querySelectorAll('.tab').forEach((tab) => {
-        tab.classList.toggle('active', tab.dataset.tab === name);
-      });
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name));
       if (push) stack.push(name);
     }
-
     function openPost(index) {
       const post = posts[index] || posts[0];
       document.getElementById('detail-author').textContent = post.author;
       document.getElementById('detail-time').textContent = post.time;
-      document.getElementById('detail-edited').textContent = post.edited ? '수정됨' : '';
       document.getElementById('detail-title').textContent = post.title;
       document.getElementById('detail-body').textContent = post.body;
       document.getElementById('detail-like').textContent = `좋아요 ${post.likes}`;
@@ -1016,27 +640,22 @@
     renderCategories();
     renderPosts('home', posts);
     renderPosts('my-posts', posts.slice(0, 2));
-    renderPosts('bookmarks', posts.filter((post) => post.bookmarked));
+    renderPosts('bookmarks', posts.filter(post => post.bookmarked));
     renderCommunity();
 
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', event => {
       const tab = event.target.closest('[data-tab]');
       const open = event.target.closest('[data-open]');
       const post = event.target.closest('[data-post]');
       const filter = event.target.closest('[data-filter]');
       const chip = event.target.closest('[data-chip]');
-      const back = event.target.closest('.back-button');
-
+      const back = event.target.closest('.back');
       if (tab) {
         stack = [tab.dataset.tab];
         show(tab.dataset.tab, false);
       } else if (open) {
-        if (open.dataset.open === 'community') {
-          stack = ['community'];
-          show('community', false);
-        } else {
-          show(open.dataset.open);
-        }
+        if (open.dataset.open === 'community') stack = ['community'];
+        show(open.dataset.open, open.dataset.open !== 'community');
       } else if (post) {
         openPost(Number(post.dataset.post));
       } else if (filter) {
