@@ -154,6 +154,29 @@
       scroll-snap-align: start;
       padding: 32px 14px;
     }
+    .hero-book {
+      min-height: 176px;
+      background-color: #fff5f0;
+      background-image:
+        linear-gradient(90deg, rgba(255, 250, 246, .98) 0%, rgba(255, 250, 246, .92) 44%, rgba(255, 250, 246, .12) 72%),
+        url('assets/yo-magazine-breakup-book-hero.png');
+      background-position: center;
+      background-size: cover;
+    }
+    .hero-book .hero-main { max-width: 64%; }
+    .hero-book h2 { font-size: 20px; }
+    .hero-book .muted {
+      max-width: 210px;
+      color: #5f5550;
+      font-size: 13px;
+    }
+    .hero-cta {
+      display: inline-flex;
+      margin-top: 14px;
+      color: var(--active);
+      font-size: 13px;
+      font-weight: 800;
+    }
     .hero-ad {
       position: relative;
       background: #f1f2f3;
@@ -237,8 +260,9 @@
 
     .chips {
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
-      overflow-x: auto;
+      overflow-x: visible;
       padding-bottom: 8px;
       margin-bottom: 8px;
     }
@@ -259,26 +283,28 @@
     .sort {
       display: flex;
       justify-content: flex-end;
-      gap: 4px;
+      gap: 14px;
       margin-bottom: 8px;
     }
     .sort button {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #ffffff;
+      min-height: 32px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
       color: var(--muted);
-      padding: 7px 12px;
+      padding: 4px 0;
       font-size: 14px;
     }
     .sort .active { color: var(--ink); font-weight: 700; }
 
     .post {
-      width: 100%;
+      width: calc(100% + 28px);
+      margin-left: -14px;
       border: 0;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 4px solid var(--soft);
       background: #ffffff;
       color: var(--ink);
-      padding: 14px 0;
+      padding: 14px 14px 0;
       text-align: left;
       cursor: pointer;
     }
@@ -337,6 +363,14 @@
       color: var(--muted);
       font-size: 13px;
     }
+    .post .post-body { margin-bottom: 0; }
+    .post .thread-actions { gap: 4px; }
+    .post .thread-action {
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+      padding: 0 8px;
+    }
     .thread-action {
       min-width: 0;
       display: inline-flex;
@@ -363,6 +397,7 @@
       color: var(--active);
       font-weight: 800;
     }
+    .thread-action.liked span { font-weight: 400; }
     .thread-action.liked svg { fill: currentColor; }
     .detail-thread-actions {
       gap: 22px;
@@ -375,7 +410,19 @@
       border-bottom: 1px solid var(--line);
       margin-bottom: 14px;
     }
-    .detail-head { margin-bottom: 7px; }
+    .detail-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 7px;
+    }
+    .detail-category {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .detail-author-meta { margin-left: auto; }
     .kebab {
       width: 34px;
       height: 34px;
@@ -409,11 +456,9 @@
     .comment .thread-action {
       margin-top: 10px;
     }
-    .deleted {
-      color: var(--muted);
-      background: var(--soft);
-      padding-left: 10px;
-    }
+    .comment.deleted { background: transparent; }
+    .comment.deleted .post-body { color: var(--muted); }
+    .comment.deleted .thread-action { display: none; }
     .comment-input {
       position: absolute;
       left: 0;
@@ -429,9 +474,18 @@
       height: 48px;
     }
     .comment-input .btn {
-      flex: 0 0 62px;
+      flex: 0 0 48px;
       height: 48px;
       padding: 0;
+    }
+    .comment-input .btn svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     input, textarea, select {
       width: 100%;
@@ -477,8 +531,10 @@
       border-bottom: 0;
     }
     .mypage-group {
-      padding: 8px 0;
-      border-top: 8px solid var(--soft);
+      width: calc(100% + 28px);
+      margin-left: -14px;
+      padding: 8px 14px;
+      border-top: 4px solid var(--soft);
     }
     .mypage-group:first-of-type { border-top: 0; }
     .mypage-group .menu {
@@ -657,10 +713,12 @@
 
     <main class="screen active" data-screen="home">
       <section class="hero">
-        <article class="hero-slide">
+        <article class="hero-slide hero-book">
           <div class="hero-main">
-            <h2>이번 주 연애 고민</h2>
-            <p class="muted">학교, 알바, 동아리, DM 사이에서 헷갈리는 마음을 나눠보세요.</p>
+            <span class="hero-eyebrow">요매거진 주인장의 첫 번째 책</span>
+            <h2>《이별 뒤의 마음에게》</h2>
+            <p class="muted">끝난 사랑 뒤에도, 내 마음을 천천히 돌보는 법</p>
+            <span class="hero-cta">책 만나보기 →</span>
           </div>
         </article>
         <article class="hero-slide">
@@ -700,7 +758,8 @@
     <main class="screen" data-screen="detail">
       <article class="detail">
         <div class="detail-head">
-          <div class="meta"><strong id="detail-author"></strong><span id="detail-time"></span></div>
+          <strong class="detail-category" id="detail-category"></strong>
+          <div class="meta detail-author-meta"><strong id="detail-author"></strong><span id="detail-time"></span></div>
         </div>
         <h2 id="detail-title"></h2>
         <p id="detail-body"></p>
@@ -718,7 +777,10 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>2</span>
         </button>
       </div>
-      <div class="comment deleted">삭제된 댓글입니다.</div>
+      <div class="comment deleted">
+        <div class="meta"><strong>익명6</strong><span>7분 전</span></div>
+        <div class="post-body">삭제된 댓글입니다.</div>
+      </div>
       <div class="comment">
         <div class="meta"><strong>익명9</strong><span>10분 전</span><span>수정됨</span></div>
         <div class="post-body">저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.</div>
@@ -728,7 +790,9 @@
       </div>
       <div class="comment-input">
         <input aria-label="댓글 입력" placeholder="댓글을 입력하세요">
-        <button class="btn primary" type="button">등록</button>
+        <button class="btn primary" type="button" aria-label="댓글 등록">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+        </button>
       </div>
     </main>
 
@@ -906,7 +970,7 @@
           <div class="post-body">${post.body}</div>
           <div class="thread-actions">
             <button class="thread-action ${post.liked ? 'liked' : ''}" type="button" data-like="${index}" aria-label="좋아요">${icons.heart}<span>${post.likes}</span></button>
-            <span class="thread-action">${icons.comment}<span>${post.comments}</span></span>
+            <button class="thread-action" type="button" aria-label="댓글 ${post.comments}개">${icons.comment}<span>${post.comments}</span></button>
           </div>
         </article>`;
     }
@@ -952,6 +1016,7 @@
     function openPost(index, push = true) {
       const post = posts[index] || posts[0];
       document.querySelector('[data-screen="detail"]').dataset.currentPost = String(index);
+      document.getElementById('detail-category').textContent = post.category;
       document.getElementById('detail-author').textContent = post.author;
       document.getElementById('detail-time').textContent = post.time;
       document.getElementById('detail-title').textContent = post.title;
