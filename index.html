@@ -364,7 +364,10 @@
       font-size: 13px;
     }
     .post .post-body { margin-bottom: 0; }
-    .post .thread-actions { gap: 4px; }
+    .post .thread-actions {
+      gap: 4px;
+      margin-left: -8px;
+    }
     .post .thread-action {
       min-width: 44px;
       min-height: 44px;
@@ -515,8 +518,8 @@
       right: 16px;
       bottom: 20px;
       padding: 10px;
-      border: 1px solid rgba(230, 230, 230, .9);
-      border-radius: 24px;
+      border: 0;
+      border-radius: 999px;
       background: rgba(255, 255, 255, .98);
       box-shadow: 0 10px 32px rgba(17, 17, 17, .18);
       backdrop-filter: blur(10px);
@@ -525,7 +528,10 @@
       flex: 1;
       min-width: 0;
       height: 48px;
-      border-radius: 12px;
+      border: 0;
+      outline: 0;
+      border-radius: 999px;
+      background: transparent;
     }
     .comment-input .btn {
       flex: 0 0 48px;
@@ -837,7 +843,7 @@
       </article>
       <div class="section-head"><h3>댓글</h3></div>
       <div class="comment">
-        <div class="meta"><strong>익명8</strong><span>3분 전</span></div>
+        <div class="meta"><strong>익명10</strong><span>3분 전</span></div>
         <div class="post-body">시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.</div>
         <div class="comment-actions">
           <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
@@ -852,11 +858,11 @@
         </div>
       </div>
       <div class="comment deleted">
-        <div class="meta"><strong>익명6</strong><span>7분 전</span></div>
+        <div class="meta"><strong>익명9</strong><span>7분 전</span></div>
         <div class="post-body">삭제된 댓글입니다.</div>
       </div>
       <div class="comment">
-        <div class="meta"><strong>익명9</strong><span>10분 전</span><span>수정됨</span></div>
+        <div class="meta"><strong>익명8</strong><span>10분 전</span><span>수정됨</span></div>
         <div class="post-body">저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.</div>
         <div class="comment-actions">
           <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
