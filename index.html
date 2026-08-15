@@ -406,9 +406,10 @@
 
     .detail {
       position: relative;
-      padding: 16px 0 18px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 14px;
+      width: calc(100% + 28px);
+      margin: 0 0 14px -14px;
+      padding: 16px 14px 18px;
+      border-bottom: 4px solid var(--soft);
     }
     .detail-head {
       display: flex;
@@ -450,12 +451,60 @@
     }
     .comment-input { display: flex; gap: 8px; flex-wrap: nowrap; }
     .comment {
+      position: relative;
       padding: 14px 0;
       border-bottom: 1px solid var(--line);
     }
-    .comment .thread-action {
+    .comment-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-top: 10px;
     }
+    .comment-actions .thread-action { margin-top: 0; }
+    .comment-more { position: relative; }
+    .comment-kebab {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #8a8a8a;
+      line-height: 1;
+    }
+    .comment-kebab svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+    .comment-kebab:hover { background: var(--soft); }
+    .comment-menu {
+      position: absolute;
+      z-index: 5;
+      right: 0;
+      top: 42px;
+      min-width: 112px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(17, 17, 17, .12);
+    }
+    .comment-menu button {
+      width: 100%;
+      min-height: 40px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--active);
+      padding: 0 12px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .comment-menu button:hover { background: var(--soft); }
     .comment.deleted { background: transparent; }
     .comment.deleted .post-body { color: var(--muted); }
     .comment.deleted .thread-action { display: none; }
@@ -497,6 +546,15 @@
     }
     textarea { min-height: 160px; resize: none; }
     form { display: grid; gap: 10px; }
+    .anonymous-notice {
+      margin-bottom: 12px;
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--muted);
+      padding: 11px 12px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
 
     .profile {
       display: flex;
@@ -773,9 +831,17 @@
       <div class="comment">
         <div class="meta"><strong>익명8</strong><span>3분 전</span></div>
         <div class="post-body">시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.</div>
-        <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>2</span>
-        </button>
+        <div class="comment-actions">
+          <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>2</span>
+          </button>
+          <div class="comment-more">
+            <button class="comment-kebab" type="button" data-comment-menu aria-label="댓글 더보기" aria-expanded="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
+            </button>
+            <div class="comment-menu" hidden><button type="button" data-block-user>차단하기</button></div>
+          </div>
+        </div>
       </div>
       <div class="comment deleted">
         <div class="meta"><strong>익명6</strong><span>7분 전</span></div>
@@ -784,9 +850,17 @@
       <div class="comment">
         <div class="meta"><strong>익명9</strong><span>10분 전</span><span>수정됨</span></div>
         <div class="post-body">저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.</div>
-        <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>5</span>
-        </button>
+        <div class="comment-actions">
+          <button class="thread-action liked" type="button" aria-label="댓글 좋아요">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>5</span>
+          </button>
+          <div class="comment-more">
+            <button class="comment-kebab" type="button" data-comment-menu aria-label="댓글 더보기" aria-expanded="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
+            </button>
+            <div class="comment-menu" hidden><button type="button" data-block-user>차단하기</button></div>
+          </div>
+        </div>
       </div>
       <div class="comment-input">
         <input aria-label="댓글 입력" placeholder="댓글을 입력하세요">
@@ -797,6 +871,7 @@
     </main>
 
     <main class="screen" data-screen="write">
+      <p class="anonymous-notice">작성한 글은 익명으로 게시돼요.</p>
       <form>
         <select aria-label="카테고리 선택" id="category-select"></select>
         <input aria-label="제목" placeholder="제목">
@@ -810,7 +885,6 @@
         <span class="avatar">익</span>
         <span class="profile-main">
           <span class="profile-name">익명</span>
-          <span class="muted">카카오 간편로그인 연결됨</span>
         </span>
         <span class="chev">›</span>
       </button>
@@ -852,7 +926,6 @@
             <div class="avatar">익</div>
             <div class="profile-main">
               <div class="profile-name">익명</div>
-              <p class="muted">카카오 간편로그인 연결됨</p>
             </div>
           </div>
           <div class="account-row"><strong>로그인 방식</strong><span>카카오 간편 로그인</span></div>
@@ -970,7 +1043,7 @@
           <div class="post-body">${post.body}</div>
           <div class="thread-actions">
             <button class="thread-action ${post.liked ? 'liked' : ''}" type="button" data-like="${index}" aria-label="좋아요">${icons.heart}<span>${post.likes}</span></button>
-            <button class="thread-action" type="button" aria-label="댓글 ${post.comments}개">${icons.comment}<span>${post.comments}</span></button>
+            <button class="thread-action" type="button" data-comment="${index}" aria-label="댓글 ${post.comments}개">${icons.comment}<span>${post.comments}</span></button>
           </div>
         </article>`;
     }
@@ -1064,12 +1137,30 @@
       const tab = event.target.closest('[data-tab]');
       const open = event.target.closest('[data-open]');
       const like = event.target.closest('[data-like]');
+      const comment = event.target.closest('[data-comment]');
+      const commentMenuButton = event.target.closest('[data-comment-menu]');
+      const blockUserButton = event.target.closest('[data-block-user]');
       const post = event.target.closest('[data-post]');
       const chip = event.target.closest('[data-chip]');
       const back = event.target.closest('.back');
-      if (like) {
+      if (commentMenuButton) {
+        event.stopPropagation();
+        const menu = commentMenuButton.nextElementSibling;
+        const willOpen = menu.hidden;
+        document.querySelectorAll('.comment-menu').forEach(item => { item.hidden = true; });
+        document.querySelectorAll('[data-comment-menu]').forEach(button => button.setAttribute('aria-expanded', 'false'));
+        menu.hidden = !willOpen;
+        commentMenuButton.setAttribute('aria-expanded', String(willOpen));
+      } else if (blockUserButton) {
+        event.stopPropagation();
+        blockUserButton.closest('.comment-menu').hidden = true;
+      } else if (like) {
         event.stopPropagation();
         toggleLike(Number(like.dataset.like));
+      } else if (comment) {
+        event.stopPropagation();
+        openPost(Number(comment.dataset.comment));
+        document.querySelector('.comment-input input')?.focus();
       } else if (event.target.closest('#detail-like')) {
         const current = Number(document.querySelector('[data-screen="detail"]').dataset.currentPost || 0);
         toggleLike(current);
@@ -1087,6 +1178,9 @@
       } else if (back) {
         stack.pop();
         show(stack[stack.length - 1] || 'home', false);
+      } else {
+        document.querySelectorAll('.comment-menu').forEach(item => { item.hidden = true; });
+        document.querySelectorAll('[data-comment-menu]').forEach(button => button.setAttribute('aria-expanded', 'false'));
       }
     });
   </script>
