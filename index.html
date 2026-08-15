@@ -502,7 +502,7 @@
       padding: 0 12px;
       text-align: left;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 400;
     }
     .comment-menu button:hover { background: var(--soft); }
     .comment.deleted { background: transparent; }
@@ -622,7 +622,9 @@
       stroke-linejoin: round;
     }
     .account-detail {
-      display: grid;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
       gap: 16px;
       padding-top: 8px;
     }
@@ -644,6 +646,7 @@
     .account-row strong {
       color: var(--ink);
       font-size: 15px;
+      font-weight: 400;
     }
     .text-actions {
       margin-top: auto;
@@ -655,11 +658,11 @@
       min-height: 48px;
       border: 0;
       background: transparent;
-      color: var(--ink);
+      color: #7f7f7f;
       text-align: left;
-      font-weight: 700;
+      font-weight: 400;
     }
-    .text-btn.danger { color: var(--active); }
+    .text-btn.danger { color: #9a777d; }
     .notice {
       width: 100%;
       display: grid;
@@ -839,7 +842,7 @@
             <button class="comment-kebab" type="button" data-comment-menu aria-label="댓글 더보기" aria-expanded="false">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
             </button>
-            <div class="comment-menu" hidden><button type="button" data-block-user>차단하기</button></div>
+            <div class="comment-menu" hidden><button type="button" data-report-comment>신고하기</button></div>
           </div>
         </div>
       </div>
@@ -858,7 +861,7 @@
             <button class="comment-kebab" type="button" data-comment-menu aria-label="댓글 더보기" aria-expanded="false">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
             </button>
-            <div class="comment-menu" hidden><button type="button" data-block-user>차단하기</button></div>
+            <div class="comment-menu" hidden><button type="button" data-report-comment>신고하기</button></div>
           </div>
         </div>
       </div>
@@ -1139,7 +1142,7 @@
       const like = event.target.closest('[data-like]');
       const comment = event.target.closest('[data-comment]');
       const commentMenuButton = event.target.closest('[data-comment-menu]');
-      const blockUserButton = event.target.closest('[data-block-user]');
+      const reportCommentButton = event.target.closest('[data-report-comment]');
       const post = event.target.closest('[data-post]');
       const chip = event.target.closest('[data-chip]');
       const back = event.target.closest('.back');
@@ -1151,9 +1154,9 @@
         document.querySelectorAll('[data-comment-menu]').forEach(button => button.setAttribute('aria-expanded', 'false'));
         menu.hidden = !willOpen;
         commentMenuButton.setAttribute('aria-expanded', String(willOpen));
-      } else if (blockUserButton) {
+      } else if (reportCommentButton) {
         event.stopPropagation();
-        blockUserButton.closest('.comment-menu').hidden = true;
+        reportCommentButton.closest('.comment-menu').hidden = true;
       } else if (like) {
         event.stopPropagation();
         toggleLike(Number(like.dataset.like));
