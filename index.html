@@ -510,17 +510,22 @@
     .comment.deleted .thread-action { display: none; }
     .comment-input {
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 10px 12px;
-      border-top: 1px solid var(--line);
-      background: #ffffff;
+      z-index: 6;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      padding: 8px;
+      border: 1px solid rgba(222, 222, 222, .9);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 8px 28px rgba(17, 17, 17, .14);
+      backdrop-filter: blur(10px);
     }
     .comment-input input {
       flex: 1;
       min-width: 0;
       height: 48px;
+      border-radius: 12px;
     }
     .comment-input .btn {
       flex: 0 0 48px;
