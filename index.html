@@ -374,6 +374,101 @@
       justify-content: center;
       padding: 0 8px;
     }
+    .post.compact {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: auto auto;
+      align-items: center;
+      column-gap: 10px;
+      row-gap: 5px;
+      padding: 10px 14px 8px;
+    }
+    .post.compact .post-top { display: contents; }
+    .post.compact .post-category {
+      grid-column: 1 / 3;
+      grid-row: 1;
+      font-size: 11px;
+    }
+    .post.compact .post-time {
+      grid-column: 1 / 3;
+      grid-row: 1;
+      margin-left: 0;
+      font-size: 11px;
+      justify-self: end;
+    }
+    .post.compact .post-title {
+      grid-column: 1;
+      grid-row: 2;
+      margin-bottom: 0;
+      font-size: 13px;
+    }
+    .post.compact .thread-actions {
+      grid-column: 2;
+      grid-row: 2;
+      margin-left: 0;
+    }
+    .post.compact .thread-action {
+      min-width: 30px;
+      min-height: 28px;
+      padding: 0 2px;
+      font-size: 12px;
+    }
+    .post.compact .thread-action svg {
+      width: 16px;
+      height: 16px;
+    }
+    .more-posts {
+      width: 100%;
+      height: 44px;
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .more-posts:hover { background: var(--soft); }
+    .magazine-section .more-posts {
+      width: calc(100% - 14px);
+      margin-top: 8px;
+      margin-right: 14px;
+    }
+    .magazine-section {
+      margin: 22px -14px 0;
+      padding: 0 0 4px 14px;
+    }
+    .magazine-section .section-head {
+      margin-right: 14px;
+    }
+    .magazine-rail {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 0 14px 8px 0;
+      scrollbar-width: none;
+    }
+    .magazine-rail::-webkit-scrollbar { display: none; }
+    .magazine-card {
+      position: relative;
+      flex: 0 0 162px;
+      height: 220px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 7px;
+      background: #111111;
+      color: #ffffff;
+      padding: 0;
+      text-align: left;
+      scroll-snap-align: start;
+    }
+    .magazine-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
     .thread-action {
       min-width: 0;
       display: inline-flex;
@@ -817,6 +912,25 @@
       </section>
       <div class="section-head"><h3>인기 고민</h3></div>
       <div data-post-list="home"></div>
+      <button class="more-posts" type="button" data-open="community">더보기</button>
+      <section class="magazine-section" aria-label="매거진">
+        <div class="section-head"><h3>매거진</h3></div>
+        <div class="magazine-rail">
+          <button class="magazine-card" type="button" aria-label="요매거진 대나무숲 사연을 모집합니다">
+            <img src="assets/magazine-thumb-1.jpg" alt="">
+          </button>
+          <button class="magazine-card" type="button" aria-label="만 원으로 여자친구 행복하게 할 수 있다면 여기로 갈게요">
+            <img src="assets/magazine-thumb-2.jpg" alt="">
+          </button>
+          <button class="magazine-card" type="button" aria-label="왜 다들 연애하면 이케아에 가는지 비로소 알 것 같았다">
+            <img src="assets/magazine-thumb-3.jpg" alt="">
+          </button>
+          <button class="magazine-card" type="button" aria-label="수제 맥주 실컷 맛보러 동대문구 맥주 축제 갈 사람 없나">
+            <img src="assets/magazine-thumb-4.jpg" alt="">
+          </button>
+        </div>
+        <button class="more-posts" type="button">더보기</button>
+      </section>
       <button class="fab" type="button" data-open="write" aria-label="글쓰기">✎</button>
     </main>
 
@@ -1049,12 +1163,13 @@
     let stack = ['home'];
     let selectedCategory = '전체';
 
-    function postMarkup(post, index) {
+    function postMarkup(post, index, options = {}) {
+      const compact = Boolean(options.compact);
       return `
-        <article class="post" data-post="${index}">
+        <article class="post${compact ? ' compact' : ''}" data-post="${index}">
           <div class="post-top"><span class="post-category">${post.category}</span><span class="post-time">${post.time}</span></div>
           <div class="post-title">${post.title}</div>
-          <div class="post-body">${post.body}</div>
+          ${compact ? '' : `<div class="post-body">${post.body}</div>`}
           <div class="thread-actions">
             <button class="thread-action ${post.liked ? 'liked' : ''}" type="button" data-like="${index}" aria-label="좋아요">${icons.heart}<span>${post.likes}</span></button>
             <button class="thread-action" type="button" data-comment="${index}" aria-label="댓글 ${post.comments}개">${icons.comment}<span>${post.comments}</span></button>
@@ -1064,7 +1179,8 @@
 
     function renderPosts(target, list) {
       const node = document.querySelector(`[data-post-list="${target}"]`);
-      if (node) node.innerHTML = list.map(post => postMarkup(post, posts.indexOf(post))).join('');
+      const visiblePosts = target === 'home' ? list.slice(0, 5) : list;
+      if (node) node.innerHTML = visiblePosts.map(post => postMarkup(post, posts.indexOf(post), { compact: target === 'home' })).join('');
     }
     function renderCategories() {
       document.getElementById('category-select').innerHTML = categories.map(name => `<option>${name}</option>`).join('');
