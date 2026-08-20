@@ -3,1433 +3,269 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>요매거진 MVP 프로토타입</title>
-  <style>
-    :root {
-      --viewport-mobile-max: 430px;
-      --viewport-mobile-height: 860px;
-      --viewport-desktop-height: 820px;
-      --breakpoint-phone-frame: 520px;
-
-      --color-surface: #ffffff;
-      --color-surface-soft: #f6f6f6;
-      --color-surface-ad: #f1f2f3;
-      --color-surface-book: #fff5f0;
-      --color-text-primary: #111111;
-      --color-text-body: #333333;
-      --color-text-secondary: #707070;
-      --color-text-tertiary: #7f7f7f;
-      --color-text-subtle: #8a8a8a;
-      --color-text-book: #5f5550;
-      --color-border: #dedede;
-      --color-border-strong: #a6a6a6;
-      --color-brand-main: #ff385c;
-      --color-brand-pressed: #e31c50;
-      --color-danger-muted: #9a777d;
-      --color-floating-input: rgba(255, 255, 255, .98);
-      --color-overlay-strong: rgba(17, 17, 17, .72);
-      --color-shadow: rgba(17, 17, 17, .12);
-      --color-shadow-strong: rgba(17, 17, 17, .18);
-      --gradient-book-hero: linear-gradient(90deg, rgba(255, 250, 246, .98) 0%, rgba(255, 250, 246, .92) 44%, rgba(255, 250, 246, .12) 72%);
-
-      --font-caption2: 10px;
-      --font-tab: 11px;
-      --font-caption: 12px;
-      --font-label: 13px;
-      --font-body: 14px;
-      --font-card-title: 15px;
-      --font-detail-body: 16px;
-      --font-section-title: 17px;
-      --font-title: 18px;
-      --font-topbar-title: 20px;
-      --font-detail-title: 22px;
-      --font-back-icon: 30px;
-
-      --line-body: 1.45;
-      --line-detail-body: 1.55;
-      --line-title: 1.35;
-      --line-detail-title: 1.25;
-
-      --space-2: 2px;
-      --space-3: 3px;
-      --space-4: 4px;
-      --space-5: 5px;
-      --space-6: 6px;
-      --space-7: 7px;
-      --space-8: 8px;
-      --space-10: 10px;
-      --space-11: 11px;
-      --space-12: 12px;
-      --space-14: 14px;
-      --space-15: 15px;
-      --space-16: 16px;
-      --space-18: 18px;
-      --space-20: 20px;
-      --space-22: 22px;
-      --space-24: 24px;
-      --space-28: 28px;
-      --space-32: 32px;
-
-      --radius-xs: 3px;
-      --radius-card: 7px;
-      --radius-control: 8px;
-      --radius-panel: 10px;
-      --radius-frame: 32px;
-      --radius-pill: 999px;
-      --radius-circle: 50%;
-
-      --size-dot: 5px;
-      --size-topbar: 54px;
-      --size-status: 34px;
-      --size-icon-button: 36px;
-      --size-icon-button-sm: 34px;
-      --size-touch: 44px;
-      --size-input: 48px;
-      --size-fab: 52px;
-      --size-avatar: 54px;
-      --size-tabs: 66px;
-      --size-icon-sm: 16px;
-      --size-icon-md: 20px;
-      --size-icon-topbar: 21px;
-      --size-icon-lg: 22px;
-
-      --shadow-menu: 0 8px 24px var(--color-shadow);
-      --shadow-floating-input: 0 10px 32px var(--color-shadow-strong);
-
-      --page: var(--color-surface);
-      --ink: var(--color-text-primary);
-      --body: var(--color-text-body);
-      --muted: var(--color-text-secondary);
-      --line: var(--color-border);
-      --soft: var(--color-surface-soft);
-      --active: var(--color-brand-main);
-      --active-press: var(--color-brand-pressed);
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: var(--page);
-      color: var(--ink);
-      font-family: "Airbnb Cereal VF", Circular, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-    }
-    button, input, textarea, select { font: inherit; }
-    button { cursor: pointer; }
-
-    .phone {
-      width: min(var(--viewport-mobile-max), 100vw);
-      height: min(var(--viewport-mobile-height), 100vh);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--color-surface);
-      border-left: 1px solid var(--line);
-      border-right: 1px solid var(--line);
-    }
-    @media (min-width: 520px) {
-      .phone {
-        height: var(--viewport-desktop-height);
-        border: 1px solid var(--line);
-        border-radius: var(--radius-frame);
-      }
-    }
-
-    .status, .topbar {
-      flex: 0 0 auto;
-      background: var(--color-text-primary);
-      color: var(--color-surface);
-    }
-    .status {
-      height: var(--size-status);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--space-22);
-      font-size: var(--font-caption);
-      font-weight: 700;
-    }
-    .dots { display: flex; gap: var(--space-5); }
-    .dots span {
-      width: var(--size-dot);
-      height: var(--size-dot);
-      border-radius: var(--radius-circle);
-      background: var(--color-surface);
-      opacity: .72;
-    }
-    .topbar {
-      height: var(--size-topbar);
-      display: flex;
-      align-items: center;
-      gap: var(--space-8);
-      padding: 0 var(--space-14);
-    }
-    .title {
-      flex: 1;
-      min-width: 0;
-      font-size: var(--font-topbar-title);
-      font-weight: 800;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .icon, .back {
-      width: var(--size-icon-button);
-      height: var(--size-icon-button);
-      border: 0;
-      border-radius: var(--radius-circle);
-      background: transparent;
-      color: inherit;
-      font-size: var(--font-topbar-title);
-    }
-    .back {
-      display: none;
-      font-size: var(--font-back-icon);
-      line-height: 1;
-    }
-    .icon svg {
-      width: var(--size-icon-topbar);
-      height: var(--size-icon-topbar);
-      display: block;
-      margin: auto;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .topbar .kebab {
-      display: none;
-      color: var(--color-surface);
-    }
-    .topbar.detail-mode .title {
-      color: transparent;
-    }
-    .topbar.detail-mode .icon {
-      display: none;
-    }
-    .topbar.detail-mode .kebab {
-      display: grid;
-    }
-
-    .screen {
-      display: none;
-      position: relative;
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      padding: var(--space-12) var(--space-14) 82px;
-      background: var(--color-surface);
-    }
-    .screen.active { display: block; }
-
-    .hero {
-      position: relative;
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-      margin: calc(var(--space-12) * -1) calc(var(--space-14) * -1) var(--space-16);
-      border-bottom: 1px solid var(--line);
-      background: var(--soft);
-    }
-    .hero::-webkit-scrollbar { display: none; }
-    .hero-slide {
-      flex: 0 0 100%;
-      min-height: 128px;
-      display: flex;
-      align-items: center;
-      scroll-snap-align: start;
-      padding: var(--space-32) var(--space-14);
-    }
-    .hero-book {
-      min-height: 176px;
-      background-color: var(--color-surface-book);
-      background-image:
-        var(--gradient-book-hero),
-        url('assets/yo-magazine-breakup-book-hero.png');
-      background-position: center;
-      background-size: cover;
-    }
-    .hero-book .hero-main { max-width: 64%; }
-    .hero-book h2 { font-size: var(--font-topbar-title); }
-    .hero-book .muted {
-      max-width: 210px;
-      color: var(--color-text-book);
-      font-size: var(--font-label);
-    }
-    .hero-cta {
-      display: inline-flex;
-      margin-top: var(--space-14);
-      color: var(--active);
-      font-size: var(--font-label);
-      font-weight: 800;
-    }
-    .hero-ad {
-      position: relative;
-      background: var(--color-surface-ad);
-    }
-    .hero-eyebrow {
-      display: block;
-      margin-bottom: var(--space-8);
-      color: var(--muted);
-      font-size: var(--font-caption);
-      font-weight: 700;
-    }
-    .ad-badge {
-      position: absolute;
-      top: var(--space-18);
-      right: var(--space-14);
-      padding: var(--space-3) var(--space-6);
-      border: 1px solid var(--color-border-strong);
-      border-radius: var(--radius-xs);
-      color: var(--muted);
-      font-size: var(--font-caption2);
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .hero-pagination {
-      position: absolute;
-      right: var(--space-14);
-      bottom: var(--space-12);
-      min-width: 42px;
-      height: 24px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--radius-pill);
-      background: var(--color-overlay-strong);
-      color: var(--color-surface);
-      font-size: var(--font-caption);
-      font-weight: 800;
-      pointer-events: none;
-    }
-    .hero-main { flex: 1; min-width: 0; }
-    h2, h3, p { margin: 0; }
-    h2 { font-size: var(--font-title); line-height: var(--line-title); }
-    h3 { font-size: var(--font-section-title); line-height: var(--line-title); }
-    .muted {
-      margin-top: var(--space-5);
-      color: var(--muted);
-      font-size: var(--font-body);
-      line-height: var(--line-body);
-    }
-
-    .btn {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-pill);
-      background: var(--soft);
-      color: var(--ink);
-      padding: var(--space-10) var(--space-14);
-      font-size: var(--font-body);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .btn.primary {
-      border-color: var(--active);
-      background: var(--active);
-      color: var(--color-surface);
-    }
-    .btn.primary:active { background: var(--active-press); }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: var(--space-16) 0 var(--space-8);
-    }
-    .link {
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      font-size: var(--font-label);
-    }
-    .post:hover, .menu button:hover { background: var(--soft); }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-6);
-      overflow-x: visible;
-      padding-bottom: var(--space-8);
-      margin-bottom: var(--space-8);
-    }
-    .chip {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-pill);
-      background: var(--color-surface);
-      color: var(--ink);
-      padding: 9px var(--space-14);
-      font-size: var(--font-body);
-      white-space: nowrap;
-    }
-    .chip.active {
-      border-color: var(--active);
-      background: var(--active);
-      color: var(--color-surface);
-    }
-    .sort {
-      display: flex;
-      justify-content: flex-end;
-      gap: var(--space-14);
-      margin-bottom: var(--space-8);
-    }
-    .sort button {
-      min-height: 32px;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      color: var(--muted);
-      padding: 4px 0;
-      font-size: var(--font-body);
-    }
-    .sort .active { color: var(--ink); font-weight: 700; }
-
-    .post {
-      width: calc(100% + 28px);
-      margin-left: calc(var(--space-14) * -1);
-      border: 0;
-      border-bottom: 4px solid var(--soft);
-      background: var(--color-surface);
-      color: var(--ink);
-      padding: var(--space-14) var(--space-14) 0;
-      text-align: left;
-      cursor: pointer;
-    }
-    .post-top {
-      display: flex;
-      align-items: center;
-      gap: var(--space-10);
-      margin-bottom: var(--space-7);
-    }
-    .post-category {
-      min-width: 0;
-      color: var(--muted);
-      font-size: var(--font-caption);
-      font-weight: 700;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .post-time {
-      margin-left: auto;
-      color: var(--muted);
-      font-size: var(--font-caption);
-      white-space: nowrap;
-    }
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: var(--space-7);
-      color: var(--muted);
-      font-size: var(--font-caption);
-      margin-bottom: var(--space-7);
-    }
-    .meta strong { color: var(--ink); }
-    .post-title {
-      margin-bottom: var(--space-5);
-      font-size: var(--font-card-title);
-      font-weight: 800;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .post-body {
-      color: var(--body);
-      font-size: var(--font-body);
-      line-height: var(--line-body);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-bottom: var(--space-10);
-    }
-    .thread-actions {
-      display: flex;
-      align-items: center;
-      gap: var(--space-18);
-      color: var(--muted);
-      font-size: var(--font-label);
-    }
-    .post .post-body { margin-bottom: 0; }
-    .post .thread-actions {
-      gap: var(--space-4);
-      margin-left: calc(var(--space-8) * -1);
-    }
-    .post .thread-action {
-      min-width: var(--size-touch);
-      min-height: var(--size-touch);
-      justify-content: center;
-      padding: 0 var(--space-8);
-    }
-    .post.compact {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-rows: auto auto;
-      align-items: center;
-      column-gap: var(--space-10);
-      row-gap: var(--space-5);
-      padding: var(--space-10) var(--space-14) var(--space-8);
-    }
-    .post.compact .post-top { display: contents; }
-    .post.compact .post-category {
-      grid-column: 1 / 3;
-      grid-row: 1;
-      font-size: var(--font-tab);
-    }
-    .post.compact .post-time {
-      grid-column: 1 / 3;
-      grid-row: 1;
-      margin-left: 0;
-      font-size: var(--font-tab);
-      justify-self: end;
-    }
-    .post.compact .post-title {
-      grid-column: 1;
-      grid-row: 2;
-      margin-bottom: 0;
-      font-size: var(--font-label);
-    }
-    .post.compact .thread-actions {
-      grid-column: 2;
-      grid-row: 2;
-      margin-left: 0;
-    }
-    .post.compact .thread-action {
-      min-width: 30px;
-      min-height: 28px;
-      padding: 0 2px;
-      font-size: var(--font-caption);
-    }
-    .post.compact .thread-action svg {
-      width: var(--size-icon-sm);
-      height: var(--size-icon-sm);
-    }
-    .more-posts {
-      width: 100%;
-      height: var(--size-touch);
-      margin-top: var(--space-10);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-control);
-      background: var(--color-surface);
-      color: var(--ink);
-      font-size: var(--font-body);
-      font-weight: 700;
-    }
-    .more-posts:hover { background: var(--soft); }
-    .magazine-section .more-posts {
-      width: calc(100% - 14px);
-      margin-top: var(--space-8);
-      margin-right: var(--space-14);
-    }
-    .magazine-section {
-      margin: var(--space-22) calc(var(--space-14) * -1) 0;
-      padding: 0 0 var(--space-4) var(--space-14);
-    }
-    .magazine-section .section-head {
-      margin-right: var(--space-14);
-    }
-    .magazine-rail {
-      display: flex;
-      gap: var(--space-12);
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding: 0 var(--space-14) var(--space-8) 0;
-      scrollbar-width: none;
-    }
-    .magazine-rail::-webkit-scrollbar { display: none; }
-    .magazine-card {
-      position: relative;
-      flex: 0 0 162px;
-      height: 220px;
-      overflow: hidden;
-      border: 0;
-      border-radius: var(--radius-card);
-      background: var(--color-text-primary);
-      color: var(--color-surface);
-      padding: 0;
-      text-align: left;
-      scroll-snap-align: start;
-    }
-    .magazine-card img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-    .thread-action {
-      min-width: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-5);
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      padding: 0;
-      font-size: var(--font-label);
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .thread-action svg {
-      width: var(--size-icon-md);
-      height: var(--size-icon-md);
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.9;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .thread-action.liked {
-      color: var(--active);
-      font-weight: 800;
-    }
-    .thread-action.liked span { font-weight: 400; }
-    .thread-action.liked svg { fill: currentColor; }
-    .detail-thread-actions {
-      gap: var(--space-22);
-      margin-top: var(--space-12);
-    }
-
-    .detail {
-      position: relative;
-      width: calc(100% + 28px);
-      margin: 0 0 var(--space-14) calc(var(--space-14) * -1);
-      padding: var(--space-16) var(--space-14) var(--space-18);
-      border-bottom: 4px solid var(--soft);
-    }
-    .detail-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-12);
-      margin-bottom: var(--space-7);
-    }
-    .detail-category {
-      color: var(--ink);
-      font-size: var(--font-label);
-      font-weight: 700;
-    }
-    .detail-author-meta { margin-left: auto; }
-    .kebab {
-      width: var(--size-icon-button-sm);
-      height: var(--size-icon-button-sm);
-      display: grid;
-      place-items: center;
-      border: 0;
-      border-radius: var(--radius-circle);
-      background: transparent;
-      color: var(--ink);
-      font-size: var(--font-detail-title);
-      line-height: 1;
-    }
-    .kebab:hover { background: var(--soft); }
-    .detail h2 {
-      margin: var(--space-10) 0;
-      font-size: var(--font-detail-title);
-      line-height: var(--line-detail-title);
-      font-weight: 700;
-    }
-    .detail p {
-      margin-bottom: var(--space-14);
-      color: var(--body);
-      font-size: var(--font-detail-body);
-      line-height: var(--line-detail-body);
-    }
-    .comment-input { display: flex; gap: var(--space-8); flex-wrap: nowrap; }
-    .comment {
-      position: relative;
-      padding: var(--space-14) 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .comment-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: var(--space-10);
-    }
-    .comment-actions .thread-action { margin-top: 0; }
-    .comment-more { position: relative; }
-    .comment-kebab {
-      width: var(--size-touch);
-      height: var(--size-touch);
-      display: grid;
-      place-items: center;
-      border: 0;
-      border-radius: var(--radius-circle);
-      background: transparent;
-      color: var(--color-text-subtle);
-      line-height: 1;
-    }
-    .comment-kebab svg {
-      width: var(--size-icon-md);
-      height: var(--size-icon-md);
-      fill: currentColor;
-    }
-    .comment-kebab:hover { background: var(--soft); }
-    .comment-menu {
-      position: absolute;
-      z-index: 5;
-      right: 0;
-      top: 42px;
-      min-width: 112px;
-      padding: var(--space-4);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-panel);
-      background: var(--color-surface);
-      box-shadow: var(--shadow-menu);
-    }
-    .comment-menu button {
-      width: 100%;
-      min-height: 40px;
-      border: 0;
-      border-radius: var(--radius-card);
-      background: transparent;
-      color: var(--active);
-      padding: 0 var(--space-12);
-      text-align: left;
-      font-size: var(--font-body);
-      font-weight: 400;
-    }
-    .comment-menu button:hover { background: var(--soft); }
-    .comment.deleted { background: transparent; }
-    .comment.deleted .post-body { color: var(--muted); }
-    .comment.deleted .thread-action { display: none; }
-    .comment-input {
-      position: absolute;
-      z-index: 6;
-      left: 16px;
-      right: 16px;
-      bottom: 20px;
-      padding: var(--space-10);
-      border: 0;
-      border-radius: var(--radius-pill);
-      background: var(--color-floating-input);
-      box-shadow: var(--shadow-floating-input);
-      backdrop-filter: blur(10px);
-    }
-    .comment-input input {
-      flex: 1;
-      min-width: 0;
-      height: var(--size-input);
-      border: 0;
-      outline: 0;
-      border-radius: var(--radius-pill);
-      background: transparent;
-    }
-    .comment-input .btn {
-      flex: 0 0 var(--size-input);
-      height: var(--size-input);
-      padding: 0;
-    }
-    .comment-input .btn svg {
-      width: var(--size-icon-lg);
-      height: var(--size-icon-lg);
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-control);
-      background: var(--color-surface);
-      color: var(--ink);
-      padding: var(--space-14) var(--space-12);
-    }
-    textarea { min-height: 160px; resize: none; }
-    form { display: grid; gap: var(--space-10); }
-    .anonymous-notice {
-      margin-bottom: var(--space-12);
-      border-radius: var(--radius-panel);
-      background: var(--soft);
-      color: var(--muted);
-      padding: var(--space-11) var(--space-12);
-      font-size: var(--font-label);
-      line-height: 1.4;
-    }
-
-    .profile {
-      display: flex;
-      align-items: center;
-      gap: var(--space-12);
-      padding: var(--space-18) 0;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: var(--space-12);
-    }
-    .avatar {
-      width: var(--size-avatar);
-      height: var(--size-avatar);
-      display: grid;
-      place-items: center;
-      border-radius: var(--radius-circle);
-      background: var(--soft);
-      font-weight: 900;
-    }
-    .profile-main { flex: 1; min-width: 0; }
-    .profile-name { font-size: var(--font-title); font-weight: 800; }
-    .profile-link {
-      width: 100%;
-      border: 0;
-      background: transparent;
-      color: var(--ink);
-      text-align: left;
-      cursor: pointer;
-    }
-    .mypage-profile {
-      margin: 0;
-      padding: var(--space-20) 0;
-      border-bottom: 0;
-    }
-    .mypage-group {
-      width: calc(100% + 28px);
-      margin-left: calc(var(--space-14) * -1);
-      padding: var(--space-8) var(--space-14);
-      border-top: 4px solid var(--soft);
-    }
-    .mypage-group:first-of-type { border-top: 0; }
-    .mypage-group .menu {
-      margin-bottom: 0;
-      border-top: 0;
-    }
-    .mypage-group .menu button {
-      min-height: var(--size-input);
-      border-bottom: 0;
-      padding: 0 var(--space-2);
-    }
-    .menu-icon {
-      width: var(--size-icon-lg);
-      height: var(--size-icon-lg);
-      flex: 0 0 auto;
-      display: grid;
-      place-items: center;
-      color: var(--ink);
-    }
-    .menu-icon svg {
-      width: 19px;
-      height: 19px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.9;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .account-detail {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-16);
-      padding-top: var(--space-8);
-    }
-    .account-card {
-      display: grid;
-      gap: var(--space-12);
-      padding: var(--space-16) 0;
-      border-bottom: 8px solid var(--soft);
-    }
-    .account-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-14);
-      min-height: 34px;
-      color: var(--muted);
-      font-size: var(--font-body);
-    }
-    .account-row strong {
-      color: var(--ink);
-      font-size: var(--font-card-title);
-      font-weight: 400;
-    }
-    .text-actions {
-      margin-top: auto;
-      display: grid;
-      gap: var(--space-2);
-      padding-top: var(--space-28);
-    }
-    .text-btn {
-      min-height: var(--size-input);
-      border: 0;
-      background: transparent;
-      color: var(--color-text-tertiary);
-      text-align: left;
-      font-weight: 400;
-    }
-    .text-btn.danger { color: var(--color-danger-muted); }
-    .notice {
-      width: 100%;
-      display: grid;
-      gap: var(--space-6);
-      border: 0;
-      border-bottom: 1px solid var(--line);
-      background: var(--color-surface);
-      color: var(--ink);
-      padding: var(--space-15) 0;
-      text-align: left;
-    }
-    .notice:hover { background: var(--soft); }
-    .notice-top {
-      display: flex;
-      align-items: center;
-      gap: var(--space-8);
-      color: var(--muted);
-      font-size: var(--font-caption);
-    }
-    .notice-type {
-      color: var(--active);
-      font-weight: 800;
-    }
-    .notice-time { margin-left: auto; }
-    .notice-title {
-      font-size: var(--font-card-title);
-      font-weight: 800;
-      line-height: 1.4;
-    }
-    .notice-body {
-      color: var(--muted);
-      font-size: var(--font-label);
-      line-height: var(--line-body);
-    }
-    .menu {
-      margin-bottom: var(--space-10);
-      border-top: 1px solid var(--line);
-    }
-    .menu button, .menu-row {
-      width: 100%;
-      min-height: 50px;
-      display: flex;
-      align-items: center;
-      gap: var(--space-10);
-      border: 0;
-      border-bottom: 1px solid var(--line);
-      background: transparent;
-      color: var(--ink);
-      text-align: left;
-      padding: 0;
-    }
-    .chev { margin-left: auto; color: var(--color-text-subtle); }
-
-    .fab {
-      position: absolute;
-      right: var(--space-16);
-      bottom: var(--space-18);
-      width: var(--size-fab);
-      height: var(--size-fab);
-      display: grid;
-      place-items: center;
-      border: 0;
-      border-radius: var(--radius-circle);
-      background: var(--active);
-      color: var(--color-surface);
-      font-size: var(--font-detail-title);
-    }
-    .tabs {
-      height: var(--size-tabs);
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid var(--line);
-      background: var(--color-surface);
-      flex: 0 0 auto;
-    }
-    .tab {
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-3);
-      font-size: var(--font-tab);
-    }
-    .symbol { font-size: var(--font-detail-title); line-height: 1; }
-    .tab.active { color: var(--active); font-weight: 800; }
-
-    .empty-state, .error-state {
-      min-height: 160px;
-      display: grid;
-      place-items: center;
-      padding: var(--space-24) var(--space-14);
-      color: var(--color-text-secondary);
-      font-size: var(--font-body);
-      line-height: var(--line-body);
-      text-align: center;
-    }
-
-    .error-state { color: var(--color-danger-muted); }
-  </style>
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="익명으로 연애 고민을 나누고 요매거진 콘텐츠를 읽는 모바일 커뮤니티 프로토타입">
+  <title>요매거진 앱 프로토타입</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="phone" role="application" aria-label="요매거진 MVP 프로토타입" data-ui="AppFrame">
+  <div class="phone" role="application" aria-label="요매거진 앱 프로토타입" data-ui="AppFrame">
     <div class="status" data-ui="AppStatusBar">
-      <span>15:03</span>
-      <span class="dots" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span id="status-time">15:03</span>
+      <span class="status-dots" aria-hidden="true"><span></span><span></span><span></span></span>
     </div>
 
     <header class="topbar" data-ui="AppTopbar">
-      <button class="back" type="button" aria-label="뒤로" data-ui="AppTopbar_backButton">‹</button>
-      <div class="title" data-ui="AppTopbar_title">Yo!</div>
-      <button class="icon" type="button" data-open="community" aria-label="검색" data-ui="AppTopbar_searchButton">
+      <button class="icon-button back-button" type="button" aria-label="뒤로" data-action="back" data-ui="AppTopbar_backButton">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+      </button>
+      <div class="topbar-title" data-ui="AppTopbar_title">Yo!</div>
+      <button class="icon-button topbar-search" type="button" aria-label="검색" data-action="open-search" data-ui="AppTopbar_searchButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
       </button>
-      <button class="icon" type="button" data-open="notifications" aria-label="알림" data-ui="AppTopbar_notificationButton">
+      <button class="icon-button topbar-notification" type="button" aria-label="알림센터" data-action="open-notifications" data-ui="AppTopbar_notificationButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
       </button>
-      <button class="kebab" type="button" data-open="report" aria-label="게시글 더보기" data-ui="AppTopbar_moreButton">⋮</button>
+      <button class="icon-button topbar-more" type="button" aria-label="게시글 더보기" data-action="open-post-menu" data-ui="AppTopbar_moreButton">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
+      </button>
     </header>
 
     <main class="screen active" data-screen="home" data-ui="HomeScreen">
-      <section class="hero" data-ui="HomeHeroCarousel">
-        <article class="hero-slide hero-book" data-ui="HomeHeroCard_book">
-          <div class="hero-main" data-ui="HomeHeroCard_book_content">
-            <span class="hero-eyebrow" data-ui="HomeHeroCard_book_eyebrow">요매거진 주인장의 첫 번째 책</span>
-            <h2 data-ui="HomeHeroCard_book_title">《이별 뒤의 마음에게》</h2>
-            <p class="muted" data-ui="HomeHeroCard_book_subTitle">끝난 사랑 뒤에도, 내 마음을 천천히 돌보는 법</p>
-            <span class="hero-cta" data-ui="HomeHeroCard_book_cta">책 만나보기 →</span>
-          </div>
-        </article>
-        <article class="hero-slide" data-ui="HomeHeroCard_popular">
-          <div class="hero-main" data-ui="HomeHeroCard_popular_content">
-            <h2 data-ui="HomeHeroCard_popular_title">요즘 가장 많이 보는 고민</h2>
-            <p class="muted" data-ui="HomeHeroCard_popular_subTitle">답장 텀, 스토리 반응, 애매한 호감 신호를 함께 이야기해요.</p>
-          </div>
-        </article>
-        <article class="hero-slide hero-ad" data-ui="HomeHeroCard_ad">
-          <span class="ad-badge" data-ui="HomeHeroCard_ad_badge">AD</span>
-          <div class="hero-main" data-ui="HomeHeroCard_ad_content">
-            <span class="hero-eyebrow" data-ui="HomeHeroCard_ad_eyebrow">브랜드 배너 영역</span>
-            <h2 data-ui="HomeHeroCard_ad_title">광고 상품이 들어가는 자리</h2>
-            <p class="muted" data-ui="HomeHeroCard_ad_subTitle">연애·데이트·뷰티·숙박 등 직접 광고 노출 슬롯</p>
-          </div>
-        </article>
-        <article class="hero-slide" data-ui="HomeHeroCard_anonymous">
-          <div class="hero-main" data-ui="HomeHeroCard_anonymous_content">
-            <h2 data-ui="HomeHeroCard_anonymous_title">익명으로 편하게 털어놓기</h2>
-            <p class="muted" data-ui="HomeHeroCard_anonymous_subTitle">친구에게 말하기 어려운 썸, 이별, 재회 고민을 남겨보세요.</p>
-          </div>
-        </article>
+      <section class="hero" aria-label="메인 배너" data-ui="HomeHeroCarousel">
+        <button class="hero-slide hero-book" type="button" data-magazine="0" data-ui="HomeHeroCard_book">
+          <span class="hero-content">
+            <span class="hero-eyebrow">요매거진 주인장의 첫 번째 책</span>
+            <strong>《이별 뒤의 마음에게》</strong>
+            <span class="hero-copy">끝난 사랑 뒤에도 내 마음을 천천히 돌보는 법</span>
+            <span class="hero-cta">책 만나보기</span>
+          </span>
+        </button>
+        <button class="hero-slide hero-community" type="button" data-action="open-community" data-ui="HomeHeroCard_popular">
+          <span class="hero-content">
+            <span class="hero-eyebrow">최근 72시간 급상승</span>
+            <strong>요즘 가장 많이 이야기하는 고민</strong>
+            <span class="hero-copy">답장 텀, 스토리 반응, 애매한 호감 신호를 함께 이야기해요.</span>
+          </span>
+        </button>
+        <div class="hero-slide hero-ad" data-ui="HomeHeroCard_ad">
+          <span class="ad-badge">AD</span>
+          <span class="hero-content">
+            <span class="hero-eyebrow">브랜드 배너 영역</span>
+            <strong>광고 상품이 들어가는 자리</strong>
+            <span class="hero-copy">어드민에서 이동 없음으로 설정된 배너 예시입니다.</span>
+          </span>
+        </div>
+        <button class="hero-slide hero-anonymous" type="button" data-member-open="write" data-ui="HomeHeroCard_anonymous">
+          <span class="hero-content">
+            <span class="hero-eyebrow">익명 커뮤니티</span>
+            <strong>편하게 털어놓아도 괜찮아요</strong>
+            <span class="hero-copy">친구에게 말하기 어려운 썸, 이별, 재회 고민을 남겨보세요.</span>
+          </span>
+        </button>
         <span class="hero-pagination" data-ui="HomeHeroCarousel_pagination">1/4</span>
       </section>
-      <div class="section-head" data-ui="HomePopularSection_header"><h3 data-ui="HomePopularSection_title">인기 고민</h3></div>
-      <div data-post-list="home" data-ui="HomePopularPostList"></div>
-      <button class="more-posts" type="button" data-open="community" data-ui="HomePopularSection_moreButton">더보기</button>
-      <section class="magazine-section" aria-label="매거진" data-ui="HomeMagazineSection">
-        <div class="section-head" data-ui="HomeMagazineSection_header"><h3 data-ui="HomeMagazineSection_title">매거진</h3></div>
-        <div class="magazine-rail" data-ui="HomeMagazineRail">
-          <button class="magazine-card" type="button" aria-label="요매거진 대나무숲 사연을 모집합니다" data-ui="HomeMagazineCard_1">
-            <img src="assets/magazine-thumb-1.jpg" alt="">
-          </button>
-          <button class="magazine-card" type="button" aria-label="만 원으로 여자친구 행복하게 할 수 있다면 여기로 갈게요" data-ui="HomeMagazineCard_2">
-            <img src="assets/magazine-thumb-2.jpg" alt="">
-          </button>
-          <button class="magazine-card" type="button" aria-label="왜 다들 연애하면 이케아에 가는지 비로소 알 것 같았다" data-ui="HomeMagazineCard_3">
-            <img src="assets/magazine-thumb-3.jpg" alt="">
-          </button>
-          <button class="magazine-card" type="button" aria-label="수제 맥주 실컷 맛보러 동대문구 맥주 축제 갈 사람 없나" data-ui="HomeMagazineCard_4">
-            <img src="assets/magazine-thumb-4.jpg" alt="">
-          </button>
-        </div>
-        <button class="more-posts" type="button" data-ui="HomeMagazineSection_moreButton">더보기</button>
+
+      <section class="content-section" data-ui="HomePopularSection">
+        <div class="section-head"><h2>고민 둘러보기</h2><span class="section-meta">랜덤 추천</span></div>
+        <div data-post-list="home" data-ui="HomePopularPostList"></div>
+        <button class="wide-button" type="button" data-action="toggle-home-posts" data-ui="HomePopularSection_moreButton">2/2 보기</button>
       </section>
-      <button class="fab" type="button" data-open="write" aria-label="글쓰기" data-ui="HomeWriteFab">✎</button>
+
+      <section class="magazine-section" aria-label="요매거진" data-ui="HomeMagazineSection">
+        <div class="section-head"><h2>요매거진</h2><button class="text-button" type="button" data-open="magazines">더보기</button></div>
+        <div class="magazine-rail" data-magazine-rail data-ui="HomeMagazineRail"></div>
+      </section>
+
+      <button class="fab" type="button" data-member-open="write" aria-label="글쓰기" data-ui="HomeWriteFab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path></svg>
+      </button>
     </main>
 
     <main class="screen" data-screen="community" data-ui="CommunityScreen">
-      <div class="chips" id="community-chips" data-ui="CommunityCategoryChipList"></div>
-      <div class="sort" data-ui="CommunitySortControl"><button class="active" type="button" data-ui="CommunitySortControl_latestButton">최신순</button><button type="button" data-ui="CommunitySortControl_likeButton">좋아요순</button></div>
+      <div class="chips" id="community-chips" aria-label="카테고리" data-ui="CommunityCategoryChipList"></div>
+      <div class="sort-control" aria-label="게시글 정렬" data-ui="CommunitySortControl">
+        <button class="active" type="button" data-sort="latest">최신순</button>
+        <button type="button" data-sort="reaction">반응순</button>
+      </div>
       <div data-post-list="community" data-ui="CommunityPostList"></div>
-      <button class="fab" type="button" data-open="write" aria-label="글쓰기" data-ui="CommunityWriteFab">✎</button>
+      <div class="load-sentinel" data-community-sentinel data-ui="CommunityPostList_loadState">게시글을 불러오는 중</div>
+      <button class="fab" type="button" data-member-open="write" aria-label="글쓰기" data-ui="CommunityWriteFab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path></svg>
+      </button>
     </main>
 
-    <main class="screen" data-screen="detail" data-ui="PostDetailScreen">
+    <main class="screen detail-screen" data-screen="detail" data-ui="PostDetailScreen">
       <article class="detail" data-ui="PostDetailCard">
-        <div class="detail-head" data-ui="PostDetailCard_header">
-          <strong class="detail-category" id="detail-category" data-ui="PostDetailCard_category"></strong>
-          <div class="meta detail-author-meta" data-ui="PostDetailCard_meta"><strong id="detail-author" data-ui="PostDetailCard_author"></strong><span id="detail-time" data-ui="PostDetailCard_time"></span></div>
+        <div class="detail-head">
+          <strong id="detail-category" class="detail-category"></strong>
+          <div class="meta"><strong id="detail-author"></strong><span id="detail-time"></span><span id="detail-edited" class="edited" hidden>수정됨</span></div>
         </div>
-        <h2 id="detail-title" data-ui="PostDetailCard_title"></h2>
-        <p id="detail-body" data-ui="PostDetailCard_body"></p>
-        <div class="thread-actions detail-thread-actions" data-ui="PostDetailCard_actionList">
-          <button class="thread-action liked" type="button" id="detail-like" data-ui="PostDetailCard_likeButton"></button>
-          <button class="thread-action" type="button" id="detail-comment-count" data-ui="PostDetailCard_commentButton"></button>
-          <button class="thread-action" type="button" aria-label="공유" id="detail-share" data-ui="PostDetailCard_shareButton"></button>
+        <h1 id="detail-title"></h1>
+        <p id="detail-body"></p>
+        <div class="thread-actions" data-ui="PostDetailCard_actionList">
+          <button class="thread-action" type="button" id="detail-like" data-action="like-current" aria-label="게시글 좋아요"></button>
+          <button class="thread-action" type="button" id="detail-comment-count" data-action="focus-comment" aria-label="댓글 입력으로 이동"></button>
+          <button class="thread-action" type="button" id="detail-share" data-action="share-current" aria-label="공유"></button>
         </div>
       </article>
-      <div class="section-head" data-ui="PostCommentSection_header"><h3 data-ui="PostCommentSection_title">댓글</h3></div>
-      <div class="comment" data-ui="PostCommentCard_1">
-        <div class="meta" data-ui="PostCommentCard_1_meta"><strong data-ui="PostCommentCard_1_author">익명10</strong><span data-ui="PostCommentCard_1_time">3분 전</span></div>
-        <div class="post-body" data-ui="PostCommentCard_1_body">시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.</div>
-        <div class="comment-actions" data-ui="PostCommentCard_1_actionList">
-          <button class="thread-action liked" type="button" aria-label="댓글 좋아요" data-ui="PostCommentCard_1_likeButton">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>2</span>
-          </button>
-          <div class="comment-more" data-ui="PostCommentCard_1_moreMenu">
-            <button class="comment-kebab" type="button" data-comment-menu aria-label="댓글 더보기" aria-expanded="false" data-ui="PostCommentCard_1_moreButton">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
-            </button>
-            <div class="comment-menu" hidden data-ui="PostCommentCard_1_menu"><button type="button" data-report-comment data-ui="PostCommentCard_1_reportButton">신고하기</button></div>
-          </div>
+      <div class="section-head comment-section-head"><h2>댓글</h2><span class="section-meta">오래된 댓글순</span></div>
+      <div id="detail-comments" data-ui="PostCommentList"></div>
+      <div class="comment-composer" data-ui="PostCommentInput">
+        <div class="comment-field">
+          <input id="comment-input" aria-label="댓글 입력" placeholder="댓글을 입력하세요" autocomplete="off" data-ui="PostCommentInput_field">
+          <span class="counter" id="comment-counter">0/500</span>
         </div>
-      </div>
-      <div class="comment deleted" data-ui="PostCommentCard_2_deleted">
-        <div class="meta" data-ui="PostCommentCard_2_meta"><strong data-ui="PostCommentCard_2_author">익명9</strong><span data-ui="PostCommentCard_2_time">7분 전</span></div>
-        <div class="post-body" data-ui="PostCommentCard_2_body">삭제된 댓글입니다.</div>
-      </div>
-      <div class="comment" data-ui="PostCommentCard_3">
-        <div class="meta" data-ui="PostCommentCard_3_meta"><strong data-ui="PostCommentCard_3_author">익명8</strong><span data-ui="PostCommentCard_3_time">10분 전</span><span data-ui="PostCommentCard_3_state">수정됨</span></div>
-        <div class="post-body" data-ui="PostCommentCard_3_body">저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.</div>
-        <div class="comment-actions" data-ui="PostCommentCard_3_actionList">
-          <button class="thread-action liked" type="button" aria-label="댓글 좋아요" data-ui="PostCommentCard_3_likeButton">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg><span>5</span>
-          </button>
-          <div class="comment-more" data-ui="PostCommentCard_3_moreMenu">
-            <button class="comment-kebab" type="button" data-comment-menu aria-label="댓글 더보기" aria-expanded="false" data-ui="PostCommentCard_3_moreButton">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
-            </button>
-            <div class="comment-menu" hidden data-ui="PostCommentCard_3_menu"><button type="button" data-report-comment data-ui="PostCommentCard_3_reportButton">신고하기</button></div>
-          </div>
-        </div>
-      </div>
-      <div class="comment-input" data-ui="PostCommentInput">
-        <input aria-label="댓글 입력" placeholder="댓글을 입력하세요" data-ui="PostCommentInput_field">
-        <button class="btn primary" type="button" aria-label="댓글 등록" data-ui="PostCommentInput_submitButton">
+        <button class="submit-icon" id="comment-submit" type="button" data-action="submit-comment" aria-label="댓글 등록" disabled data-ui="PostCommentInput_submitButton">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
         </button>
       </div>
     </main>
 
     <main class="screen" data-screen="write" data-ui="WriteScreen">
-      <p class="anonymous-notice" data-ui="WriteNotice">작성한 글은 익명으로 게시돼요.</p>
-      <form data-ui="WriteForm">
-        <select aria-label="카테고리 선택" id="category-select" data-ui="WriteForm_categorySelect"></select>
-        <input aria-label="제목" placeholder="제목" data-ui="WriteForm_titleInput">
-        <textarea aria-label="내용" placeholder="상황을 자세히 적어주세요." data-ui="WriteForm_bodyInput"></textarea>
-        <button class="btn primary" type="button" data-open="community" data-ui="WriteForm_submitButton">등록</button>
+      <form id="write-form" class="write-form" data-ui="WriteForm">
+        <label class="field-group">
+          <span class="field-label">카테고리 <em>필수</em></span>
+          <select id="write-category" aria-label="카테고리 선택" data-ui="WriteForm_categorySelect"></select>
+        </label>
+        <label class="field-group">
+          <span class="field-label">제목 <em>필수</em></span>
+          <input id="write-title" aria-label="제목" placeholder="고민을 한 문장으로 적어주세요" autocomplete="off" data-ui="WriteForm_titleInput">
+          <span class="counter" id="write-title-counter">0/40</span>
+        </label>
+        <label class="field-group">
+          <span class="field-label">글 <em>필수</em></span>
+          <textarea id="write-body" aria-label="글" placeholder="상황을 자세히 적어주세요" data-ui="WriteForm_bodyInput"></textarea>
+          <span class="counter" id="write-body-counter">0/2000</span>
+        </label>
+        <div class="writing-guide" data-ui="WriteGuide">
+          <strong>서로를 존중하는 글을 작성해 주세요.</strong>
+          <span>개인정보, 욕설, 광고성 내용은 운영 정책에 따라 숨김 처리될 수 있습니다.</span>
+        </div>
+        <button class="primary-button" id="write-submit" type="submit" disabled data-ui="WriteForm_submitButton">등록</button>
       </form>
     </main>
 
+    <main class="screen" data-screen="search" data-ui="SearchScreen">
+      <div class="search-bar" data-ui="SearchInput">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+        <input id="search-input" type="search" aria-label="게시글 검색" placeholder="제목과 글에서 검색" autocomplete="off">
+        <button type="button" data-action="clear-search" aria-label="검색어 지우기">×</button>
+      </div>
+      <p class="search-summary" id="search-summary">검색어를 입력해 주세요.</p>
+      <div data-post-list="search" data-ui="SearchResultList"></div>
+    </main>
+
     <main class="screen" data-screen="mypage" data-ui="MyPageScreen">
-      <button class="profile profile-link mypage-profile" type="button" data-open="account" data-ui="MyPageProfileCard">
-        <span class="avatar" data-ui="MyPageProfileCard_avatar">익</span>
-        <span class="profile-main" data-ui="MyPageProfileCard_content">
-          <span class="profile-name" data-ui="MyPageProfileCard_name">익명</span>
-        </span>
-        <span class="chev" data-ui="MyPageProfileCard_chevron">›</span>
+      <button class="profile profile-link" type="button" data-open="account" data-ui="MyPageProfileCard">
+        <span class="avatar">익</span>
+        <span class="profile-main"><span class="profile-name">익명</span><span class="profile-sub" id="mypage-provider">카카오로 로그인</span></span>
+        <span class="chevron">›</span>
       </button>
-      <section class="mypage-group" data-ui="MyPageActivityMenuGroup">
-        <div class="menu" data-ui="MyPageActivityMenu">
-          <button type="button" data-open="my-posts" data-ui="MyPageActivityMenu_postButton">내가 작성한 글 <span class="chev">›</span></button>
-          <button type="button" data-open="my-comments" data-ui="MyPageActivityMenu_commentButton">내가 작성한 댓글 <span class="chev">›</span></button>
-          <button type="button" data-open="likes" data-ui="MyPageActivityMenu_likeButton">좋아요한 글 <span class="chev">›</span></button>
-        </div>
+
+      <section class="menu-group" aria-label="나의 활동" data-ui="MyPageActivityMenu">
+        <button type="button" data-open="my-posts">내가 작성한 글 <span class="chevron">›</span></button>
+        <button type="button" data-open="my-comments">내가 작성한 댓글 <span class="chevron">›</span></button>
+        <button type="button" data-open="likes">좋아요한 글 <span class="chevron">›</span></button>
       </section>
-      <section class="mypage-group" data-ui="MyPageSettingMenuGroup">
-        <div class="menu" data-ui="MyPageSettingMenu">
-          <button type="button" data-open="blocks" data-ui="MyPageSettingMenu_blockButton">신고/차단 관리 <span class="chev">›</span></button>
-          <button type="button" data-open="settings" data-ui="MyPageSettingMenu_notificationButton">알림 설정 <span class="chev">›</span></button>
-        </div>
-      </section>
-      <section class="mypage-group" data-ui="MyPageExternalMenuGroup">
-        <div class="menu" data-ui="MyPageExternalMenu">
-          <button type="button" data-ui="MyPageExternalMenu_instagramButton">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.5"></circle><path d="M17 7h.01"></path></svg></span>
-            요매거진 Instagram 이동 <span class="chev">↗</span>
-          </button>
-          <button type="button" data-ui="MyPageExternalMenu_shopButton">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg></span>
-            마플샵 이동 <span class="chev">↗</span>
-          </button>
-          <button type="button" data-ui="MyPageExternalMenu_kakaoButton">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5c0 4.1-4 7.5-9 7.5a10.4 10.4 0 0 1-3.3-.5L4 20l1.3-3.4A7 7 0 0 1 3 11.5C3 7.4 7 4 12 4s9 3.4 9 7.5Z"></path></svg></span>
-            요매거진 카카오 문의톡 이동 <span class="chev">↗</span>
-          </button>
-        </div>
+
+      <section class="menu-group" aria-label="설정과 정보" data-ui="MyPageInfoMenu">
+        <button type="button" data-action="open-os-settings">알림 설정 <span class="chevron">›</span></button>
+        <button type="button" data-info="community-rules">커뮤니티 이용규칙 <span class="chevron">›</span></button>
+        <button type="button" data-info="terms">서비스 이용약관 <span class="chevron">›</span></button>
+        <button type="button" data-info="privacy">개인정보 처리방침 <span class="chevron">›</span></button>
+        <div class="menu-row">앱 버전 <span class="menu-value">1.0.0 · 최신 버전</span></div>
       </section>
     </main>
 
     <main class="screen" data-screen="account" data-ui="AccountScreen">
-      <section class="account-detail" data-ui="AccountDetail">
-        <div class="account-card" data-ui="AccountProfileCard">
-          <div class="profile mypage-profile" data-ui="AccountProfileCard_profile">
-            <div class="avatar" data-ui="AccountProfileCard_avatar">익</div>
-            <div class="profile-main" data-ui="AccountProfileCard_content">
-              <div class="profile-name" data-ui="AccountProfileCard_name">익명</div>
-            </div>
-          </div>
-          <div class="account-row" data-ui="AccountProfileCard_loginMethod"><strong>로그인 방식</strong><span>카카오 간편 로그인</span></div>
-          <div class="account-row" data-ui="AccountProfileCard_email"><strong>가입 이메일</strong><span>yo.user@kakao.com</span></div>
+      <section class="account-card" data-ui="AccountProfileCard">
+        <div class="profile">
+          <span class="avatar">익</span>
+          <span class="profile-main"><span class="profile-name">익명</span></span>
         </div>
-        <div class="text-actions" data-ui="AccountActionList">
-          <button class="text-btn" type="button" data-ui="AccountActionList_logoutButton">로그아웃하기</button>
-          <button class="text-btn danger" type="button" data-ui="AccountActionList_deleteButton">탈퇴하기</button>
-        </div>
+        <div class="account-row"><strong>로그인 방식</strong><span id="account-provider">카카오</span></div>
+        <div class="account-row"><strong>가입 이메일</strong><span>yo.user@kakao.com</span></div>
       </section>
-    </main>
-
-    <main class="screen" data-screen="settings" data-ui="SettingsScreen">
-      <section class="menu" data-ui="SettingsMenu">
-        <div class="menu-row" data-ui="SettingsMenu_commentNoticeRow"><strong>댓글 알림</strong><span class="chev">켜짐</span></div>
-        <div class="menu-row" data-ui="SettingsMenu_popularNoticeRow"><strong>인기글 알림</strong><span class="chev">켜짐</span></div>
-        <button type="button" data-open="blocks" data-ui="SettingsMenu_blockButton">신고/차단 관련 관리 <span class="chev">›</span></button>
-      </section>
+      <div class="account-actions">
+        <button type="button" data-action="logout">로그아웃하기</button>
+        <button class="danger" type="button" data-open="withdraw">탈퇴하기</button>
+      </div>
     </main>
 
     <main class="screen" data-screen="notifications" data-ui="NotificationScreen">
+      <div class="notice-intro">댓글과 좋아요 소식은 이곳에 바로 쌓여요.</div>
       <div data-notification-list data-ui="NotificationList"></div>
     </main>
 
-    <main class="screen" data-screen="blocks" data-ui="BlockReportScreen">
-      <div class="section-head" data-ui="BlockedUserSection_header"><h3 data-ui="BlockedUserSection_title">차단한 사용자</h3></div>
-      <section class="menu" data-ui="BlockedUserList"><div class="menu-row" data-ui="BlockedUserRow_1">익명 <span class="chev">차단 해제</span></div></section>
-      <div class="section-head" data-ui="ReportHistorySection_header"><h3 data-ui="ReportHistorySection_title">최근 신고 내역</h3></div>
-      <section class="menu" data-ui="ReportHistoryList"><div class="menu-row" data-ui="ReportHistoryRow_1">욕설/비방 <span class="chev">검토 중</span></div></section>
+    <main class="screen" data-screen="my-posts" data-ui="MyPostScreen">
+      <div data-post-list="my-posts" data-ui="MyPostList"></div>
     </main>
 
-    <main class="screen" data-screen="report" data-ui="ReportScreen">
-      <div class="section-head" data-ui="ReportReasonSection_header"><h3 data-ui="ReportReasonSection_title">객관식 신고 사유</h3></div>
-      <section class="menu" data-ui="ReportReasonList">
-        <button type="button" data-ui="ReportReasonButton_abuse">욕설/비방</button>
-        <button type="button" data-ui="ReportReasonButton_privacy">개인정보 노출</button>
-        <button type="button" data-ui="ReportReasonButton_adult">성적 콘텐츠</button>
-        <button type="button" data-ui="ReportReasonButton_spam">도배/광고</button>
-        <button type="button" data-ui="ReportReasonButton_contact">외부 연락처 유도</button>
-      </section>
-      <button class="btn primary" type="button" data-open="detail" data-ui="ReportSubmitButton">신고 접수</button>
+    <main class="screen" data-screen="likes" data-ui="LikedPostScreen">
+      <div data-post-list="likes" data-ui="LikedPostList"></div>
     </main>
 
-    <main class="screen" data-screen="my-posts" data-ui="MyPostScreen"><div data-post-list="my-posts" data-ui="MyPostList"></div></main>
-    <main class="screen" data-screen="likes" data-ui="LikedPostScreen"><div data-post-list="likes" data-ui="LikedPostList"></div></main>
     <main class="screen" data-screen="my-comments" data-ui="MyCommentScreen">
-      <div class="comment" data-ui="MyCommentCard_1">
-        <div class="meta" data-ui="MyCommentCard_1_meta"><strong data-ui="MyCommentCard_1_author">익명7</strong><span data-ui="MyCommentCard_1_state">내 댓글</span></div>
-        <div class="post-body" data-ui="MyCommentCard_1_body">읽씹인지 바쁜 건지 계속 추측하면 나만 힘들어서, 저는 한 번만 직접 물어봤어요.</div>
-      </div>
-      <div class="comment" data-ui="MyCommentCard_2">
-        <div class="meta" data-ui="MyCommentCard_2_meta"><strong data-ui="MyCommentCard_2_author">익명7</strong><span data-ui="MyCommentCard_2_state">수정됨</span></div>
-        <div class="post-body" data-ui="MyCommentCard_2_body">전애인 연락은 반가워도 바로 흔들리면 또 같은 이유로 싸우더라고요. 천천히 보는 게 맞는 듯.</div>
-      </div>
+      <div id="my-comment-list" data-ui="MyCommentList"></div>
+    </main>
+
+    <main class="screen" data-screen="magazines" data-ui="MagazineListScreen">
+      <div class="magazine-list" id="magazine-list" data-ui="MagazineList"></div>
+    </main>
+
+    <main class="screen magazine-detail-screen" data-screen="magazine-detail" data-ui="MagazineDetailScreen">
+      <img id="magazine-detail-image" class="magazine-detail-image" alt="">
+      <article class="magazine-detail-copy">
+        <span class="hero-eyebrow">요매거진</span>
+        <h1 id="magazine-detail-title"></h1>
+        <p id="magazine-detail-body"></p>
+        <button class="secondary-button" type="button" data-action="share-magazine">공유하기</button>
+      </article>
+    </main>
+
+    <main class="screen" data-screen="info" data-ui="InfoScreen">
+      <article class="info-page">
+        <h1 id="info-title"></h1>
+        <p id="info-body"></p>
+      </article>
+    </main>
+
+    <main class="screen" data-screen="withdraw" data-ui="WithdrawalScreen">
+      <form id="withdraw-form" class="withdraw-form">
+        <fieldset>
+          <legend>탈퇴하는 이유를 알려주세요.</legend>
+          <p>서비스 개선을 위해 참고할게요.</p>
+          <div id="withdraw-reasons" class="reason-list"></div>
+        </fieldset>
+        <label class="field-group">
+          <span class="field-label">자유 입력</span>
+          <textarea id="withdraw-note" placeholder="더 나누고 싶은 이야기가 있다면 적어주세요"></textarea>
+        </label>
+        <button class="danger-button" type="submit">탈퇴하기</button>
+      </form>
+    </main>
+
+    <main class="screen completion-screen" data-screen="withdraw-complete" data-ui="WithdrawalCompleteScreen">
+      <div class="completion-mark" aria-hidden="true">✓</div>
+      <h1>탈퇴가 완료되었습니다.</h1>
+      <p>그동안 요매거진과 함께해 주셔서 감사합니다.</p>
+      <button class="primary-button" type="button" data-action="browse-as-guest">비회원으로 둘러보기</button>
     </main>
 
     <nav class="tabs" aria-label="하단 네비게이션" data-ui="BottomTabBar">
-      <button class="tab active" type="button" data-tab="home" data-ui="BottomTabBar_homeTab"><span class="symbol" data-ui="BottomTabBar_homeIcon">⌂</span>홈</button>
-      <button class="tab" type="button" data-tab="community" data-ui="BottomTabBar_communityTab"><span class="symbol" data-ui="BottomTabBar_communityIcon">☷</span>커뮤니티</button>
-      <button class="tab" type="button" data-tab="mypage" data-ui="BottomTabBar_mypageTab"><span class="symbol" data-ui="BottomTabBar_mypageIcon">○</span>마이페이지</button>
+      <button class="tab active" type="button" data-tab="home" data-ui="BottomTabBar_homeTab"><span class="tab-symbol">⌂</span><span>홈</span></button>
+      <button class="tab" type="button" data-tab="community" data-ui="BottomTabBar_communityTab"><span class="tab-symbol">☷</span><span>커뮤니티</span></button>
+      <button class="tab" type="button" data-tab="mypage" data-member-tab="mypage" data-ui="BottomTabBar_mypageTab"><span class="tab-symbol">○</span><span>마이페이지</span></button>
     </nav>
+
+    <div class="modal-layer" id="modal-layer" hidden data-ui="ModalLayer">
+      <button class="modal-scrim" type="button" data-action="close-modal" aria-label="닫기"></button>
+      <section class="modal-panel" id="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden data-ui="Toast"></div>
   </div>
-
-  <script>
-    const titles = {
-      home: 'Yo!',
-      community: '커뮤니티',
-      detail: '',
-      write: '글쓰기',
-      mypage: '마이페이지',
-      account: '계정 정보',
-      notifications: '알림',
-      settings: '설정',
-      blocks: '신고/차단 관리',
-      report: '신고하기',
-      'my-posts': '내가 작성한 글',
-      'my-comments': '내가 작성한 댓글',
-      likes: '좋아요한 글'
-    };
-
-    const categories = ['썸/소개팅', '짝사랑', '연애중', '재회', '이별/권태기/장기연애', '결혼 고민', '연애 잡담'];
-    const icons = {
-      heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg>',
-      comment: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.8 8.4 8.9 8.9 0 0 1-3.8-.9L3 20l1.3-4.3a8.2 8.2 0 0 1-.9-3.8A8.4 8.4 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8Z"></path></svg>',
-      share: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path></svg>'
-    };
-
-    const posts = [
-      ['썸/소개팅', '과팅에서 만난 사람이 스토리는 보는데 답장을 안 해요', '처음엔 새벽까지 카톡했는데 어제부터 답장이 6시간씩 늦어요. 근데 제 스토리는 바로 봐서 더 신경 쓰입니다. 그냥 관심 식은 걸까요?', '익명', '5분 전', 28, 17],
-      ['짝사랑', '같은 과 선배가 자꾸 챙겨주는데 착각인지 모르겠어요', '수업 끝나고 같이 밥 먹자고 하고 과제도 먼저 도와주는데, 원래 후배들한테 다 친절한 사람이라 헷갈려요. 고백은 너무 빠르겠죠?', '익명', '18분 전', 41, 26, true],
-      ['연애중', '애인이 시험기간마다 연락이 거의 끊겨요', '공부하는 건 이해하는데 하루에 잘자 한 마디도 없는 날이 많아요. 제가 너무 연락에 집착하는 건지, 최소한의 표현은 필요한 건지 모르겠어요.', '익명', '42분 전', 33, 22],
-      ['이별/권태기/장기연애', '헤어진 뒤에 맞팔 유지하는 거 다들 가능해요?', '헤어진 지 2주 됐는데 서로 언팔은 안 했어요. 새 글 올라올 때마다 마음이 흔들려서 차단까지 해야 하나 고민 중입니다.', '익명', '1시간 전', 19, 14],
-      ['재회', '전애인이 생일 축하한다고 연락 왔어요', '좋게 헤어진 건 아니었는데 생일 되자마자 장문 카톡이 왔어요. 그냥 예의인지 다시 얘기해보고 싶은 건지 감이 안 옵니다.', '익명', '2시간 전', 24, 31, true],
-      ['이별/권태기/장기연애', '고3 때부터 만났는데 대학 오고 생활이 너무 달라졌어요', '저는 통학이고 상대는 자취하면서 새 친구도 많아졌어요. 예전처럼 매일 붙어있는 게 불가능한데 서운함을 어떻게 줄여야 할까요?', '익명', '3시간 전', 15, 9],
-      ['결혼 고민', '어린 나이에 결혼 얘기 꺼내면 너무 부담일까요', '아직 취업 준비도 남았는데 서로 미래 얘기를 자주 하게 돼요. 좋아하는 마음이랑 현실적인 준비는 다른 문제 같아서 고민입니다.', '익명', '어제', 37, 18],
-      ['연애 잡담', '연락할 때 ㅋㅋ만 오는 거 관심 없는 신호인가요', '질문하면 답은 하는데 대화가 계속 제가 끌고 가는 느낌이에요. 친구들은 그냥 접으라는데 아직 미련이 남아요.', '익명', '어제', 52, 40]
-    ].map(([category, title, body, author, time, likes, comments, liked]) => ({ category, title, body, author, time, likes, comments, liked }));
-
-    const notifications = [
-      { postIndex: 0, type: '좋아요', time: '3분 전', body: '내가 쓴 글이 좋아요를 받았어요.' },
-      { postIndex: 1, type: '댓글', time: '18분 전', body: '내가 쓴 글에 새 댓글이 달렸어요.' },
-      { postIndex: 2, type: '좋아요', time: '52분 전', body: '내가 쓴 글이 좋아요를 받았어요.' },
-      { postIndex: 4, type: '댓글', time: '26.08.13', body: '내가 쓴 글에 새 댓글이 달렸어요.' },
-      { postIndex: 6, type: '좋아요', time: '26.08.02', body: '내가 쓴 글이 좋아요를 받았어요.' }
-    ];
-
-    let stack = ['home'];
-    let selectedCategory = '전체';
-
-    function postMarkup(post, index, options = {}) {
-      const compact = Boolean(options.compact);
-      const uiPrefix = options.uiPrefix || 'PostCard';
-      const uiName = `${uiPrefix}_${index + 1}`;
-      return `
-        <article class="post${compact ? ' compact' : ''}" data-post="${index}" data-ui="${uiName}">
-          <div class="post-top" data-ui="${uiName}_meta"><span class="post-category" data-ui="${uiName}_category">${post.category}</span><span class="post-time" data-ui="${uiName}_time">${post.time}</span></div>
-          <div class="post-title" data-ui="${uiName}_title">${post.title}</div>
-          ${compact ? '' : `<div class="post-body" data-ui="${uiName}_body">${post.body}</div>`}
-          <div class="thread-actions" data-ui="${uiName}_actionList">
-            <button class="thread-action ${post.liked ? 'liked' : ''}" type="button" data-like="${index}" aria-label="좋아요" data-ui="${uiName}_likeButton">${icons.heart}<span data-ui="${uiName}_likeCount">${post.likes}</span></button>
-            <button class="thread-action" type="button" data-comment="${index}" aria-label="댓글 ${post.comments}개" data-ui="${uiName}_commentButton">${icons.comment}<span data-ui="${uiName}_commentCount">${post.comments}</span></button>
-          </div>
-        </article>`;
-    }
-
-    function renderPosts(target, list) {
-      const node = document.querySelector(`[data-post-list="${target}"]`);
-      const visiblePosts = target === 'home' ? list.slice(0, 5) : list;
-      const prefixByTarget = {
-        home: 'HomePostCard',
-        community: 'CommunityPostCard',
-        'my-posts': 'MyPostCard',
-        likes: 'LikedPostCard'
-      };
-      if (node) {
-        node.innerHTML = visiblePosts.length
-          ? visiblePosts.map(post => postMarkup(post, posts.indexOf(post), { compact: target === 'home', uiPrefix: prefixByTarget[target] })).join('')
-          : `<div class="empty-state" data-ui="${prefixByTarget[target] || 'PostList'}_emptyState">표시할 글이 없습니다.</div>`;
-      }
-    }
-    function renderCategories() {
-      document.getElementById('category-select').innerHTML = categories.map(name => `<option>${name}</option>`).join('');
-    }
-    function renderCommunity() {
-      const all = ['전체', ...categories];
-      document.getElementById('community-chips').innerHTML = all.map((name, index) =>
-        `<button class="chip ${name === selectedCategory ? 'active' : ''}" type="button" data-chip="${name}" data-ui="CommunityCategoryChip_${index + 1}">${name}</button>`
-      ).join('');
-      renderPosts('community', selectedCategory === '전체' ? posts : posts.filter(post => post.category === selectedCategory));
-    }
-    function renderNotifications() {
-      const node = document.querySelector('[data-notification-list]');
-      node.innerHTML = notifications.length ? notifications.map((item, index) => {
-        const post = posts[item.postIndex];
-        const uiName = `NotificationCard_${index + 1}`;
-        return `
-          <button class="notice" type="button" data-post="${item.postIndex}" data-ui="${uiName}">
-            <div class="notice-top" data-ui="${uiName}_meta"><span class="notice-type" data-ui="${uiName}_type">${item.type}</span><span data-ui="${uiName}_category">${post.category}</span><span class="notice-time" data-ui="${uiName}_time">${item.time}</span></div>
-            <div class="notice-title" data-ui="${uiName}_title">${post.title}</div>
-            <div class="notice-body" data-ui="${uiName}_body">${item.body}</div>
-          </button>`;
-      }).join('') : '<div class="empty-state" data-ui="NotificationList_emptyState">새 알림이 없습니다.</div>';
-    }
-    function show(name, push = true) {
-      document.querySelectorAll('.screen').forEach(screen => {
-        const active = screen.dataset.screen === name;
-        screen.classList.toggle('active', active);
-        if (active) screen.scrollTop = 0;
-      });
-      document.querySelector('.title').textContent = titles[name] || 'Yo!';
-      document.querySelector('.topbar').classList.toggle('detail-mode', name === 'detail');
-      document.querySelector('.back').style.display = ['home', 'community', 'mypage'].includes(name) ? 'none' : 'block';
-      document.querySelector('.tabs').style.display = name === 'detail' ? 'none' : 'grid';
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name));
-      if (push) stack.push(name);
-    }
-    function openPost(index, push = true) {
-      const post = posts[index] || posts[0];
-      document.querySelector('[data-screen="detail"]').dataset.currentPost = String(index);
-      document.getElementById('detail-category').textContent = post.category;
-      document.getElementById('detail-author').textContent = post.author;
-      document.getElementById('detail-time').textContent = post.time;
-      document.getElementById('detail-title').textContent = post.title;
-      document.getElementById('detail-body').textContent = post.body;
-      document.getElementById('detail-like').classList.toggle('liked', Boolean(post.liked));
-      document.getElementById('detail-like').innerHTML = `${icons.heart}<span>${post.likes}</span>`;
-      document.getElementById('detail-comment-count').innerHTML = `${icons.comment}<span>${post.comments}</span>`;
-      document.getElementById('detail-share').innerHTML = icons.share;
-      show('detail', push);
-    }
-    function toggleLike(index) {
-      const post = posts[index];
-      if (!post) return;
-      post.liked = !post.liked;
-      post.likes += post.liked ? 1 : -1;
-      renderPosts('home', posts);
-      renderPosts('my-posts', posts.slice(0, 2));
-      renderPosts('likes', posts.filter(post => post.liked));
-      renderCommunity();
-      if (document.querySelector('[data-screen="detail"]').classList.contains('active')) {
-        openPost(index, false);
-      }
-    }
-
-    renderCategories();
-    renderPosts('home', posts);
-    renderPosts('my-posts', posts.slice(0, 2));
-    renderPosts('likes', posts.filter(post => post.liked));
-    renderCommunity();
-    renderNotifications();
-
-    const hero = document.querySelector('.hero');
-    const heroPagination = document.querySelector('.hero-pagination');
-    const heroSlides = document.querySelectorAll('.hero-slide');
-    function updateHeroPagination() {
-      if (!hero || !heroPagination || !heroSlides.length) return;
-      const index = Math.round(hero.scrollLeft / hero.clientWidth) + 1;
-      heroPagination.textContent = `${Math.min(Math.max(index, 1), heroSlides.length)}/${heroSlides.length}`;
-    }
-    hero?.addEventListener('scroll', updateHeroPagination, { passive: true });
-    window.addEventListener('resize', updateHeroPagination);
-    updateHeroPagination();
-
-    document.addEventListener('click', event => {
-      const tab = event.target.closest('[data-tab]');
-      const open = event.target.closest('[data-open]');
-      const like = event.target.closest('[data-like]');
-      const comment = event.target.closest('[data-comment]');
-      const commentMenuButton = event.target.closest('[data-comment-menu]');
-      const reportCommentButton = event.target.closest('[data-report-comment]');
-      const post = event.target.closest('[data-post]');
-      const chip = event.target.closest('[data-chip]');
-      const back = event.target.closest('.back');
-      if (commentMenuButton) {
-        event.stopPropagation();
-        const menu = commentMenuButton.nextElementSibling;
-        const willOpen = menu.hidden;
-        document.querySelectorAll('.comment-menu').forEach(item => { item.hidden = true; });
-        document.querySelectorAll('[data-comment-menu]').forEach(button => button.setAttribute('aria-expanded', 'false'));
-        menu.hidden = !willOpen;
-        commentMenuButton.setAttribute('aria-expanded', String(willOpen));
-      } else if (reportCommentButton) {
-        event.stopPropagation();
-        reportCommentButton.closest('.comment-menu').hidden = true;
-      } else if (like) {
-        event.stopPropagation();
-        toggleLike(Number(like.dataset.like));
-      } else if (comment) {
-        event.stopPropagation();
-        openPost(Number(comment.dataset.comment));
-        document.querySelector('.comment-input input')?.focus();
-      } else if (event.target.closest('#detail-like')) {
-        const current = Number(document.querySelector('[data-screen="detail"]').dataset.currentPost || 0);
-        toggleLike(current);
-      } else if (tab) {
-        stack = [tab.dataset.tab];
-        show(tab.dataset.tab, false);
-      } else if (open) {
-        if (open.dataset.open === 'community') stack = ['community'];
-        show(open.dataset.open, open.dataset.open !== 'community');
-      } else if (post) {
-        openPost(Number(post.dataset.post));
-      } else if (chip) {
-        selectedCategory = chip.dataset.chip;
-        renderCommunity();
-      } else if (back) {
-        stack.pop();
-        show(stack[stack.length - 1] || 'home', false);
-      } else {
-        document.querySelectorAll('.comment-menu').forEach(item => { item.hidden = true; });
-        document.querySelectorAll('[data-comment-menu]').forEach(button => button.setAttribute('aria-expanded', 'false'));
-      }
-    });
-  </script>
 </body>
 </html>
