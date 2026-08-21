@@ -29,6 +29,7 @@ const posts = [
     title: '과팅에서 만난 사람이 스토리는 보는데 답장을 안 해요',
     body: '처음엔 새벽까지 카톡했는데 어제부터 답장이 6시간씩 늦어요. 근데 제 스토리는 바로 봐서 더 신경 쓰입니다. 그냥 관심이 식은 걸까요?',
     time: '5분 전',
+    hoursAgo: 0.1,
     order: 10,
     likes: 28,
     liked: false,
@@ -48,6 +49,7 @@ const posts = [
     title: '같은 과 선배가 자꾸 챙겨주는데 착각인지 모르겠어요',
     body: '수업 끝나고 같이 밥 먹자고 하고 과제도 먼저 도와주는데, 원래 후배들한테 다 친절한 사람이라 헷갈려요. 고백은 너무 빠르겠죠?',
     time: '18분 전',
+    hoursAgo: 0.3,
     order: 9,
     likes: 41,
     liked: true,
@@ -64,6 +66,7 @@ const posts = [
     title: '애인이 시험기간마다 연락이 거의 끊겨요',
     body: '공부하는 건 이해하는데 하루에 잘 자 한 마디도 없는 날이 많아요. 제가 너무 연락에 집착하는 건지, 최소한의 표현은 필요한 건지 모르겠어요.',
     time: '42분 전',
+    hoursAgo: 0.7,
     order: 8,
     likes: 33,
     liked: false,
@@ -81,6 +84,7 @@ const posts = [
     title: '헤어진 뒤에 맞팔 유지하는 거 다들 가능해요?',
     body: '헤어진 지 2주 됐는데 서로 언팔은 안 했어요. 새 글 올라올 때마다 마음이 흔들려서 차단까지 해야 하나 고민 중입니다.',
     time: '1시간 전',
+    hoursAgo: 1,
     order: 7,
     likes: 19,
     liked: false,
@@ -95,6 +99,7 @@ const posts = [
     title: '전애인이 생일 축하한다고 연락 왔어요',
     body: '좋게 헤어진 건 아니었는데 생일이 되자마자 장문 카톡이 왔어요. 그냥 예의인지 다시 얘기해보고 싶은 건지 감이 안 옵니다.',
     time: '2시간 전',
+    hoursAgo: 2,
     order: 6,
     likes: 24,
     liked: true,
@@ -110,6 +115,7 @@ const posts = [
     title: '연애 고민을 나누기 전에 기억하면 좋은 한 가지',
     body: '상대의 마음을 단정하기보다 내가 느끼는 감정과 원하는 관계를 먼저 살펴보세요. 조언은 선택지이고 결정은 언제나 여러분의 몫입니다.',
     time: '3시간 전',
+    hoursAgo: 3,
     order: 5,
     likes: 58,
     liked: false,
@@ -124,6 +130,7 @@ const posts = [
     title: '어린 나이에 결혼 얘기 꺼내면 너무 부담일까요',
     body: '아직 취업 준비도 남았는데 서로 미래 얘기를 자주 하게 돼요. 좋아하는 마음이랑 현실적인 준비는 다른 문제 같아서 고민입니다.',
     time: '어제',
+    hoursAgo: 26,
     order: 4,
     likes: 37,
     liked: false,
@@ -138,6 +145,7 @@ const posts = [
     title: '연락할 때 ㅋㅋ만 오는 거 관심 없는 신호인가요',
     body: '질문하면 답은 하는데 대화가 계속 제가 끌고 가는 느낌이에요. 친구들은 그냥 접으라는데 아직 미련이 남아요.',
     time: '어제',
+    hoursAgo: 30,
     order: 3,
     likes: 52,
     liked: false,
@@ -152,6 +160,7 @@ const posts = [
     title: '복학했는데 개강 첫날부터 관심 가는 사람이 생겼어요',
     body: '복학생 선배에게 동아리 같이 들자는 제안을 자연스럽게 하고 싶은데 어떤 말로 시작하면 좋을까요?',
     time: '2일 전',
+    hoursAgo: 50,
     order: 2,
     likes: 16,
     liked: false,
@@ -165,13 +174,33 @@ const posts = [
     category: '연애중',
     title: '장거리 연애에서 약속이 자꾸 미뤄져요',
     body: '한 달에 한 번은 만나기로 했는데 최근 두 번이나 일정이 바뀌었어요. 사정은 이해하지만 계속 제가 기다리는 기분입니다.',
-    time: '3일 전',
+    time: '4일 전',
+    hoursAgo: 92,
     order: 1,
     likes: 12,
     liked: false,
     commentTotal: 6,
     modified: false,
     comments: []
+  }
+  ,
+  {
+    id: 'post_11',
+    userId: 'user_i',
+    hidden: true,
+    category: '연애 잡담',
+    title: '관리자가 숨김 처리한 글',
+    body: '운영 정책에 따라 숨김 처리된 게시글입니다. 목록에는 노출되지 않지만, 내가 남긴 댓글 목록에서는 삭제된 글로 표시됩니다.',
+    time: '5시간 전',
+    hoursAgo: 5,
+    order: 0,
+    likes: 0,
+    liked: false,
+    commentTotal: 1,
+    modified: false,
+    comments: [
+      { id: 'comment_8', userId: 'user_me', body: '이 글에 남겼던 제 댓글입니다.', time: '4시간 전', order: 1, likes: 0, liked: false, status: 'normal', modified: false }
+    ]
   }
 ];
 
@@ -260,11 +289,11 @@ const state = {
   currentPostId: 'post_1',
   currentMagazineIndex: 0,
   selectedCategory: '전체',
-  sort: 'latest',
   communityLimit: 4,
   communityLoading: false,
-  homePage: 0,
-  homeOrder: ['post_2', 'post_5', 'post_1', 'post_8', 'post_3', 'post_7', 'post_6', 'post_4', 'post_10', 'post_9'],
+  recentLoveIds: [],
+  recentLoveShown: new Set(),
+  hasUnreadNotification: true,
   blockedUsers: new Set(),
   pendingMemberAction: null,
   reportTarget: null,
@@ -274,6 +303,10 @@ const state = {
 };
 
 const rootScreens = new Set(['home', 'community', 'mypage']);
+
+// [요즘 연애] 노출 기준: 최근 3일(72시간) 이내 게시글, 한 번에 노출하는 개수
+const RECENT_LOVE_WINDOW_HOURS = 72;
+const RECENT_LOVE_COUNT = 5;
 
 function escapeHTML(value) {
   return String(value)
@@ -294,10 +327,6 @@ function visiblePosts() {
 
 function commentCount(post) {
   return post.commentTotal ?? post.comments.length;
-}
-
-function reactionScore(post) {
-  return post.likes + (commentCount(post) * 2);
 }
 
 function authorLabel(entity) {
@@ -339,14 +368,43 @@ function renderPostList(target, list, options = {}) {
     : `<div class="empty-state" data-ui="${prefixMap[target]}_emptyState">${escapeHTML(options.emptyText || '표시할 글이 없습니다.')}</div>`;
 }
 
+// 노출 대상: 삭제, 숨김, 차단 작성자 글을 제외한 최근 3일 이내 게시글
+function recentLovePool() {
+  return visiblePosts().filter(post => (post.hoursAgo ?? 0) <= RECENT_LOVE_WINDOW_HOURS);
+}
+
+function shuffled(list) {
+  const copy = [...list];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+  return copy;
+}
+
+// 앱에 새로 진입할 때마다 노출 대상을 다시 선정한다.
+// 이전에 노출받지 않은 게시글을 먼저 채우고, 모두 소진되면 노출 이력을 비우고 다시 랜덤 노출한다.
+function selectRecentLove() {
+  const pool = recentLovePool();
+  const unseen = pool.filter(post => !state.recentLoveShown.has(post.id));
+  const picked = shuffled(unseen).slice(0, RECENT_LOVE_COUNT);
+  if (picked.length < RECENT_LOVE_COUNT) {
+    state.recentLoveShown.clear();
+    const pickedIds = new Set(picked.map(post => post.id));
+    shuffled(pool)
+      .filter(post => !pickedIds.has(post.id))
+      .slice(0, RECENT_LOVE_COUNT - picked.length)
+      .forEach(post => picked.push(post));
+  }
+  // 상세 진입 여부와 관계없이 노출된 시점을 기준으로 이력에 포함한다.
+  picked.forEach(post => state.recentLoveShown.add(post.id));
+  state.recentLoveIds = picked.map(post => post.id);
+}
+
 function renderHome() {
   const byId = new Map(visiblePosts().map(post => [post.id, post]));
-  const ordered = state.homeOrder.map(id => byId.get(id)).filter(Boolean).slice(0, 10);
-  const start = state.homePage * 5;
-  renderPostList('home', ordered.slice(start, start + 5), { compact: true });
-  const toggle = document.querySelector('[data-action="toggle-home-posts"]');
-  toggle.hidden = ordered.length <= 5;
-  toggle.textContent = state.homePage === 0 ? '2/2 보기' : '1/2 보기';
+  const list = state.recentLoveIds.map(id => byId.get(id)).filter(Boolean);
+  renderPostList('home', list, { compact: true, emptyText: '최근 3일 안에 올라온 고민이 없습니다.' });
 }
 
 function renderCategories() {
@@ -358,19 +416,14 @@ function renderCategories() {
   document.getElementById('write-category').innerHTML = categories.map(category => `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`).join('');
 }
 
+// 론칭 버전 정렬은 최신순만 제공한다.
 function getCommunityPosts() {
   const filtered = visiblePosts().filter(post => state.selectedCategory === '전체' || post.category === state.selectedCategory);
-  return filtered.sort((a, b) => {
-    if (state.sort === 'reaction') {
-      return reactionScore(b) - reactionScore(a) || b.order - a.order;
-    }
-    return b.order - a.order;
-  });
+  return filtered.sort((a, b) => b.order - a.order);
 }
 
 function renderCommunity() {
   renderCategories();
-  document.querySelectorAll('[data-sort]').forEach(button => button.classList.toggle('active', button.dataset.sort === state.sort));
   const list = getCommunityPosts();
   renderPostList('community', list.slice(0, state.communityLimit), { emptyText: '이 카테고리에는 아직 글이 없습니다.' });
   const sentinel = document.querySelector('[data-community-sentinel]');
@@ -516,20 +569,28 @@ function renderLikedPosts() {
   renderPostList('likes', list, { emptyText: '좋아요한 글이 없습니다.' });
 }
 
+// 원글이 삭제되거나 숨김 처리된 경우에도 아이템은 남기고 제목 자리만 대체한다.
 function renderMyComments() {
   const items = [];
-  visiblePosts().forEach(post => {
-    post.comments.forEach(comment => {
-      if (comment.userId === currentUser.id && comment.status === 'normal') items.push({ post, comment });
+  posts
+    .filter(post => !state.blockedUsers.has(post.userId))
+    .forEach(post => {
+      post.comments.forEach(comment => {
+        if (comment.userId === currentUser.id && comment.status === 'normal') items.push({ post, comment });
+      });
     });
-  });
   items.sort((a, b) => b.comment.order - a.comment.order);
-  document.getElementById('my-comment-list').innerHTML = items.length ? items.map((item, index) => `
-    <button class="my-comment-card" type="button" data-post-id="${item.post.id}" data-ui="MyCommentCard_${index + 1}">
-      <span class="meta"><strong>${escapeHTML(item.post.category)}</strong><span>${escapeHTML(item.comment.time)}</span>${item.comment.modified ? '<span>수정됨</span>' : ''}</span>
-      <span class="post-body">${escapeHTML(item.comment.body)}</span>
-    </button>
-  `).join('') : '<div class="empty-state" data-ui="MyCommentList_emptyState">작성한 댓글이 없습니다.</div>';
+  document.getElementById('my-comment-list').innerHTML = items.length ? items.map((item, index) => {
+    const unavailable = item.post.deleted || item.post.hidden;
+    const uiName = `MyCommentCard_${index + 1}`;
+    const head = `
+      <span class="meta"><strong>${escapeHTML(item.post.category)}</strong><span>${escapeHTML(item.post.time)}</span>${item.comment.modified ? '<span class="edited">수정됨</span>' : ''}</span>
+      <span class="my-comment-title${unavailable ? ' unavailable' : ''}">${escapeHTML(unavailable ? '삭제된 글입니다.' : item.post.title)}</span>
+      <span class="post-body">${escapeHTML(item.comment.body)}</span>`;
+    return unavailable
+      ? `<div class="my-comment-card is-unavailable" data-ui="${uiName}">${head}</div>`
+      : `<button class="my-comment-card" type="button" data-post-id="${item.post.id}" data-ui="${uiName}">${head}</button>`;
+  }).join('') : '<div class="empty-state" data-ui="MyCommentList_emptyState">작성한 댓글이 없습니다.</div>';
 }
 
 function renderNotifications() {
@@ -548,13 +609,18 @@ function renderNotifications() {
 
 function renderWithdrawReasons() {
   document.getElementById('withdraw-reasons').innerHTML = withdrawalReasons.map((reason, index) => `
-    <label class="reason-option"><input type="radio" name="withdraw-reason" value="${escapeHTML(reason)}"><span>${escapeHTML(reason)}</span></label>
+    <label class="reason-option" data-ui="WithdrawalReasonOption_${index + 1}"><input type="radio" name="withdraw-reason" value="${escapeHTML(reason)}"><span>${escapeHTML(reason)}</span></label>
   `).join('');
 }
 
 function renderAccount() {
   document.getElementById('mypage-provider').textContent = `${currentUser.provider}로 로그인`;
   document.getElementById('account-provider').textContent = currentUser.provider;
+}
+
+function updateNotificationDot() {
+  const dot = document.querySelector('.notification-dot');
+  if (dot) dot.hidden = !state.hasUnreadNotification;
 }
 
 function renderAllLists() {
@@ -566,6 +632,7 @@ function renderAllLists() {
   renderMyComments();
   renderNotifications();
   renderAccount();
+  updateNotificationDot();
 }
 
 function show(screenName, push = true) {
@@ -579,7 +646,11 @@ function show(screenName, push = true) {
   if (screenName === 'my-posts') renderMyPosts();
   if (screenName === 'my-comments') renderMyComments();
   if (screenName === 'likes') renderLikedPosts();
-  if (screenName === 'notifications') renderNotifications();
+  if (screenName === 'notifications') {
+    state.hasUnreadNotification = false;
+    updateNotificationDot();
+    renderNotifications();
+  }
   if (screenName === 'magazines') renderMagazineList();
   if (screenName === 'magazine-detail') renderMagazineDetail();
 
@@ -670,9 +741,21 @@ function openStatusModal(title, description, confirmText = '확인') {
     <button class="primary-button" type="button" data-action="close-modal">${escapeHTML(confirmText)}</button>`);
 }
 
+// 정지 안내는 앱 진입 시와 사용 중 서버 호출 시점에 노출하고, 확인 시 앱을 종료한다.
+function openSuspendedModal() {
+  openModal(`
+    ${modalHead('서비스 이용 정지', '운영 정책 위반으로 서비스 이용이 정지되었습니다. 자세한 내용은 고객센터로 문의해 주세요.')}
+    <button class="primary-button" type="button" data-action="exit-app" data-ui="SuspendedModal_confirmButton">확인</button>`);
+}
+
+function exitApp() {
+  closeModal();
+  document.getElementById('exit-layer').hidden = false;
+}
+
 function requireMember(action) {
   if (state.userStatus === 'suspended') {
-    openStatusModal('서비스 이용이 정지되었습니다.', '운영 정책 위반으로 서비스 이용이 정지되었습니다. 자세한 내용은 고객센터로 문의해 주세요.');
+    openSuspendedModal();
     return;
   }
   if (state.userStatus === 'withdrawn') {
@@ -751,11 +834,12 @@ function openPostMenu() {
 
 function openReportDialog(target) {
   state.reportTarget = target;
-  const reasons = ['욕설 / 비방', '성적 또는 부적절한 콘텐츠', '광고 / 홍보 / 도배', '개인정보 노출', '기타'];
+  // 원문 기준 신고 사유. 필수, 단수 선택, 자유 입력 없음.
+  const reasons = ['욕설·비방·혐오 표현', '성적·선정적인 내용', '광고·홍보·도배', '개인정보 노출 또는 사칭', '폭력·위협·불법적인 내용'];
   openModal(`
     ${modalHead('신고 사유를 선택해 주세요.', '운영진이 내용을 확인한 후 운영 정책에 따라 조치합니다.')}
     <div class="report-options">
-      ${reasons.map(reason => `<label class="report-option"><input type="radio" name="report-reason" value="${escapeHTML(reason)}"><span>${escapeHTML(reason)}</span></label>`).join('')}
+      ${reasons.map((reason, index) => `<label class="report-option" data-ui="ReportModal_reasonOption_${index + 1}"><input type="radio" name="report-reason" value="${escapeHTML(reason)}"><span>${escapeHTML(reason)}</span></label>`).join('')}
     </div>
     <p class="modal-warning">허위 신고 시 불이익을 받을 수 있습니다.</p>
     <div class="modal-actions"><button class="cancel" type="button" data-action="close-modal">취소</button><button class="confirm" id="report-confirm" type="button" data-action="confirm-report" disabled>신고하기</button></div>`);
@@ -819,6 +903,7 @@ function submitPost() {
     title,
     body,
     time: '방금 전',
+    hoursAgo: 0,
     order: Math.max(...posts.map(post => post.order)) + 1,
     likes: 0,
     liked: false,
@@ -827,12 +912,10 @@ function submitPost() {
     comments: []
   };
   posts.push(newPost);
-  state.homeOrder.unshift(newPost.id);
   document.getElementById('write-form').reset();
   document.getElementById('write-category').value = categories[0];
   updateWriteForm();
   state.selectedCategory = '전체';
-  state.sort = 'latest';
   state.communityLimit = 4;
   state.stack = ['community'];
   renderAllLists();
@@ -907,7 +990,19 @@ function logout() {
   toast('로그아웃되었습니다.');
 }
 
+function updateWithdrawForm() {
+  const note = document.getElementById('withdraw-note');
+  enforceLimit(note, 500, '자유 입력은 공백 포함 최대 500자까지 입력할 수 있어요.');
+  document.getElementById('withdraw-note-counter').textContent = `${note.value.length}/500`;
+  const reasonChecked = Boolean(document.querySelector('input[name="withdraw-reason"]:checked'));
+  const consentChecked = document.getElementById('withdraw-consent').checked;
+  document.getElementById('withdraw-submit').disabled = !reasonChecked || !consentChecked;
+}
+
 function completeWithdrawal() {
+  const reasonChecked = Boolean(document.querySelector('input[name="withdraw-reason"]:checked'));
+  const consentChecked = document.getElementById('withdraw-consent').checked;
+  if (!reasonChecked || !consentChecked) return;
   state.loggedIn = false;
   state.userStatus = 'withdrawn';
   state.pendingMemberAction = null;
@@ -948,7 +1043,6 @@ document.addEventListener('click', event => {
   const postLike = event.target.closest('[data-like-id]');
   const commentButton = event.target.closest('[data-comment-id]');
   const categoryChip = event.target.closest('[data-chip]');
-  const sortButton = event.target.closest('[data-sort]');
   const magazineButton = event.target.closest('[data-magazine]');
   const commentLike = event.target.closest('[data-comment-like]');
   const commentMenu = event.target.closest('[data-comment-menu]');
@@ -1015,13 +1109,6 @@ document.addEventListener('click', event => {
     return;
   }
 
-  if (sortButton) {
-    state.sort = sortButton.dataset.sort;
-    state.communityLimit = 4;
-    renderCommunity();
-    return;
-  }
-
   if (memberTab) {
     requireMember({ type: 'open', screen: memberTab.dataset.memberTab });
     return;
@@ -1061,10 +1148,6 @@ document.addEventListener('click', event => {
     state.stack = ['community'];
     show('community', false);
   }
-  else if (action === 'toggle-home-posts') {
-    state.homePage = state.homePage === 0 ? 1 : 0;
-    renderHome();
-  }
   else if (action === 'open-post-menu') openPostMenu();
   else if (action === 'like-current') requireMember({ type: 'like-post', postId: state.currentPostId });
   else if (action === 'focus-comment') document.getElementById('comment-input').focus();
@@ -1092,6 +1175,7 @@ document.addEventListener('click', event => {
   else if (action === 'open-os-settings') openStatusModal('알림 설정', '휴대폰 설정 > 앱 설정 > 알림 권한을 통해 설정해 주세요.');
   else if (action === 'logout') logout();
   else if (action === 'browse-as-guest') browseAsGuest();
+  else if (action === 'exit-app') exitApp();
   else closeInlineMenus();
 });
 
@@ -1122,6 +1206,8 @@ document.getElementById('withdraw-form').addEventListener('submit', event => {
   event.preventDefault();
   completeWithdrawal();
 });
+document.getElementById('withdraw-note').addEventListener('input', updateWithdrawForm);
+document.getElementById('withdraw-form').addEventListener('change', updateWithdrawForm);
 
 const hero = document.querySelector('.hero');
 hero.addEventListener('scroll', () => {
@@ -1132,17 +1218,14 @@ hero.addEventListener('scroll', () => {
 function initialize() {
   const now = new Date();
   document.getElementById('status-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-  state.homeOrder = posts.map(post => post.id);
-  for (let index = state.homeOrder.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
-    [state.homeOrder[index], state.homeOrder[swapIndex]] = [state.homeOrder[swapIndex], state.homeOrder[index]];
-  }
+  selectRecentLove();
   renderCategories();
   renderMagazineRail();
   renderMagazineList();
   renderWithdrawReasons();
   renderAllLists();
   updateWriteForm();
+  updateWithdrawForm();
   updateCommentComposer();
   initializeObserver();
   show('home', false);

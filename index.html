@@ -26,6 +26,7 @@
       </button>
       <button class="icon-button topbar-notification" type="button" aria-label="알림센터" data-action="open-notifications" data-ui="AppTopbar_notificationButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+        <span class="notification-dot" data-ui="AppTopbar_notificationDot" hidden></span>
       </button>
       <button class="icon-button topbar-more" type="button" aria-label="게시글 더보기" data-action="open-post-menu" data-ui="AppTopbar_moreButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
@@ -42,10 +43,10 @@
             <span class="hero-cta">책 만나보기</span>
           </span>
         </button>
-        <button class="hero-slide hero-community" type="button" data-action="open-community" data-ui="HomeHeroCard_popular">
+        <button class="hero-slide hero-community" type="button" data-action="open-community" data-ui="HomeHeroCard_community">
           <span class="hero-content">
-            <span class="hero-eyebrow">최근 72시간 급상승</span>
-            <strong>요즘 가장 많이 이야기하는 고민</strong>
+            <span class="hero-eyebrow">커뮤니티</span>
+            <strong>지금 올라온 고민 보러 가기</strong>
             <span class="hero-copy">답장 텀, 스토리 반응, 애매한 호감 신호를 함께 이야기해요.</span>
           </span>
         </button>
@@ -67,10 +68,9 @@
         <span class="hero-pagination" data-ui="HomeHeroCarousel_pagination">1/4</span>
       </section>
 
-      <section class="content-section" data-ui="HomePopularSection">
-        <div class="section-head"><h2>고민 둘러보기</h2><span class="section-meta">랜덤 추천</span></div>
-        <div data-post-list="home" data-ui="HomePopularPostList"></div>
-        <button class="wide-button" type="button" data-action="toggle-home-posts" data-ui="HomePopularSection_moreButton">2/2 보기</button>
+      <section class="content-section" data-ui="HomeRecentLoveSection">
+        <div class="section-head"><h2>요즘 연애</h2><span class="section-meta">최근 3일 랜덤</span></div>
+        <div data-post-list="home" data-ui="HomeRecentLovePostList"></div>
       </section>
 
       <section class="magazine-section" aria-label="요매거진" data-ui="HomeMagazineSection">
@@ -85,10 +85,6 @@
 
     <main class="screen" data-screen="community" data-ui="CommunityScreen">
       <div class="chips" id="community-chips" aria-label="카테고리" data-ui="CommunityCategoryChipList"></div>
-      <div class="sort-control" aria-label="게시글 정렬" data-ui="CommunitySortControl">
-        <button class="active" type="button" data-sort="latest">최신순</button>
-        <button type="button" data-sort="reaction">반응순</button>
-      </div>
       <div data-post-list="community" data-ui="CommunityPostList"></div>
       <div class="load-sentinel" data-community-sentinel data-ui="CommunityPostList_loadState">게시글을 불러오는 중</div>
       <button class="fab" type="button" data-member-open="write" aria-label="글쓰기" data-ui="CommunityWriteFab">
@@ -234,16 +230,24 @@
 
     <main class="screen" data-screen="withdraw" data-ui="WithdrawalScreen">
       <form id="withdraw-form" class="withdraw-form">
-        <fieldset>
-          <legend>탈퇴하는 이유를 알려주세요.</legend>
+        <fieldset data-ui="WithdrawalReasonField">
+          <legend>탈퇴하는 이유를 알려주세요. <em>필수</em></legend>
           <p>서비스 개선을 위해 참고할게요.</p>
-          <div id="withdraw-reasons" class="reason-list"></div>
+          <div id="withdraw-reasons" class="reason-list" data-ui="WithdrawalReasonList"></div>
         </fieldset>
         <label class="field-group">
           <span class="field-label">자유 입력</span>
-          <textarea id="withdraw-note" placeholder="더 나누고 싶은 이야기가 있다면 적어주세요"></textarea>
+          <textarea id="withdraw-note" placeholder="더 나누고 싶은 이야기가 있다면 적어주세요" data-ui="WithdrawalNoteInput"></textarea>
+          <span class="counter" id="withdraw-note-counter">0/500</span>
         </label>
-        <button class="danger-button" type="submit">탈퇴하기</button>
+        <div class="consent-box" data-ui="WithdrawalConsentBox">
+          <p class="consent-copy" data-ui="WithdrawalConsentBox_copy">탈퇴 후에도 작성한 글과 댓글은 삭제되지 않고 유지됩니다. 개인정보 등 삭제가 필요한 내용이 포함되어 있다면, 탈퇴 전에 직접 수정하거나 삭제해 주세요.</p>
+          <label class="consent-check" data-ui="WithdrawalConsentBox_checkbox">
+            <input type="checkbox" id="withdraw-consent">
+            <span><em>[필수]</em> 위 내용을 확인했으며, 작성한 콘텐츠가 탈퇴 후에도 유지되는 것에 동의합니다.</span>
+          </label>
+        </div>
+        <button class="danger-button" id="withdraw-submit" type="submit" disabled data-ui="WithdrawalForm_submitButton">탈퇴하기</button>
       </form>
     </main>
 
@@ -266,6 +270,11 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden data-ui="Toast"></div>
+
+    <div class="exit-layer" id="exit-layer" hidden data-ui="AppExitLayer">
+      <strong>앱이 종료되었습니다.</strong>
+      <span>정지 안내 확인 후 앱을 종료하는 화면입니다.</span>
+    </div>
   </div>
 </body>
 </html>

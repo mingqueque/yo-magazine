@@ -130,9 +130,10 @@
 
 - `AppTopbar_title`
 - `HomeHeroCard_book_subTitle`
-- `HomePopularSection_moreButton`
+- `HomeRecentLoveSection`
 - `HomeMagazineCard_1`
 - `CommunityCategoryChip_1`
+- `WithdrawalConsentBox_checkbox`
 - `CommunityPostCard_1_title`
 - `PostDetailCard_body`
 - `PostCommentCard_1_likeButton`
