@@ -30,6 +30,9 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
         <span class="notification-dot" data-ui="AppTopbar_notificationDot" hidden></span>
       </button>
+      <button class="icon-button topbar-share" type="button" aria-label="공유하기" data-action="share-magazine" data-ui="AppTopbar_shareButton">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 10.5 6.8-4"></path><path d="m8.6 13.5 6.8 4"></path></svg>
+      </button>
       <button class="icon-button topbar-more" type="button" aria-label="게시글 더보기" data-action="open-post-menu" data-ui="AppTopbar_moreButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
       </button>
@@ -219,9 +222,11 @@
     </main>
 
     <main class="screen magazine-detail-screen" data-screen="magazine-detail" data-ui="MagazineDetailScreen">
-      <img id="magazine-detail-image" class="magazine-detail-image" alt="">
+      <div class="magazine-detail-media">
+        <div id="magazine-detail-rail" class="magazine-detail-rail" data-ui="MagazineDetailImageCarousel"></div>
+        <span id="magazine-detail-counter" class="hero-pagination">1 / 4</span>
+      </div>
       <article class="magazine-detail-copy">
-        <span class="hero-eyebrow">요매거진</span>
         <h1 id="magazine-detail-title"></h1>
         <p id="magazine-detail-body"></p>
       </article>

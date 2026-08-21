@@ -221,25 +221,50 @@ const posts = [
 
 const magazines = [
   {
-    image: 'assets/magazine-thumb-1.jpg',
+    image: 'assets/magazine-content-1-01.png',
+    images: [
+      'assets/magazine-content-1-01.png',
+      'assets/magazine-content-1-02.png',
+      'assets/magazine-content-1-03.png',
+      'assets/magazine-content-1-04.png',
+      'assets/magazine-content-1-05.png',
+      'assets/magazine-content-1-06.png'
+    ],
     title: '요매거진 대나무숲 사연을 모집합니다',
     summary: '아무에게도 말하지 못했던 연애 이야기를 익명으로 들려주세요.',
     body: '친구에게도 꺼내기 어려웠던 이야기가 있나요?\n\n요매거진 대나무숲은 이름 없이 마음을 나누는 공간입니다. 보내주신 이야기는 개인정보를 제거한 뒤, 다른 사람의 경험과 조언을 만날 수 있는 콘텐츠로 소개합니다.'
   },
   {
-    image: 'assets/magazine-thumb-2.jpg',
-    title: '만 원으로 여자친구 행복하게 할 수 있다면 여기로 갈게요',
-    summary: '큰돈 없이도 오래 기억되는 서울 데이트 코스를 모았습니다.',
-    body: '좋은 데이트가 꼭 비쌀 필요는 없습니다.\n\n천천히 걸을 수 있는 길, 취향을 나눌 수 있는 작은 가게, 둘만의 사진을 남기기 좋은 장소를 한 코스로 엮었습니다.'
+    image: 'assets/magazine-content-2-01.png',
+    images: [
+      'assets/magazine-content-2-01.png',
+      'assets/magazine-content-2-02.png',
+      'assets/magazine-content-2-03.png'
+    ],
+    title: '꽃 사다주면 환장하는 애인을 위해 여기, 가주세요',
+    summary: '기념일이 아니어도 들르기 좋은 서울 꽃시장 세 곳.',
+    body: '꽃은 거창한 이벤트보다 빠르게 마음을 전하는 물건입니다.\n\n양재동화훼공판장처럼 종류가 넓은 곳, 강북꽃도매상가처럼 알차게 둘러보기 좋은 곳을 지나며 색과 향을 고르는 시간을 담았습니다. 장미 한 단만 골라도 하루의 분위기가 달라지는, 애인과 함께 가볍게 들르기 좋은 꽃시장 코스입니다.'
   },
   {
     image: 'assets/magazine-thumb-3.jpg',
+    images: [
+      'assets/magazine-thumb-3.jpg',
+      'assets/magazine-thumb-1.jpg',
+      'assets/magazine-thumb-2.jpg',
+      'assets/magazine-thumb-4.jpg'
+    ],
     title: '왜 다들 연애하면 이케아에 가는지 비로소 알 것 같았다',
     summary: '가구보다 서로의 생활을 더 많이 보게 되는 데이트 이야기.',
     body: '쇼룸을 걷다 보면 생각보다 많은 대화가 시작됩니다.\n\n좋아하는 색, 쉬는 방식, 함께 살고 싶은 집까지. 이케아 데이트에서 발견한 관계의 작은 단서를 기록했습니다.'
   },
   {
     image: 'assets/magazine-thumb-4.jpg',
+    images: [
+      'assets/magazine-thumb-4.jpg',
+      'assets/magazine-thumb-1.jpg',
+      'assets/magazine-thumb-2.jpg',
+      'assets/magazine-thumb-3.jpg'
+    ],
     title: '수제 맥주 실컷 맛보러 동대문구 맥주 축제 갈 사람 없나',
     summary: '선선한 저녁, 가볍게 건네기 좋은 데이트 제안.',
     body: '부담스럽지 않게 약속을 잡고 싶다면 축제만큼 좋은 핑계도 없습니다.\n\n함께 맛볼 맥주와 근처 산책 코스, 대화가 끊기지 않는 작은 팁을 소개합니다.'
@@ -290,7 +315,7 @@ const titles = {
   'my-comments': '내가 작성한 댓글',
   likes: '좋아요한 글',
   magazines: '요매거진',
-  'magazine-detail': '',
+  'magazine-detail': '요매거진',
   info: '',
   withdraw: '회원 탈퇴',
   'withdraw-complete': '탈퇴 완료'
@@ -318,6 +343,7 @@ const state = {
   deleteTarget: null,
   editingPostId: null,
   editingCommentId: null,
+  commentInputComposing: false,
   searchQuery: '',
   toastTimer: null
 };
@@ -526,19 +552,36 @@ function renderMagazineRail() {
 
 function renderMagazineList() {
   document.getElementById('magazine-list').innerHTML = magazines.map((magazine, index) => `
-    <button class="magazine-list-card" type="button" data-magazine="${index}" data-ui="MagazineListCard_${index + 1}">
+    <button class="magazine-list-card" type="button" data-magazine="${index}" aria-label="${escapeHTML(magazine.title)}" data-ui="MagazineListCard_${index + 1}">
       <img src="${magazine.image}" alt="">
-      <span class="magazine-list-copy"><strong>${escapeHTML(magazine.title)}</strong><span>${escapeHTML(magazine.summary)}</span></span>
     </button>
   `).join('');
 }
 
-function renderMagazineDetail() {
+function updateMagazineImageCounter(index, total) {
+  document.getElementById('magazine-detail-counter').textContent = `${index + 1} / ${total}`;
+}
+
+function updateMagazineDetailContent() {
   const magazine = magazines[state.currentMagazineIndex] || magazines[0];
-  document.getElementById('magazine-detail-image').src = magazine.image;
-  document.getElementById('magazine-detail-image').alt = magazine.title;
   document.getElementById('magazine-detail-title').textContent = magazine.title;
   document.getElementById('magazine-detail-body').textContent = magazine.body;
+}
+
+function renderMagazineDetail() {
+  const rail = document.getElementById('magazine-detail-rail');
+  const magazine = magazines[state.currentMagazineIndex] || magazines[0];
+  const images = magazine.images?.length ? magazine.images : [magazine.image];
+  rail.innerHTML = images.map((image, index) => `
+    <div class="magazine-detail-slide" data-ui="MagazineDetailImage_${index + 1}">
+      <img class="magazine-detail-image" src="${image}" alt="${escapeHTML(magazine.title)} ${index + 1}">
+    </div>
+  `).join('');
+  updateMagazineDetailContent();
+  updateMagazineImageCounter(0, images.length);
+  requestAnimationFrame(() => {
+    rail.scrollTo({ left: 0, behavior: 'auto' });
+  });
 }
 
 function commentNumberMap(comments) {
@@ -546,8 +589,11 @@ function commentNumberMap(comments) {
   let next = 1;
   comments.forEach(comment => {
     if (comment.editor) return;
-    map.set(comment.id, next);
-    next += 1;
+    const authorKey = comment.userId || comment.id;
+    if (!map.has(authorKey)) {
+      map.set(authorKey, next);
+      next += 1;
+    }
   });
   return map;
 }
@@ -570,13 +616,14 @@ function renderComments(post) {
     };
     const isException = status !== 'normal';
     const isOwnComment = isOwn(comment);
-    const author = comment.editor ? '에디터 ✓' : `익명${numbers.get(comment.id)}`;
+    const author = comment.editor ? '에디터 ✓' : `익명${numbers.get(comment.userId || comment.id)}`;
     const uiName = `PostCommentCard_${index + 1}`;
     return `
       <article class="comment-card${isException ? ' exception' : ''}" data-comment-card="${comment.id}" data-ui="${uiName}">
-        <div class="meta"><strong>${escapeHTML(author)}</strong><span>${escapeHTML(comment.time)}</span>${comment.modified ? '<span class="edited">수정됨</span>' : ''}</div>
+        <div class="meta"><strong>${escapeHTML(author)}</strong><span>${escapeHTML(comment.time)}</span></div>
         <div class="post-body">${escapeHTML(isException ? messages[status] : comment.body)}</div>
         ${isException ? '' : `
+          ${comment.modified ? '<div class="comment-edited edited">수정됨</div>' : ''}
           <div class="comment-actions">
             <button class="thread-action${comment.liked ? ' liked' : ''}" type="button" data-comment-like="${comment.id}" aria-label="댓글 좋아요">${icons.heart}<span>${comment.likes}</span></button>
             <div class="comment-menu-wrap">
@@ -659,9 +706,9 @@ function renderMyComments() {
     const unavailable = item.post.deleted || item.post.hidden;
     const uiName = `MyCommentCard_${index + 1}`;
     const head = `
-      <span class="meta"><strong>${escapeHTML(item.post.category)}</strong><span>${escapeHTML(item.post.time)}</span>${item.comment.modified ? '<span class="edited">수정됨</span>' : ''}</span>
+      <span class="meta"><strong>${escapeHTML(item.post.category)}</strong><span>${escapeHTML(item.post.time)}</span></span>
       <span class="my-comment-title${unavailable ? ' unavailable' : ''}">${escapeHTML(unavailable ? '삭제된 글입니다.' : item.post.title)}</span>
-      <span class="post-body">${escapeHTML(item.comment.body)}</span>`;
+      <span class="my-comment-body">"${escapeHTML(item.comment.body)}"</span>`;
     return unavailable
       ? `<div class="my-comment-card is-unavailable" data-ui="${uiName}">${head}</div>`
       : `<button class="my-comment-card" type="button" data-post-id="${item.post.id}" data-ui="${uiName}">${head}</button>`;
@@ -762,6 +809,7 @@ function show(screenName, push = true) {
   const isRoot = rootScreens.has(screenName);
   topbar.classList.toggle('subpage', !isRoot);
   topbar.classList.toggle('detail-mode', screenName === 'detail');
+  topbar.classList.toggle('magazine-detail-mode', screenName === 'magazine-detail');
   renderTopbarTitle(screenName);
   document.querySelector('.topbar-search').hidden = !isRoot;
   document.querySelector('.topbar-notification').hidden = !isRoot;
@@ -810,6 +858,31 @@ function toast(message) {
   node.textContent = message;
   node.hidden = false;
   state.toastTimer = window.setTimeout(() => { node.hidden = true; }, 2200);
+}
+
+async function shareMagazine() {
+  const magazine = magazines[state.currentMagazineIndex] || magazines[0];
+  const shareData = {
+    title: magazine.title,
+    text: magazine.summary
+  };
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    shareData.url = window.location.href;
+  }
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      return;
+    }
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(shareData.url || `${shareData.title}\n${shareData.text}`);
+      toast('공유 링크를 복사했어요.');
+      return;
+    }
+  } catch (error) {
+    if (error?.name === 'AbortError') return;
+  }
+  toast('공유 기능은 준비 중이에요.');
 }
 
 function openModal(markup, options = {}) {
@@ -1096,7 +1169,9 @@ function updateCommentComposer() {
 
 function submitComment() {
   const input = document.getElementById('comment-input');
-  if (!input.value.trim().length) return;
+  if (state.commentInputComposing) return;
+  const body = input.value.trim();
+  if (!body.length) return;
   if (!state.loggedIn) {
     requireMember({ type: 'submit-comment' });
     return;
@@ -1111,7 +1186,7 @@ function submitComment() {
       updateCommentComposer();
       return;
     }
-    found.comment.body = input.value;
+    found.comment.body = body;
     found.comment.modified = true;
     found.comment.time = '방금 전';
     state.editingCommentId = null;
@@ -1128,7 +1203,7 @@ function submitComment() {
   post.comments.push({
     id: `comment_${Date.now()}`,
     userId: currentUser.id,
-    body: input.value,
+    body,
     time: '방금 전',
     order: highestOrder + 1,
     likes: 0,
@@ -1411,6 +1486,7 @@ document.addEventListener('click', event => {
   }
   else if (action === 'toggle-recent-love-page') toggleRecentLovePage();
   else if (action === 'open-post-menu') openPostMenu();
+  else if (action === 'share-magazine') shareMagazine();
   else if (action === 'edit-post') editPost();
   else if (action === 'delete-post') deletePost();
   else if (action === 'edit-comment') editComment();
@@ -1466,9 +1542,17 @@ document.getElementById('write-form').addEventListener('submit', event => {
 document.getElementById('write-title').addEventListener('input', updateWriteForm);
 document.getElementById('write-body').addEventListener('input', updateWriteForm);
 document.getElementById('comment-input').addEventListener('input', updateCommentComposer);
+document.getElementById('comment-input').addEventListener('compositionstart', () => {
+  state.commentInputComposing = true;
+});
+document.getElementById('comment-input').addEventListener('compositionend', () => {
+  state.commentInputComposing = false;
+  updateCommentComposer();
+});
 document.getElementById('comment-input').addEventListener('focus', scheduleKeyboardInsetUpdate);
 document.getElementById('comment-input').addEventListener('blur', scheduleKeyboardInsetUpdate);
 document.getElementById('comment-input').addEventListener('keydown', event => {
+  if (event.isComposing || event.keyCode === 229 || state.commentInputComposing) return;
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
     submitComment();
@@ -1491,7 +1575,16 @@ document.getElementById('withdraw-form').addEventListener('change', updateWithdr
 const hero = document.querySelector('.hero');
 hero.addEventListener('scroll', () => {
   const index = Math.round(hero.scrollLeft / hero.clientWidth) + 1;
-  document.querySelector('.hero-pagination').textContent = `${Math.min(Math.max(index, 1), 4)} / 4`;
+  document.querySelector('.hero .hero-pagination').textContent = `${Math.min(Math.max(index, 1), 4)} / 4`;
+}, { passive: true });
+
+const magazineDetailRail = document.getElementById('magazine-detail-rail');
+magazineDetailRail.addEventListener('scroll', () => {
+  if (!magazineDetailRail.clientWidth) return;
+  const index = Math.round(magazineDetailRail.scrollLeft / magazineDetailRail.clientWidth);
+  const magazine = magazines[state.currentMagazineIndex] || magazines[0];
+  const total = magazine.images?.length || 1;
+  updateMagazineImageCounter(Math.min(Math.max(index, 0), total - 1), total);
 }, { passive: true });
 
 function initialize() {
