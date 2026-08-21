@@ -884,6 +884,7 @@ textarea { min-height: 160px; resize: none; line-height: var(--line-body); }
 .magazine-list-card img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .magazine-detail-screen { padding: 0 0 84px; }
 .magazine-detail-media { position: relative; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: var(--color-surface-soft); }
+.magazine-detail-media .hero-pagination { top: var(--space-12); bottom: auto; }
 .magazine-detail-rail { height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .magazine-detail-rail::-webkit-scrollbar { display: none; }
 .magazine-detail-slide { flex: 0 0 100%; height: 100%; scroll-snap-align: start; }
