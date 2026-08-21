@@ -88,6 +88,8 @@
   --size-icon-topbar: 21px;
   --size-icon-lg: 22px;
 
+  --font-family-base: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+
   --shadow-menu: 0 8px 24px var(--color-shadow);
   --shadow-floating-input: 0 10px 32px var(--color-shadow-strong);
 
@@ -112,7 +114,7 @@ body {
   place-items: center;
   background: var(--color-surface);
   color: var(--color-text-primary);
-  font-family: "Airbnb Cereal VF", Circular, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--font-family-base);
   letter-spacing: 0;
 }
 

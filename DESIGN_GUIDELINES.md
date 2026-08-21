@@ -45,6 +45,25 @@
 - `--color-danger-muted`: 탈퇴/오류 등 위험 계열 보조 색
 - `--color-overlay-strong`: 페이지네이션 오버레이
 
+## 폰트 패밀리
+
+본문 폰트는 **Pretendard**를 사용한다. 가변 폰트(Pretendard Variable)를 우선 적용하고, 로드되지 않을 때를 대비해 시스템 폰트로 폴백한다.
+
+```css
+--font-family-base: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+```
+
+- 개별 요소에 `font-family`를 직접 쓰지 않고 `--font-family-base`를 상속받는다.
+- 프로토타입은 jsDelivr의 동적 서브셋 CSS로 불러온다. 필요한 글자만 내려받아 초기 로딩이 가볍다.
+
+```html
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+```
+
+- 굵기는 가변 축(`wght` 45~930)을 그대로 쓴다. 이 프로젝트에서 실제로 쓰는 값은 `400`, `700`, `800`, `900`이다.
+- 디자인 캔버스처럼 외부 요청이 막힌 환경에서는 KS X 1001 한글 2,350자로 서브셋한 가변 woff2를 `@font-face`에 base64로 심어 같은 폰트를 재현한다.
+
 ## 폰트 체계
 
 폰트는 역할별 토큰을 사용한다.
