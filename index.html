@@ -22,7 +22,7 @@
       <button class="icon-button back-button" type="button" aria-label="뒤로" data-action="back" data-ui="AppTopbar_backButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
       </button>
-      <div class="topbar-title" data-ui="AppTopbar_title">Yo!</div>
+      <div class="topbar-title" data-ui="AppTopbar_title" aria-label="요니버스"></div>
       <button class="icon-button topbar-search" type="button" aria-label="검색" data-action="open-search" data-ui="AppTopbar_searchButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
       </button>
@@ -71,7 +71,7 @@
       </section>
 
       <section class="content-section" data-ui="HomeRecentLoveSection">
-        <div class="section-head"><h2>요즘 연애</h2><span class="section-meta">최근 3일 랜덤</span></div>
+        <div class="section-head"><h2>요즘 연애</h2></div>
         <div data-post-list="home" data-ui="HomeRecentLovePostList"></div>
         <button class="recent-love-more" type="button" data-action="toggle-recent-love-page" data-ui="HomeRecentLoveMoreButton" hidden></button>
       </section>
@@ -109,12 +109,11 @@
           <button class="thread-action" type="button" id="detail-comment-count" data-action="focus-comment" aria-label="댓글 입력으로 이동"></button>
         </div>
       </article>
-      <div class="section-head comment-section-head"><h2>댓글</h2><span class="section-meta">오래된 댓글순</span></div>
+      <div class="section-head comment-section-head"><h2>댓글</h2></div>
       <div id="detail-comments" data-ui="PostCommentList"></div>
       <div class="comment-composer" data-ui="PostCommentInput">
         <div class="comment-field">
-          <input id="comment-input" aria-label="댓글 입력" placeholder="댓글을 입력하세요" autocomplete="off" data-ui="PostCommentInput_field">
-          <span class="counter" id="comment-counter">0/500</span>
+          <input id="comment-input" aria-label="댓글 입력" placeholder="댓글을 남겨주세요" autocomplete="off" data-ui="PostCommentInput_field">
         </div>
         <button class="submit-icon" id="comment-submit" type="button" data-action="submit-comment" aria-label="댓글 등록" disabled data-ui="PostCommentInput_submitButton">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
@@ -158,8 +157,7 @@
 
     <main class="screen" data-screen="mypage" data-ui="MyPageScreen">
       <button class="profile profile-link mypage-profile" type="button" data-open="account" data-ui="MyPageProfileCard">
-        <span class="avatar">익</span>
-        <span class="profile-main"><span class="profile-name">익명</span><span class="profile-sub" id="mypage-provider">카카오로 로그인</span></span>
+        <span class="profile-main"><span class="profile-name">익명으로 활동중</span></span>
         <span class="chevron">›</span>
       </button>
 
@@ -195,10 +193,6 @@
 
     <main class="screen" data-screen="account" data-ui="AccountScreen">
       <section class="account-card" data-ui="AccountProfileCard">
-        <div class="profile mypage-profile">
-          <span class="avatar">익</span>
-          <span class="profile-main"><span class="profile-name">익명</span></span>
-        </div>
         <div class="account-row"><strong>로그인 방식</strong><span id="account-provider">카카오</span></div>
         <div class="account-row"><strong>가입 이메일</strong><span>yo.user@kakao.com</span></div>
       </section>
@@ -254,7 +248,7 @@
         </fieldset>
         <label class="field-group">
           <span class="field-label">자유 입력</span>
-          <textarea id="withdraw-note" placeholder="더 나누고 싶은 이야기가 있다면 적어주세요" data-ui="WithdrawalNoteInput"></textarea>
+          <textarea id="withdraw-note" placeholder="소중한 의견이 있으시다면 입력해주세요. 더 나은 서비스가 되도록 노력하겠습니다." data-ui="WithdrawalNoteInput"></textarea>
           <span class="counter" id="withdraw-note-counter">0/500</span>
         </label>
         <div class="consent-box" data-ui="WithdrawalConsentBox">

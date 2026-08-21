@@ -456,7 +456,7 @@ function renderCommunity() {
   const sentinel = document.querySelector('[data-community-sentinel]');
   if (state.communityLoading) sentinel.textContent = '게시글을 불러오는 중';
   else if (state.communityLimit < list.length) sentinel.textContent = '아래로 내려 더 보기';
-  else sentinel.textContent = list.length ? '모든 게시글을 확인했어요.' : '';
+  else sentinel.textContent = '';
 }
 
 function loadMoreCommunity() {
@@ -474,7 +474,8 @@ function loadMoreCommunity() {
 function renderMagazineRail() {
   document.querySelector('[data-magazine-rail]').innerHTML = magazines.map((magazine, index) => `
     <button class="magazine-card" type="button" data-magazine="${index}" aria-label="${escapeHTML(magazine.title)}" data-ui="HomeMagazineCard_${index + 1}">
-      <img src="${magazine.image}" alt="">
+      <span class="magazine-card-image"><img src="${magazine.image}" alt=""></span>
+      <span class="magazine-card-title">${escapeHTML(magazine.title)}</span>
     </button>
   `).join('');
 }
@@ -640,7 +641,6 @@ function renderWithdrawReasons() {
 }
 
 function renderAccount() {
-  document.getElementById('mypage-provider').textContent = `${currentUser.provider}로 로그인`;
   document.getElementById('account-provider').textContent = currentUser.provider;
 }
 
@@ -659,6 +659,17 @@ function renderAllLists() {
   renderNotifications();
   renderAccount();
   updateNotificationDot();
+}
+
+function renderTopbarTitle(screenName) {
+  const title = document.querySelector('.topbar-title');
+  if (screenName === 'home') {
+    title.innerHTML = '<img class="topbar-logo" src="assets/yoniverse-app-logo.svg" alt="요니버스">';
+    title.setAttribute('aria-label', '요니버스');
+    return;
+  }
+  title.textContent = titles[screenName] || 'Yo!';
+  title.removeAttribute('aria-label');
 }
 
 function show(screenName, push = true) {
@@ -684,7 +695,7 @@ function show(screenName, push = true) {
   const isRoot = rootScreens.has(screenName);
   topbar.classList.toggle('subpage', !isRoot);
   topbar.classList.toggle('detail-mode', screenName === 'detail');
-  document.querySelector('.topbar-title').textContent = titles[screenName] || 'Yo!';
+  renderTopbarTitle(screenName);
   document.querySelector('.topbar-search').hidden = !isRoot;
   document.querySelector('.topbar-notification').hidden = !isRoot;
   document.querySelector('.tabs').hidden = !isRoot;
@@ -751,12 +762,12 @@ function modalHead(title, description = '') {
 function openLoginGate() {
   const appleButton = `
     <button class="provider-button apple" type="button" data-login-provider="Apple">
-      <strong>Apple로 계속하기</strong><span>iOS</span>
+      <strong>Apple로 계속하기</strong>
     </button>`;
   openModal(`
     ${modalHead('로그인이 필요한 기능입니다.', '로그인 후 지금 보던 화면으로 돌아올게요.')}
     <div class="provider-list">
-      <button class="provider-button kakao" type="button" data-login-provider="카카오"><strong>카카오로 계속하기</strong><span>이메일 필수</span></button>
+      <button class="provider-button kakao" type="button" data-login-provider="카카오"><strong>카카오로 계속하기</strong></button>
       ${appleButton}
     </div>`);
 }
@@ -952,7 +963,6 @@ function submitPost() {
 function updateCommentComposer() {
   const input = document.getElementById('comment-input');
   enforceLimit(input, 500, '댓글은 공백 포함 최대 500자까지 입력할 수 있어요.');
-  document.getElementById('comment-counter').textContent = `${input.value.length}/500`;
   document.getElementById('comment-submit').disabled = input.value.trim().length < 1;
 }
 
