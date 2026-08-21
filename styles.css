@@ -329,13 +329,6 @@ button.hero-slide:hover { filter: brightness(.985); }
   line-height: var(--line-body);
 }
 .hero-book .hero-copy { max-width: 210px; color: var(--color-text-book); font-size: var(--font-label); }
-.hero-cta {
-  display: inline-flex;
-  margin-top: var(--space-14);
-  color: var(--color-brand-main);
-  font-size: var(--font-cta);
-  font-weight: var(--font-weight-cta);
-}
 .ad-badge {
   position: absolute;
   top: var(--space-18);
