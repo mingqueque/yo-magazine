@@ -23,6 +23,21 @@ const currentUser = {
 
 const posts = [
   {
+    id: 'post_long_title_test',
+    userId: currentUser.id,
+    category: '썸/소개팅',
+    title: '긴글제목 테스트긴글제목 테스트긴글제목 테스트긴글제목 테스트긴글제목 테스트',
+    body: 'ㅇ',
+    time: '방금 전',
+    hoursAgo: 0,
+    order: 11,
+    likes: 0,
+    liked: false,
+    commentTotal: 0,
+    modified: false,
+    comments: []
+  },
+  {
     id: 'post_1',
     userId: 'user_me',
     category: '썸/소개팅',
@@ -300,6 +315,9 @@ const state = {
   reportTarget: null,
   blockTarget: null,
   commentMenuTarget: null,
+  deleteTarget: null,
+  editingPostId: null,
+  editingCommentId: null,
   searchQuery: '',
   toastTimer: null
 };
@@ -310,6 +328,7 @@ const rootScreens = new Set(['home', 'community', 'mypage']);
 const RECENT_LOVE_WINDOW_HOURS = 72;
 const RECENT_LOVE_COUNT = 10;
 const RECENT_LOVE_PAGE_SIZE = 5;
+const KEYBOARD_INSET_THRESHOLD = 80;
 
 function escapeHTML(value) {
   return String(value)
@@ -318,6 +337,19 @@ function escapeHTML(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+function updateKeyboardInset() {
+  const viewport = window.visualViewport;
+  const inputFocused = document.activeElement?.id === 'comment-input' && state.currentScreen === 'detail';
+  const rawInset = viewport ? window.innerHeight - viewport.height - viewport.offsetTop : 0;
+  const inset = inputFocused && rawInset > KEYBOARD_INSET_THRESHOLD ? rawInset : 0;
+  document.documentElement.style.setProperty('--keyboard-inset', `${Math.round(inset)}px`);
+}
+
+function scheduleKeyboardInsetUpdate() {
+  window.requestAnimationFrame(updateKeyboardInset);
+  window.setTimeout(updateKeyboardInset, 300);
 }
 
 function getPost(postId) {
@@ -332,8 +364,16 @@ function commentCount(post) {
   return post.commentTotal ?? post.comments.length;
 }
 
+function listCountLabel(count) {
+  return count >= 99 ? '99+' : String(count);
+}
+
 function authorLabel(entity) {
   return entity.editor ? '에디터 ✓' : '익명';
+}
+
+function isOwn(entity) {
+  return state.loggedIn && entity?.userId === currentUser.id;
 }
 
 function postMarkup(post, options = {}) {
@@ -341,6 +381,7 @@ function postMarkup(post, options = {}) {
   const prefix = options.prefix || 'PostCard';
   const index = posts.indexOf(post) + 1;
   const uiName = `${prefix}_${index}`;
+  const comments = commentCount(post);
   return `
     <article class="post-card${compact ? ' compact' : ''}" data-post-id="${post.id}" data-ui="${uiName}">
       <div class="post-top">
@@ -350,8 +391,8 @@ function postMarkup(post, options = {}) {
       <div class="post-title">${escapeHTML(post.title)}</div>
       <div class="post-body">${escapeHTML(post.body)}</div>
       <div class="thread-actions">
-        <button class="thread-action${post.liked ? ' liked' : ''}" type="button" data-like-id="${post.id}" aria-label="좋아요">${icons.heart}<span>${post.likes}</span></button>
-        <button class="thread-action" type="button" data-comment-id="${post.id}" aria-label="댓글 ${commentCount(post)}개">${icons.comment}<span>${commentCount(post)}</span></button>
+        <button class="thread-action${post.liked ? ' liked' : ''}" type="button" data-like-id="${post.id}" aria-label="좋아요 ${post.likes}개">${icons.heart}<span>${listCountLabel(post.likes)}</span></button>
+        <button class="thread-action" type="button" data-comment-id="${post.id}" aria-label="댓글 ${comments}개">${icons.comment}<span>${listCountLabel(comments)}</span></button>
       </div>
     </article>`;
 }
@@ -401,7 +442,9 @@ function selectRecentLove() {
   }
   // 상세 진입 여부와 관계없이 노출된 시점을 기준으로 이력에 포함한다.
   picked.forEach(post => state.recentLoveShown.add(post.id));
-  state.recentLoveIds = picked.map(post => post.id);
+  state.recentLoveIds = picked
+    .sort((a, b) => b.order - a.order)
+    .map(post => post.id);
   state.recentLovePage = 0;
 }
 
@@ -526,7 +569,7 @@ function renderComments(post) {
       blocked: '차단한 유저입니다.'
     };
     const isException = status !== 'normal';
-    const isOwnComment = state.loggedIn && comment.userId === currentUser.id;
+    const isOwnComment = isOwn(comment);
     const author = comment.editor ? '에디터 ✓' : `익명${numbers.get(comment.id)}`;
     const uiName = `PostCommentCard_${index + 1}`;
     return `
@@ -536,9 +579,9 @@ function renderComments(post) {
         ${isException ? '' : `
           <div class="comment-actions">
             <button class="thread-action${comment.liked ? ' liked' : ''}" type="button" data-comment-like="${comment.id}" aria-label="댓글 좋아요">${icons.heart}<span>${comment.likes}</span></button>
-            ${isOwnComment ? '' : `<div class="comment-menu-wrap">
+            <div class="comment-menu-wrap">
               <button class="comment-more" type="button" data-comment-menu="${comment.id}" aria-label="댓글 더보기">${icons.more}</button>
-            </div>`}
+            </div>
           </div>`}
       </article>`;
   }).join('');
@@ -558,7 +601,7 @@ function renderDetail() {
   likeButton.classList.toggle('liked', post.liked);
   likeButton.innerHTML = `${icons.heart}<span>${post.likes}</span>`;
   document.getElementById('detail-comment-count').innerHTML = `${icons.comment}<span>${commentCount(post)}</span>`;
-  document.querySelector('.topbar-more').hidden = state.loggedIn && post.userId === currentUser.id;
+  document.querySelector('.topbar-more').hidden = false;
   renderComments(post);
   updateCommentComposer();
 }
@@ -576,12 +619,19 @@ function searchMatches(post, query) {
 
 function renderSearch() {
   const query = state.searchQuery.trim();
+  const summary = document.getElementById('search-summary');
+  if (!query) {
+    summary.hidden = true;
+    summary.textContent = '';
+    document.querySelector('[data-post-list="search"]').innerHTML = '';
+    return;
+  }
   const results = query
     ? visiblePosts().filter(post => searchMatches(post, query)).sort((a, b) => b.order - a.order)
     : [];
-  const summary = document.getElementById('search-summary');
-  summary.textContent = query ? `게시글 ${results.length}개 · 최신순` : '검색어를 입력해 주세요.';
-  renderPostList('search', results, { emptyText: query ? '검색 결과가 없습니다.' : '제목과 글에서 찾아보세요.' });
+  summary.hidden = false;
+  summary.textContent = `게시글 ${results.length}개 · 최신순`;
+  renderPostList('search', results, { emptyText: '검색 결과가 없습니다.' });
 }
 
 function renderMyPosts() {
@@ -616,6 +666,23 @@ function renderMyComments() {
       ? `<div class="my-comment-card is-unavailable" data-ui="${uiName}">${head}</div>`
       : `<button class="my-comment-card" type="button" data-post-id="${item.post.id}" data-ui="${uiName}">${head}</button>`;
   }).join('') : '<div class="empty-state" data-ui="MyCommentList_emptyState">작성한 댓글이 없습니다.</div>';
+}
+
+function resetWriteForm() {
+  state.editingPostId = null;
+  const form = document.getElementById('write-form');
+  form.reset();
+  document.getElementById('write-category').value = categories[0];
+  document.getElementById('write-submit').textContent = '등록';
+  updateWriteForm();
+}
+
+function loadPostIntoWriteForm(post) {
+  document.getElementById('write-category').value = post.category;
+  document.getElementById('write-title').value = post.title;
+  document.getElementById('write-body').value = post.body;
+  document.getElementById('write-submit').textContent = '수정 완료';
+  updateWriteForm();
 }
 
 function renderNotifications() {
@@ -673,9 +740,11 @@ function renderTopbarTitle(screenName) {
 function show(screenName, push = true) {
   document.querySelectorAll('.screen').forEach(screen => screen.classList.toggle('active', screen.dataset.screen === screenName));
   state.currentScreen = screenName;
+  if (screenName !== 'detail') updateKeyboardInset();
   if (push && state.stack[state.stack.length - 1] !== screenName) state.stack.push(screenName);
 
   if (screenName === 'detail') renderDetail();
+  if (screenName === 'write' && !state.editingPostId) resetWriteForm();
   if (screenName === 'community') renderCommunity();
   if (screenName === 'search') renderSearch();
   if (screenName === 'my-posts') renderMyPosts();
@@ -713,6 +782,13 @@ function openPost(postId, push = true) {
   show('detail', push);
 }
 
+function focusCommentInput() {
+  const input = document.getElementById('comment-input');
+  input.focus({ preventScroll: true });
+  scheduleKeyboardInsetUpdate();
+  window.setTimeout(() => input.scrollIntoView({ block: 'nearest' }), 320);
+}
+
 function openMagazine(index) {
   state.currentMagazineIndex = Number(index) || 0;
   show('magazine-detail');
@@ -723,6 +799,7 @@ function goBack() {
     closeModal();
     return;
   }
+  if (state.currentScreen === 'write' && state.editingPostId) resetWriteForm();
   if (state.stack.length > 1) state.stack.pop();
   show(state.stack[state.stack.length - 1] || 'home', false);
 }
@@ -735,19 +812,27 @@ function toast(message) {
   state.toastTimer = window.setTimeout(() => { node.hidden = true; }, 2200);
 }
 
-function openModal(markup) {
+function openModal(markup, options = {}) {
   const layer = document.getElementById('modal-layer');
-  document.getElementById('modal-panel').innerHTML = markup;
+  const panel = document.getElementById('modal-panel');
+  layer.classList.toggle('dialog-mode', options.variant === 'system-dialog');
+  panel.className = `modal-panel${options.variant === 'system-dialog' ? ' system-dialog' : ''}`;
+  panel.innerHTML = markup;
   layer.hidden = false;
   window.setTimeout(() => document.querySelector('#modal-panel button, #modal-panel input')?.focus(), 0);
 }
 
 function closeModal() {
-  document.getElementById('modal-layer').hidden = true;
-  document.getElementById('modal-panel').innerHTML = '';
+  const layer = document.getElementById('modal-layer');
+  const panel = document.getElementById('modal-panel');
+  layer.hidden = true;
+  layer.classList.remove('dialog-mode');
+  panel.className = 'modal-panel';
+  panel.innerHTML = '';
   state.reportTarget = null;
   state.blockTarget = null;
   state.commentMenuTarget = null;
+  state.deleteTarget = null;
 }
 
 function modalHead(title, description = '') {
@@ -859,11 +944,15 @@ function toggleCommentLike(commentId) {
 function openPostMenu() {
   const post = getPost(state.currentPostId);
   if (!post) return;
+  const ownPost = isOwn(post);
   openModal(`
     ${modalHead('게시글 더보기')}
     <div class="action-list">
-      <button class="action-button" type="button" data-action="block-post">작성자 차단하기</button>
-      <button class="action-button danger" type="button" data-action="report-post">신고하기</button>
+      ${ownPost
+        ? `<button class="action-button" type="button" data-action="edit-post">수정하기</button>
+          <button class="action-button danger" type="button" data-action="delete-post">삭제하기</button>`
+        : `<button class="action-button" type="button" data-action="block-post">작성자 차단하기</button>
+          <button class="action-button danger" type="button" data-action="report-post">신고하기</button>`}
     </div>`);
 }
 
@@ -871,11 +960,15 @@ function openCommentMenu(commentId) {
   const found = findComment(commentId);
   if (!found) return;
   state.commentMenuTarget = { type: 'comment', postId: found.post.id, commentId, userId: found.comment.userId };
+  const ownComment = isOwn(found.comment);
   openModal(`
     ${modalHead('댓글 더보기')}
     <div class="action-list">
-      <button class="action-button" type="button" data-action="block-comment">작성자 차단하기</button>
-      <button class="action-button danger" type="button" data-action="report-comment">신고하기</button>
+      ${ownComment
+        ? `<button class="action-button" type="button" data-action="edit-comment">수정하기</button>
+          <button class="action-button danger" type="button" data-action="delete-comment">삭제하기</button>`
+        : `<button class="action-button" type="button" data-action="block-comment">작성자 차단하기</button>
+          <button class="action-button danger" type="button" data-action="report-comment">신고하기</button>`}
     </div>`);
 }
 
@@ -922,6 +1015,17 @@ function confirmBlock() {
   toast('작성자를 차단했습니다.');
 }
 
+function openDeleteDialog(target) {
+  state.deleteTarget = target;
+  const label = target.type === 'post' ? '글' : '댓글';
+  openModal(`
+    ${modalHead(`${label}을 삭제할까요?`, `삭제한 ${label}은 다시 되돌릴 수 없습니다.`)}
+    <div class="modal-actions">
+      <button class="cancel" type="button" data-action="close-modal">취소</button>
+      <button class="confirm danger" type="button" data-action="confirm-delete">삭제하기</button>
+    </div>`, { variant: 'system-dialog' });
+}
+
 function enforceLimit(input, max, message) {
   if (input.value.length <= max) return;
   input.value = input.value.slice(0, max);
@@ -941,6 +1045,24 @@ function submitPost() {
   const title = document.getElementById('write-title').value;
   const body = document.getElementById('write-body').value;
   if (!title.length || !body.length) return;
+  if (state.editingPostId) {
+    const post = getPost(state.editingPostId);
+    if (!isOwn(post)) {
+      toast('수정 권한이 없습니다.');
+      return;
+    }
+    post.category = category;
+    post.title = title;
+    post.body = body;
+    post.modified = true;
+    post.time = '방금 전';
+    state.currentPostId = post.id;
+    resetWriteForm();
+    renderAllLists();
+    show('detail', false);
+    toast('글이 수정되었습니다.');
+    return;
+  }
   const newPost = {
     id: `post_${Date.now()}`,
     userId: currentUser.id,
@@ -957,9 +1079,7 @@ function submitPost() {
     comments: []
   };
   posts.push(newPost);
-  document.getElementById('write-form').reset();
-  document.getElementById('write-category').value = categories[0];
-  updateWriteForm();
+  resetWriteForm();
   state.selectedCategory = '전체';
   state.communityLimit = 4;
   state.stack = ['community'];
@@ -983,6 +1103,27 @@ function submitComment() {
   }
   const post = getPost(state.currentPostId);
   if (!post) return;
+  if (state.editingCommentId) {
+    const found = findComment(state.editingCommentId);
+    if (!found || found.post.id !== post.id || !isOwn(found.comment) || found.comment.status !== 'normal') {
+      toast('수정 권한이 없습니다.');
+      state.editingCommentId = null;
+      updateCommentComposer();
+      return;
+    }
+    found.comment.body = input.value;
+    found.comment.modified = true;
+    found.comment.time = '방금 전';
+    state.editingCommentId = null;
+    input.value = '';
+    input.placeholder = '댓글로 생각을 남겨주세요';
+    document.getElementById('comment-submit').setAttribute('aria-label', '댓글 등록');
+    updateCommentComposer();
+    renderAllLists();
+    renderDetail();
+    toast('댓글이 수정되었습니다.');
+    return;
+  }
   const highestOrder = post.comments.length ? Math.max(...post.comments.map(comment => comment.order)) : 0;
   post.comments.push({
     id: `comment_${Date.now()}`,
@@ -1004,22 +1145,101 @@ function submitComment() {
   toast('댓글이 등록되었습니다.');
 }
 
-// 앱 공유는 마이페이지의 요니버스 앱 공유하기 메뉴에서만 제공한다.
-async function shareApp() {
-  const shareData = {
-    title: '요니버스',
-    text: '익명으로 연애 이야기를 나누는 요니버스',
-    url: window.location.href
-  };
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData);
-      return;
-    } catch (error) {
-      if (error.name === 'AbortError') return;
-    }
+function editPost() {
+  const post = getPost(state.currentPostId);
+  if (!isOwn(post)) {
+    closeModal();
+    toast('수정 권한이 없습니다.');
+    return;
   }
-  toast('OS 공유 옵션을 여는 자리입니다.');
+  closeModal();
+  state.editingPostId = post.id;
+  show('write');
+  loadPostIntoWriteForm(post);
+}
+
+function deletePost() {
+  const post = getPost(state.currentPostId);
+  if (!isOwn(post)) {
+    closeModal();
+    toast('삭제 권한이 없습니다.');
+    return;
+  }
+  closeModal();
+  openDeleteDialog({ type: 'post', postId: post.id });
+}
+
+function editComment() {
+  const target = state.commentMenuTarget;
+  const found = target ? findComment(target.commentId) : null;
+  if (!found || !isOwn(found.comment) || found.comment.status !== 'normal') {
+    closeModal();
+    toast('수정 권한이 없습니다.');
+    return;
+  }
+  closeModal();
+  state.editingCommentId = found.comment.id;
+  const input = document.getElementById('comment-input');
+  input.value = found.comment.body;
+  input.placeholder = '댓글을 수정 중입니다';
+  document.getElementById('comment-submit').setAttribute('aria-label', '댓글 수정 완료');
+  updateCommentComposer();
+  focusCommentInput();
+}
+
+function deleteComment() {
+  const target = state.commentMenuTarget;
+  const found = target ? findComment(target.commentId) : null;
+  if (!found || !isOwn(found.comment) || found.comment.status !== 'normal') {
+    closeModal();
+    toast('삭제 권한이 없습니다.');
+    return;
+  }
+  const deleteTarget = { type: 'comment', commentId: found.comment.id };
+  closeModal();
+  openDeleteDialog(deleteTarget);
+}
+
+function confirmDelete() {
+  const target = state.deleteTarget;
+  if (!target) return;
+  if (target.type === 'post') {
+    const post = getPost(target.postId);
+    if (!isOwn(post)) {
+      closeModal();
+      toast('삭제 권한이 없습니다.');
+      return;
+    }
+    post.deleted = true;
+    closeModal();
+    renderAllLists();
+    if (state.stack[state.stack.length - 1] === 'detail') state.stack.pop();
+    show(state.stack[state.stack.length - 1] || 'community', false);
+    toast('글이 삭제되었습니다.');
+    return;
+  }
+  const found = target.type === 'comment' ? findComment(target.commentId) : null;
+  if (!found || !isOwn(found.comment) || found.comment.status !== 'normal') {
+    closeModal();
+    toast('삭제 권한이 없습니다.');
+    return;
+  }
+  found.comment.body = '';
+  found.comment.status = 'deleted';
+  found.comment.modified = false;
+  found.post.commentTotal = Math.max(0, commentCount(found.post) - 1);
+  if (state.editingCommentId === found.comment.id) {
+    state.editingCommentId = null;
+    const input = document.getElementById('comment-input');
+    input.value = '';
+    input.placeholder = '댓글로 생각을 남겨주세요';
+    document.getElementById('comment-submit').setAttribute('aria-label', '댓글 등록');
+    updateCommentComposer();
+  }
+  closeModal();
+  renderAllLists();
+  if (state.currentScreen === 'detail') renderDetail();
+  toast('댓글이 삭제되었습니다.');
 }
 
 // 연결 주소가 아직 공유되지 않은 외부 이동 메뉴
@@ -1129,7 +1349,7 @@ document.addEventListener('click', event => {
   if (commentButton) {
     event.stopPropagation();
     openPost(commentButton.dataset.commentId);
-    window.setTimeout(() => document.getElementById('comment-input').focus(), 0);
+    focusCommentInput();
     return;
   }
 
@@ -1191,10 +1411,14 @@ document.addEventListener('click', event => {
   }
   else if (action === 'toggle-recent-love-page') toggleRecentLovePage();
   else if (action === 'open-post-menu') openPostMenu();
+  else if (action === 'edit-post') editPost();
+  else if (action === 'delete-post') deletePost();
+  else if (action === 'edit-comment') editComment();
+  else if (action === 'delete-comment') deleteComment();
+  else if (action === 'confirm-delete') confirmDelete();
   else if (action === 'like-current') requireMember({ type: 'like-post', postId: state.currentPostId });
-  else if (action === 'focus-comment') document.getElementById('comment-input').focus();
+  else if (action === 'focus-comment') focusCommentInput();
   else if (action === 'submit-comment') submitComment();
-  else if (action === 'share-app') shareApp();
   else if (action === 'clear-search') {
     state.searchQuery = '';
     document.getElementById('search-input').value = '';
@@ -1242,12 +1466,17 @@ document.getElementById('write-form').addEventListener('submit', event => {
 document.getElementById('write-title').addEventListener('input', updateWriteForm);
 document.getElementById('write-body').addEventListener('input', updateWriteForm);
 document.getElementById('comment-input').addEventListener('input', updateCommentComposer);
+document.getElementById('comment-input').addEventListener('focus', scheduleKeyboardInsetUpdate);
+document.getElementById('comment-input').addEventListener('blur', scheduleKeyboardInsetUpdate);
 document.getElementById('comment-input').addEventListener('keydown', event => {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
     submitComment();
   }
 });
+window.visualViewport?.addEventListener('resize', scheduleKeyboardInsetUpdate);
+window.visualViewport?.addEventListener('scroll', scheduleKeyboardInsetUpdate);
+window.addEventListener('resize', scheduleKeyboardInsetUpdate);
 document.getElementById('search-input').addEventListener('input', event => {
   state.searchQuery = event.target.value;
   renderSearch();

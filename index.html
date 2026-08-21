@@ -148,16 +148,16 @@
     <main class="screen" data-screen="search" data-ui="SearchScreen">
       <div class="search-bar" data-ui="SearchInput">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
-        <input id="search-input" type="search" aria-label="게시글 검색" placeholder="제목과 글에서 검색" autocomplete="off">
+        <input id="search-input" type="search" aria-label="게시글 검색" placeholder="제목과 글에서 검색해보세요." autocomplete="off">
         <button type="button" data-action="clear-search" aria-label="검색어 지우기">×</button>
       </div>
-      <p class="search-summary" id="search-summary">검색어를 입력해 주세요.</p>
+      <p class="search-summary" id="search-summary" hidden></p>
       <div data-post-list="search" data-ui="SearchResultList"></div>
     </main>
 
     <main class="screen" data-screen="mypage" data-ui="MyPageScreen">
       <button class="profile profile-link mypage-profile" type="button" data-open="account" data-ui="MyPageProfileCard">
-        <span class="profile-main"><span class="profile-name">익명으로 활동중</span></span>
+        <span class="profile-main"><span class="profile-name">익명으로 활동 중</span></span>
         <span class="chevron">›</span>
       </button>
 
@@ -170,9 +170,6 @@
       <section class="menu-group" aria-label="설정과 연결" data-ui="MyPageSettingMenu">
         <button type="button" data-action="open-os-settings" data-ui="MyPageSettingMenu_notificationButton">알림 설정 <span class="chevron">›</span></button>
         <button type="button" data-info="community-rules" data-ui="MyPageSettingMenu_rulesButton">커뮤니티 이용규칙 <span class="chevron">›</span></button>
-        <button type="button" data-action="share-app" data-ui="MyPageShareButton">요니버스 앱 공유하기
-          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></span>
-        </button>
         <button type="button" data-external="instagram" data-ui="MyPageExternalButton_instagram">요매거진 Instagram 이동
           <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></span>
         </button>
@@ -203,7 +200,6 @@
     </main>
 
     <main class="screen" data-screen="notifications" data-ui="NotificationScreen">
-      <div class="notice-intro">댓글과 좋아요 소식은 이곳에 바로 쌓여요.</div>
       <div data-notification-list data-ui="NotificationList"></div>
     </main>
 
