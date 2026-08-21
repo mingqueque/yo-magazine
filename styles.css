@@ -68,6 +68,8 @@
 
   --radius-xs: 3px;
   --radius-card: 7px;
+  --radius-magazine-home: 12px;
+  --radius-magazine-list: 8px;
   --radius-control: 8px;
   --radius-panel: 10px;
   --radius-frame: 32px;
@@ -257,19 +259,19 @@ h1, h2, h3, p { margin: 0; }
 .hero-slide {
   position: relative;
   flex: 0 0 100%;
-  min-height: 128px;
+  min-height: 86px;
   display: flex;
   align-items: center;
   border: 0;
   background: var(--color-surface-soft);
   color: var(--color-text-primary);
-  padding: var(--space-32) var(--space-14);
+  padding: var(--space-20) var(--space-14);
   text-align: left;
   scroll-snap-align: start;
 }
 button.hero-slide:hover { filter: brightness(.985); }
 .hero-book {
-  min-height: 176px;
+  min-height: 118px;
   background-color: var(--color-surface-warm);
   background-image: var(--gradient-book-hero), url("assets/yo-magazine-breakup-book-hero.png");
   background-position: center;
@@ -333,7 +335,7 @@ button.hero-slide:hover { filter: brightness(.985); }
   background: var(--color-overlay-strong);
   color: var(--color-surface);
   font-size: var(--font-caption);
-  font-weight: 800;
+  font-weight: 400;
   pointer-events: none;
 }
 
@@ -441,6 +443,32 @@ button.hero-slide:hover { filter: brightness(.985); }
 .post-card.compact .thread-action { min-width: 30px; min-height: 28px; padding: 0 var(--space-2); font-size: var(--font-caption); }
 .post-card.compact .thread-action svg { width: 16px; height: 16px; }
 
+.recent-love-more {
+  width: 100%;
+  min-height: var(--size-touch);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: var(--font-label);
+  font-weight: 400;
+}
+.recent-love-more:hover { background: var(--color-surface-soft); }
+.recent-love-more svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .primary-button, .secondary-button, .danger-button {
   width: 100%;
   min-height: var(--size-input);
@@ -494,13 +522,28 @@ button.hero-slide:hover { filter: brightness(.985); }
   aspect-ratio: 162 / 220;
   overflow: hidden;
   border: 0;
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-magazine-home);
   background: var(--color-text-primary);
   padding: 0;
   scroll-snap-align: start;
 }
-.magazine-card img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.magazine-card img { width: 100%; height: 100%; display: block; border-radius: var(--radius-magazine-home); object-fit: cover; }
 .magazine-card:hover img { opacity: .92; }
+.magazine-more-button {
+  width: calc(100% - var(--space-14));
+  min-height: var(--size-touch);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--space-14) var(--space-14) 0 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: var(--font-label);
+  font-weight: 400;
+}
+.magazine-more-button:hover { background: var(--color-surface-soft); }
 
 .chips {
   display: flex;
@@ -531,9 +574,10 @@ button.hero-slide:hover { filter: brightness(.985); }
 }
 
 .fab {
-  position: absolute;
-  right: var(--space-16);
-  bottom: var(--space-18);
+  position: fixed;
+  z-index: 8;
+  right: max(var(--space-16), calc((100vw - var(--viewport-mobile-max)) / 2 + var(--space-16)));
+  bottom: calc(max(0px, (100vh - min(var(--viewport-mobile-height), 100vh)) / 2) + var(--size-tabs) + var(--space-18));
   width: var(--size-fab);
   height: var(--size-fab);
   display: grid;
@@ -740,7 +784,7 @@ textarea { min-height: 160px; resize: none; line-height: var(--line-body); }
 
 .magazine-list { display: grid; gap: var(--space-14); }
 .magazine-list-card { width: 100%; display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: var(--space-14); border: 0; border-bottom: 1px solid var(--color-border); background: transparent; color: var(--color-text-primary); padding: 0 0 var(--space-14); text-align: left; }
-.magazine-list-card img { width: 112px; aspect-ratio: 3 / 4; border-radius: var(--radius-card); object-fit: cover; }
+.magazine-list-card img { width: 112px; aspect-ratio: 3 / 4; border-radius: var(--radius-magazine-list); object-fit: cover; }
 .magazine-list-copy { min-width: 0; display: grid; align-content: center; gap: var(--space-8); }
 .magazine-list-copy strong { font-size: var(--font-card-title); line-height: var(--line-title); }
 .magazine-list-copy span { color: var(--color-text-secondary); font-size: var(--font-label); line-height: var(--line-body); }
@@ -789,7 +833,22 @@ textarea { min-height: 160px; resize: none; line-height: var(--line-body); }
   background: var(--color-surface);
 }
 .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); border: 0; background: transparent; color: var(--color-text-secondary); font-size: var(--font-tab); }
-.tab-symbol { font-size: var(--font-detail-title); line-height: 1; }
+.tab-symbol {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  color: currentColor;
+}
+.tab-symbol svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .tab.active { color: var(--color-brand-main); font-weight: 800; }
 
 .exit-layer {

@@ -11,7 +11,8 @@ const categories = [
 const icons = {
   heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg>',
   comment: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.8 8.4 8.9 8.9 0 0 1-3.8-.9L3 20l1.3-4.3a8.2 8.2 0 0 1-.9-3.8A8.4 8.4 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8Z"></path></svg>',
-  more: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>'
+  more: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>',
+  refresh: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.6 6.1"></path><path d="M3 12A9 9 0 0 1 18.6 5.9"></path><path d="M18.6 2.6v3.3h-3.3"></path><path d="M5.4 21.4v-3.3h3.3"></path></svg>'
 };
 
 const currentUser = {
@@ -291,6 +292,7 @@ const state = {
   communityLimit: 4,
   communityLoading: false,
   recentLoveIds: [],
+  recentLovePage: 0,
   recentLoveShown: new Set(),
   hasUnreadNotification: true,
   blockedUsers: new Set(),
@@ -303,9 +305,10 @@ const state = {
 
 const rootScreens = new Set(['home', 'community', 'mypage']);
 
-// [요즘 연애] 노출 기준: 최근 3일(72시간) 이내 게시글, 한 번에 노출하는 개수
+// [요즘 연애] 노출 기준: 최근 3일(72시간) 이내 게시글, 최대 선정 개수와 한 화면 노출 개수
 const RECENT_LOVE_WINDOW_HOURS = 72;
-const RECENT_LOVE_COUNT = 5;
+const RECENT_LOVE_COUNT = 10;
+const RECENT_LOVE_PAGE_SIZE = 5;
 
 function escapeHTML(value) {
   return String(value)
@@ -398,12 +401,37 @@ function selectRecentLove() {
   // 상세 진입 여부와 관계없이 노출된 시점을 기준으로 이력에 포함한다.
   picked.forEach(post => state.recentLoveShown.add(post.id));
   state.recentLoveIds = picked.map(post => post.id);
+  state.recentLovePage = 0;
 }
 
 function renderHome() {
   const byId = new Map(visiblePosts().map(post => [post.id, post]));
   const list = state.recentLoveIds.map(id => byId.get(id)).filter(Boolean);
-  renderPostList('home', list, { compact: true, emptyText: '최근 3일 안에 올라온 고민이 없습니다.' });
+  const pageCount = Math.ceil(list.length / RECENT_LOVE_PAGE_SIZE);
+  if (state.recentLovePage >= pageCount) state.recentLovePage = 0;
+  const pageStart = state.recentLovePage * RECENT_LOVE_PAGE_SIZE;
+  renderPostList('home', list.slice(pageStart, pageStart + RECENT_LOVE_PAGE_SIZE), { compact: true, emptyText: '최근 3일 안에 올라온 고민이 없습니다.' });
+  renderRecentLoveMoreButton(pageCount);
+}
+
+function renderRecentLoveMoreButton(pageCount) {
+  const button = document.querySelector('.recent-love-more');
+  if (!button) return;
+  button.hidden = pageCount < 2;
+  if (button.hidden) return;
+  const nextPage = (state.recentLovePage + 1) % pageCount;
+  button.innerHTML = `${icons.refresh}<span>${nextPage + 1} / ${pageCount} 보기</span>`;
+  button.setAttribute('aria-label', `요즘 연애 ${nextPage + 1} / ${pageCount} 보기`);
+}
+
+function toggleRecentLovePage() {
+  const list = state.recentLoveIds
+    .map(id => getPost(id))
+    .filter(post => post && !post.deleted && !post.hidden && !state.blockedUsers.has(post.userId));
+  const pageCount = Math.ceil(list.length / RECENT_LOVE_PAGE_SIZE);
+  if (pageCount < 2) return;
+  state.recentLovePage = (state.recentLovePage + 1) % pageCount;
+  renderHome();
 }
 
 function renderCategories() {
@@ -1170,6 +1198,7 @@ document.addEventListener('click', event => {
     state.stack = ['community'];
     show('community', false);
   }
+  else if (action === 'toggle-recent-love-page') toggleRecentLovePage();
   else if (action === 'open-post-menu') openPostMenu();
   else if (action === 'like-current') requireMember({ type: 'like-post', postId: state.currentPostId });
   else if (action === 'focus-comment') document.getElementById('comment-input').focus();
@@ -1233,7 +1262,7 @@ document.getElementById('withdraw-form').addEventListener('change', updateWithdr
 const hero = document.querySelector('.hero');
 hero.addEventListener('scroll', () => {
   const index = Math.round(hero.scrollLeft / hero.clientWidth) + 1;
-  document.querySelector('.hero-pagination').textContent = `${Math.min(Math.max(index, 1), 4)}/4`;
+  document.querySelector('.hero-pagination').textContent = `${Math.min(Math.max(index, 1), 4)} / 4`;
 }, { passive: true });
 
 function initialize() {
