@@ -116,7 +116,7 @@
       <div id="detail-comments" data-ui="PostCommentList"></div>
       <div class="comment-composer" data-ui="PostCommentInput">
         <div class="comment-field">
-          <input id="comment-input" aria-label="댓글 입력" placeholder="댓글로 생각을 남겨주세요" autocomplete="off" data-ui="PostCommentInput_field">
+          <textarea id="comment-input" rows="1" aria-label="댓글 입력" placeholder="댓글로 생각을 남겨주세요" autocomplete="off" data-ui="PostCommentInput_field"></textarea>
         </div>
         <button class="submit-icon" id="comment-submit" type="button" data-action="submit-comment" aria-label="댓글 등록" disabled data-ui="PostCommentInput_submitButton">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
@@ -153,7 +153,6 @@
         <input id="search-input" type="search" aria-label="게시글 검색" placeholder="제목과 글에서 검색해보세요." autocomplete="off">
         <button type="button" data-action="clear-search" aria-label="검색어 지우기">×</button>
       </div>
-      <p class="search-summary" id="search-summary" hidden></p>
       <div data-post-list="search" data-ui="SearchResultList"></div>
     </main>
 

@@ -6,7 +6,7 @@
 
 - 최종 대조일: 2026-08-21
 - 원문 기준: [Notion 요매거진 유저앱 정책서](https://app.notion.com/p/3c01f6888e57805ea459f808ca79e870?v=3c01f6888e578008ad6c000c8174474b)
-- 보완 기준: 대화에서 사용자가 직접 전달한 정책
+- 보완 기준: 대화에서 사용자가 직접 전달한 정책과 기획 캡처
 
 정책이 충돌할 때는 아래 순서로 판단한다.
 
@@ -27,7 +27,7 @@
 | 마이페이지 | [05-my-page.md](./specs/05-my-page.md) | 계정, 활동 내역, 탈퇴, 설정, 약관 | 일부 내용 준비중 |
 | 검색 | [06-search.md](./specs/06-search.md) | 검색 대상, 제외 조건, 결과와 복귀 UX | 매거진 검색 보류 가능 |
 | 신고와 차단 | [07-report-and-block.md](./specs/07-report-and-block.md) | 신고 접수, 차단 노출, 어드민 조치 | 확정 |
-| 알림 | [08-notifications.md](./specs/08-notifications.md) | 푸시, 알림센터, 좋아요 이벤트 | 검토중 |
+| 알림 | [08-notifications.md](./specs/08-notifications.md) | 푸시, 알림센터, 좋아요 이벤트 | 사용자 전달 기준 적용 |
 | 슈퍼유저 | [09-superuser.md](./specs/09-superuser.md) | 에디터 표시, 권한, 감사 로그, 알림 | 일부 구현 확인 필요 |
 | 글과 댓글 | [11-post-and-comment.md](./specs/11-post-and-comment.md) | 글 작성, 본문 구성, 댓글과 예외 댓글 | 확정 |
 | 공유 | [12-share.md](./specs/12-share.md) | 공유 진입점, 공유 링크 이동 | 확정 |

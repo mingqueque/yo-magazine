@@ -272,11 +272,19 @@ const magazines = [
 ];
 
 const notifications = [
-  { postId: 'post_1', type: '댓글', time: '3분 전', body: '“저라면 한 번만 더 가볍게 물어볼 것 같아요.”', addedCount: 1 },
-  { postId: 'post_1', type: '좋아요', time: '18분 전', body: '내 글에 좋아요 4개가 새로 달렸어요.', addedCount: 4 },
-  { postId: 'post_8', type: '좋아요', time: '52분 전', body: '내 글에 좋아요 7개가 새로 달렸어요.', addedCount: 7 },
-  { postId: 'post_8', type: '댓글', time: '어제', body: '“대화가 한쪽만 노력하는 느낌이면 잠깐 쉬어가도 괜찮아요.”', addedCount: 1 }
+  { id: 'notice_seed_push_like', postId: 'post_1', type: '좋아요', target: 'post', time: '지금', title: '용기내서 다음에 만나자고 했어!', body: '오늘 내 글에 좋아요 10개가 달렸어요 💗', push: true },
+  { id: 'notice_seed_post_like_1', postId: 'post_1', type: '좋아요', target: 'post', time: '3분 전', title: '용기내서 다음에 만나자고 했어!', body: '내 글에 좋아요가 새로 달렸어요.', sourceId: 'post_1' },
+  { id: 'notice_seed_editor_comment', postId: 'post_1', type: '댓글', target: 'post', time: '3시간 전', title: '아 소개받았는데 너무 맘에 든다ㅎ 결혼할까ㅋ', body: '액그려세요.', authorLabel: '에디터', sourceId: 'comment_editor_seed' },
+  { id: 'notice_seed_post_like_2', postId: 'post_8', type: '좋아요', target: 'post', time: '11시간 전', title: '도착 5분 전 떨린다', body: '내 글에 좋아요가 새로 달렸어요.', sourceId: 'post_8' },
+  { id: 'notice_seed_comment', postId: 'post_1', type: '댓글', target: 'post', time: '어제', title: '내일 소개팅임 뭐입을까 ㅊㅊ좀', body: '그냥 깔끔하게 입으삼', sourceId: 'comment_seed' },
+  { id: 'notice_seed_comment_like', postId: 'post_3', type: '좋아요', target: 'comment', time: '5일 전', category: '이별/권태기/장기연애', title: '괜찮니? 그럴수록 너의 일상에 집중해! 밥도 잘 먹고! 화이팅! 금...', body: '내 댓글에 좋아요가 새로 달렸어요.', sourceId: 'comment_6' }
 ];
+
+const notifiedLikeKeys = new Set(
+  notifications
+    .filter(notice => notice.type === '좋아요' && notice.sourceId)
+    .map(notice => `${notice.target}:${notice.sourceId}`)
+);
 
 const withdrawalReasons = [
   '원하는 콘텐츠가 부족해요',
@@ -392,6 +400,57 @@ function commentCount(post) {
 
 function listCountLabel(count) {
   return count >= 99 ? '99+' : String(count);
+}
+
+function markNotificationUnread() {
+  if (state.currentScreen === 'notifications') {
+    renderNotifications();
+    return;
+  }
+  state.hasUnreadNotification = true;
+  updateNotificationDot();
+}
+
+function addNotification(notice) {
+  notifications.unshift({
+    id: `notice_${Date.now()}_${notifications.length}`,
+    time: '지금',
+    ...notice
+  });
+  markNotificationUnread();
+}
+
+function addCommentNotification({ post, comment, actor }) {
+  if (!post || !comment || post.userId !== currentUser.id || actor?.id === currentUser.id) return;
+  addNotification({
+    postId: post.id,
+    type: '댓글',
+    target: 'post',
+    title: post.title,
+    category: post.category,
+    body: comment.body,
+    authorLabel: actor?.editor ? '에디터' : '',
+    sourceId: comment.id
+  });
+}
+
+function addLikeNotification({ post, comment, target, actor }) {
+  if (!post || actor?.id === currentUser.id) return;
+  const likedEntity = target === 'comment' ? comment : post;
+  if (!likedEntity || likedEntity.userId !== currentUser.id) return;
+  const sourceId = target === 'comment' ? comment.id : post.id;
+  const likeKey = `${target}:${sourceId}`;
+  if (notifiedLikeKeys.has(likeKey)) return;
+  notifiedLikeKeys.add(likeKey);
+  addNotification({
+    postId: post.id,
+    type: '좋아요',
+    target,
+    title: target === 'comment' ? comment.body : post.title,
+    category: post.category,
+    body: target === 'comment' ? '내 댓글에 좋아요가 새로 달렸어요.' : '내 글에 좋아요가 새로 달렸어요.',
+    sourceId
+  });
 }
 
 function authorLabel(entity) {
@@ -666,18 +725,13 @@ function searchMatches(post, query) {
 
 function renderSearch() {
   const query = state.searchQuery.trim();
-  const summary = document.getElementById('search-summary');
   if (!query) {
-    summary.hidden = true;
-    summary.textContent = '';
     document.querySelector('[data-post-list="search"]').innerHTML = '';
     return;
   }
   const results = query
     ? visiblePosts().filter(post => searchMatches(post, query)).sort((a, b) => b.order - a.order)
     : [];
-  summary.hidden = false;
-  summary.textContent = `게시글 ${results.length}개 · 최신순`;
   renderPostList('search', results, { emptyText: '검색 결과가 없습니다.' });
 }
 
@@ -737,11 +791,16 @@ function renderNotifications() {
   container.innerHTML = notifications.length ? notifications.map((notice, index) => {
     const post = getPost(notice.postId);
     if (!post) return '';
+    const title = notice.title || post.title;
+    const category = notice.category || post.category;
+    const body = notice.type === '댓글' ? `“${notice.body}”` : notice.body;
+    const bodyClass = notice.type === '댓글' ? 'notice-body comment-preview' : 'notice-body';
+    const author = notice.authorLabel ? `<strong class="notice-author">${escapeHTML(notice.authorLabel)}</strong>` : '';
     return `
       <button class="notice-card" type="button" data-post-id="${post.id}" data-ui="NotificationCard_${index + 1}">
-        <span class="notice-top"><span class="notice-type">${escapeHTML(notice.type)}</span><span>${escapeHTML(post.category)}</span><span class="notice-time">${escapeHTML(notice.time)}</span></span>
-        <span class="notice-title">${escapeHTML(post.title)}</span>
-        <span class="notice-body">${escapeHTML(notice.body)}</span>
+        <span class="notice-top"><span class="notice-type">${escapeHTML(notice.type)}</span><span>${escapeHTML(category)}</span><span class="notice-time">${escapeHTML(notice.time)}</span></span>
+        <span class="notice-title">${escapeHTML(title)}</span>
+        <span class="${bodyClass}">${author}${escapeHTML(body)}</span>
       </button>`;
   }).join('') : '<div class="empty-state" data-ui="NotificationList_emptyState">새 알림이 없습니다.</div>';
 }
@@ -993,7 +1052,10 @@ function togglePostLike(postId) {
   if (!post) return;
   post.liked = !post.liked;
   post.likes += post.liked ? 1 : -1;
-  if (post.liked) post.likedOrder = Date.now();
+  if (post.liked) {
+    post.likedOrder = Date.now();
+    addLikeNotification({ post, target: 'post', actor: currentUser });
+  }
   renderAllLists();
   if (state.currentScreen === 'detail' && state.currentPostId === postId) renderDetail();
 }
@@ -1011,6 +1073,9 @@ function toggleCommentLike(commentId) {
   if (!found) return;
   found.comment.liked = !found.comment.liked;
   found.comment.likes += found.comment.liked ? 1 : -1;
+  if (found.comment.liked) {
+    addLikeNotification({ post: found.post, comment: found.comment, target: 'comment', actor: currentUser });
+  }
   renderComments(found.post);
 }
 
@@ -1113,6 +1178,16 @@ function updateWriteForm() {
   document.getElementById('write-submit').disabled = title.value.length < 1 || body.value.length < 1;
 }
 
+function resizeCommentInput(input = document.getElementById('comment-input')) {
+  input.style.height = 'auto';
+  const style = window.getComputedStyle(input);
+  const lineHeight = Number.parseFloat(style.lineHeight);
+  const maxHeight = Math.ceil(lineHeight * 3);
+  const height = Math.min(input.scrollHeight, maxHeight);
+  input.style.height = `${height}px`;
+  input.style.overflowY = input.scrollHeight > height ? 'auto' : 'hidden';
+}
+
 function submitPost() {
   const category = document.getElementById('write-category').value;
   const title = document.getElementById('write-title').value;
@@ -1164,6 +1239,7 @@ function submitPost() {
 function updateCommentComposer() {
   const input = document.getElementById('comment-input');
   enforceLimit(input, 500, '댓글은 공백 포함 최대 500자까지 입력할 수 있어요.');
+  resizeCommentInput(input);
   document.getElementById('comment-submit').disabled = input.value.trim().length < 1;
 }
 
@@ -1200,7 +1276,7 @@ function submitComment() {
     return;
   }
   const highestOrder = post.comments.length ? Math.max(...post.comments.map(comment => comment.order)) : 0;
-  post.comments.push({
+  const newComment = {
     id: `comment_${Date.now()}`,
     userId: currentUser.id,
     body,
@@ -1210,8 +1286,10 @@ function submitComment() {
     liked: false,
     status: 'normal',
     modified: false
-  });
+  };
+  post.comments.push(newComment);
   post.commentTotal = commentCount(post) + 1;
+  addCommentNotification({ post, comment: newComment, actor: currentUser });
   input.value = '';
   updateCommentComposer();
   renderAllLists();
@@ -1317,17 +1395,20 @@ function confirmDelete() {
   toast('댓글이 삭제되었습니다.');
 }
 
-// 연결 주소가 아직 공유되지 않은 외부 이동 메뉴
 const externalLinks = {
-  instagram: '요매거진 Instagram',
-  marpple: '마플샵',
-  kakao: '요니버스 카카오 문의톡'
+  instagram: { label: '요매거진 Instagram', url: 'https://www.instagram.com/yomagazine_/' },
+  marpple: { label: '마플샵', url: 'https://marpple.shop/kr/yomagazine_' },
+  kakao: { label: '요니버스 카카오 문의톡' }
 };
 
 function openExternal(key) {
-  const label = externalLinks[key];
-  if (!label) return;
-  toast(`${label} 연결 주소는 아직 준비 중이에요.`);
+  const link = externalLinks[key];
+  if (!link) return;
+  if (link.url) {
+    window.location.href = link.url;
+    return;
+  }
+  toast(`${link.label} 연결 주소는 아직 준비 중이에요.`);
 }
 
 function showInfo(infoKey) {
@@ -1553,7 +1634,7 @@ document.getElementById('comment-input').addEventListener('focus', scheduleKeybo
 document.getElementById('comment-input').addEventListener('blur', scheduleKeyboardInsetUpdate);
 document.getElementById('comment-input').addEventListener('keydown', event => {
   if (event.isComposing || event.keyCode === 229 || state.commentInputComposing) return;
-  if (event.key === 'Enter' && !event.shiftKey) {
+  if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
     event.preventDefault();
     submitComment();
   }

@@ -704,8 +704,20 @@ button.hero-slide:hover { filter: brightness(.985); }
   box-shadow: var(--shadow-floating-input);
   backdrop-filter: blur(10px);
 }
-.comment-field { min-width: 0; flex: 1; display: flex; align-items: center; gap: var(--space-8); }
-.comment-field input { min-width: 0; flex: 1; height: var(--size-input); border: 0; outline: 0; padding: 0; }
+.comment-field { min-width: 0; min-height: var(--size-input); flex: 1; display: flex; align-items: center; gap: var(--space-8); }
+.comment-field textarea {
+  --comment-input-line: 20px;
+  min-width: 0;
+  min-height: var(--comment-input-line);
+  max-height: calc(var(--comment-input-line) * 3);
+  flex: 1;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  overflow: hidden;
+  line-height: var(--comment-input-line);
+  -webkit-overflow-scrolling: touch;
+}
 .counter { color: var(--color-text-secondary); font-size: var(--font-caption); white-space: nowrap; }
 .submit-icon {
   width: var(--size-input);
@@ -761,8 +773,8 @@ textarea { min-height: 160px; resize: none; line-height: var(--line-body); }
 }
 .search-bar svg { flex: 0 0 20px; color: var(--color-text-secondary); }
 .search-bar input { min-width: 0; flex: 1; height: 100%; border: 0; outline: 0; padding: 0; }
+.search-bar input::-webkit-search-cancel-button { display: none; }
 .search-bar button { width: 32px; height: 32px; border: 0; border-radius: var(--radius-circle); background: transparent; color: var(--color-text-secondary); font-size: var(--font-title); }
-.search-summary { min-height: 44px; display: flex; align-items: center; color: var(--color-text-secondary); font-size: var(--font-label); }
 
 .profile { display: flex; align-items: center; gap: var(--space-12); margin-bottom: var(--space-12); padding: var(--space-18) 0; border-bottom: 1px solid var(--color-divider); }
 .mypage-profile { margin: 0; padding: var(--space-20) 0; border-bottom: 0; }
@@ -816,21 +828,40 @@ textarea { min-height: 160px; resize: none; line-height: var(--line-body); }
   width: calc(100% + 32px);
   margin-left: calc(var(--space-16) * -1);
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-8);
   border: 0;
   border-bottom: 1px solid var(--color-divider);
   background: var(--color-surface);
   color: var(--color-text-primary);
-  padding: var(--space-15) var(--space-16);
+  padding: var(--space-18) var(--space-16);
   text-align: left;
 }
 .notice-card:hover { background: var(--color-surface-soft); }
-.notice-top { display: flex; align-items: center; gap: var(--space-8); color: var(--color-text-secondary); font-size: var(--font-caption); }
-.notice-type { color: var(--color-brand-main); font-weight: 800; }
-.notice-time { margin-left: auto; }
-.notice-title { font-size: var(--font-card-title); font-weight: var(--font-weight-content-title); line-height: var(--line-title); }
-.notice-body { color: var(--color-text-secondary); font-size: var(--font-label); line-height: var(--line-body); }
-.notice-title + .notice-body { margin-top: calc(var(--space-2) * -1); }
+.notice-top { display: flex; align-items: center; gap: var(--space-5); color: var(--color-text-primary); font-size: var(--font-caption); line-height: 1.25; }
+.notice-type { font-weight: 800; }
+.notice-time { margin-left: auto; color: var(--color-text-secondary); }
+.notice-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  font-size: var(--font-card-title);
+  font-weight: var(--font-weight-content-title);
+  line-height: var(--line-title);
+}
+.notice-body {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: var(--font-label);
+  line-height: var(--line-body);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.notice-body.comment-preview { color: var(--color-text-primary); }
+.notice-author { margin-right: var(--space-5); color: var(--color-text-secondary); font-weight: 400; }
 
 .my-comment-card { width: calc(100% + 32px); display: grid; gap: var(--space-8); margin-left: calc(var(--space-16) * -1); border: 0; border-bottom: 1px solid var(--color-comment-divider); background: transparent; color: var(--color-text-primary); padding: var(--space-12) var(--space-16); text-align: left; }
 .my-comment-card.is-unavailable { cursor: default; }
