@@ -11,6 +11,7 @@ const categories = [
 const icons = {
   heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg>',
   comment: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.8 8.4 8.9 8.9 0 0 1-3.8-.9L3 20l1.3-4.3a8.2 8.2 0 0 1-.9-3.8A8.4 8.4 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8Z"></path></svg>',
+  share: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12V16.2C21 17.8802 21 18.7202 20.673 19.362C20.3854 19.9265 19.9265 20.3854 19.362 20.673C18.7202 21 17.8802 21 16.2 21H7.8C6.11984 21 5.27976 21 4.63803 20.673C4.07354 20.3854 3.6146 19.9265 3.32698 19.362C3 18.7202 3 17.8802 3 16.2V12M8 7L12 3L16 7M12 3V15"></path></svg>',
   more: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>',
   refresh: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.6 6.1"></path><path d="M3 12A9 9 0 0 1 18.6 5.9"></path><path d="M18.6 2.6v3.3h-3.3"></path><path d="M5.4 21.4v-3.3h3.3"></path></svg>'
 };
@@ -709,6 +710,7 @@ function renderDetail() {
   likeButton.classList.toggle('liked', post.liked);
   likeButton.innerHTML = `${icons.heart}<span>${post.likes}</span>`;
   document.getElementById('detail-comment-count').innerHTML = `${icons.comment}<span>${commentCount(post)}</span>`;
+  document.getElementById('detail-share').innerHTML = icons.share;
   document.querySelector('.topbar-more').hidden = false;
   renderComments(post);
   updateCommentComposer();
@@ -926,6 +928,32 @@ async function shareMagazine() {
   const shareData = {
     title: magazine.title,
     text: magazine.summary
+  };
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    shareData.url = window.location.href;
+  }
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      return;
+    }
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(shareData.url || `${shareData.title}\n${shareData.text}`);
+      toast('공유 링크를 복사했어요.');
+      return;
+    }
+  } catch (error) {
+    if (error?.name === 'AbortError') return;
+  }
+  toast('공유 기능은 준비 중이에요.');
+}
+
+async function shareCurrentPost() {
+  const post = getPost(state.currentPostId);
+  if (!post) return;
+  const shareData = {
+    title: post.title,
+    text: post.body
   };
   if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
     shareData.url = window.location.href;
@@ -1575,6 +1603,7 @@ document.addEventListener('click', event => {
   else if (action === 'toggle-recent-love-page') toggleRecentLovePage();
   else if (action === 'open-post-menu') openPostMenu();
   else if (action === 'share-magazine') shareMagazine();
+  else if (action === 'share-current-post') shareCurrentPost();
   else if (action === 'edit-post') editPost();
   else if (action === 'delete-post') deletePost();
   else if (action === 'edit-comment') editComment();

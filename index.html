@@ -31,7 +31,7 @@
         <span class="notification-dot" data-ui="AppTopbar_notificationDot" hidden></span>
       </button>
       <button class="icon-button topbar-share" type="button" aria-label="공유하기" data-action="share-magazine" data-ui="AppTopbar_shareButton">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 10.5 6.8-4"></path><path d="m8.6 13.5 6.8 4"></path></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12V16.2C21 17.8802 21 18.7202 20.673 19.362C20.3854 19.9265 19.9265 20.3854 19.362 20.673C18.7202 21 17.8802 21 16.2 21H7.8C6.11984 21 5.27976 21 4.63803 20.673C4.07354 20.3854 3.6146 19.9265 3.32698 19.362C3 18.7202 3 17.8802 3 16.2V12M8 7L12 3L16 7M12 3V15"></path></svg>
       </button>
       <button class="icon-button topbar-more" type="button" aria-label="게시글 더보기" data-action="open-post-menu" data-ui="AppTopbar_moreButton">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
@@ -110,6 +110,7 @@
         <div class="thread-actions" data-ui="PostDetailCard_actionList">
           <button class="thread-action" type="button" id="detail-like" data-action="like-current" aria-label="게시글 좋아요"></button>
           <button class="thread-action" type="button" id="detail-comment-count" data-action="focus-comment" aria-label="댓글 입력으로 이동"></button>
+          <button class="thread-action" type="button" id="detail-share" data-action="share-current-post" aria-label="게시글 공유하기"></button>
         </div>
       </article>
       <div class="section-head comment-section-head"><h2>댓글</h2></div>
