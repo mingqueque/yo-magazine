@@ -30,7 +30,7 @@
 | 알림 | [08-notifications.md](./specs/08-notifications.md) | 푸시, 알림센터, 좋아요 이벤트 | 검토중 |
 | 슈퍼유저 | [09-superuser.md](./specs/09-superuser.md) | 에디터 표시, 권한, 감사 로그, 알림 | 일부 구현 확인 필요 |
 | 글과 댓글 | [11-post-and-comment.md](./specs/11-post-and-comment.md) | 글 작성, 본문 구성, 댓글과 예외 댓글 | 확정 |
-| 공유 | [12-share.md](./specs/12-share.md) | 공유 링크 이동, 공유 버튼 위치 | 버튼 위치 확정 필요 |
+| 공유 | [12-share.md](./specs/12-share.md) | 공유 진입점, 공유 링크 이동 | 확정 |
 | 결정 필요 | [10-open-decisions.md](./specs/10-open-decisions.md) | 미확정, 원문 불일치, 후속 확인 | 상시 관리 |
 
 번호는 문서를 만든 순서다. Notion 원문의 나열 순서와는 다르며, 기존 링크를 유지하기 위해 새 도메인은 뒤 번호로 추가한다.

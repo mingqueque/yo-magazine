@@ -11,7 +11,6 @@ const categories = [
 const icons = {
   heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg>',
   comment: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.8 8.4 8.9 8.9 0 0 1-3.8-.9L3 20l1.3-4.3a8.2 8.2 0 0 1-.9-3.8A8.4 8.4 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8Z"></path></svg>',
-  share: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path></svg>',
   more: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>'
 };
 
@@ -532,7 +531,6 @@ function renderDetail() {
   likeButton.classList.toggle('liked', post.liked);
   likeButton.innerHTML = `${icons.heart}<span>${post.likes}</span>`;
   document.getElementById('detail-comment-count').innerHTML = `${icons.comment}<span>${commentCount(post)}</span>`;
-  document.getElementById('detail-share').innerHTML = icons.share;
   document.querySelector('.topbar-more').hidden = state.loggedIn && post.userId === currentUser.id;
   renderComments(post);
   updateCommentComposer();
@@ -609,7 +607,7 @@ function renderNotifications() {
 
 function renderWithdrawReasons() {
   document.getElementById('withdraw-reasons').innerHTML = withdrawalReasons.map((reason, index) => `
-    <label class="reason-option" data-ui="WithdrawalReasonOption_${index + 1}"><input type="radio" name="withdraw-reason" value="${escapeHTML(reason)}"><span>${escapeHTML(reason)}</span></label>
+    <label class="reason-option" data-ui="WithdrawalReasonOption_${index + 1}"><input type="checkbox" name="withdraw-reason" value="${escapeHTML(reason)}"><span>${escapeHTML(reason)}</span></label>
   `).join('');
 }
 
@@ -960,8 +958,13 @@ function submitComment() {
   toast('댓글이 등록되었습니다.');
 }
 
-async function shareCurrent(label) {
-  const shareData = { title: label, text: label, url: window.location.href };
+// 앱 공유는 마이페이지의 요니버스 앱 공유하기 메뉴에서만 제공한다.
+async function shareApp() {
+  const shareData = {
+    title: '요니버스',
+    text: '익명으로 연애 고민을 나누는 요니버스',
+    url: window.location.href
+  };
   if (navigator.share) {
     try {
       await navigator.share(shareData);
@@ -970,7 +973,20 @@ async function shareCurrent(label) {
       if (error.name === 'AbortError') return;
     }
   }
-  toast('공유할 링크를 준비했어요.');
+  toast('OS 공유 옵션을 여는 자리입니다.');
+}
+
+// 연결 주소가 아직 공유되지 않은 외부 이동 메뉴
+const externalLinks = {
+  instagram: '요매거진 Instagram',
+  marpple: '마플샵',
+  kakao: '요니버스 카카오 문의톡'
+};
+
+function openExternal(key) {
+  const label = externalLinks[key];
+  if (!label) return;
+  toast(`${label} 연결 주소는 아직 준비 중이에요.`);
 }
 
 function showInfo(infoKey) {
@@ -1049,6 +1065,7 @@ document.addEventListener('click', event => {
   const commentReport = event.target.closest('[data-comment-report]');
   const commentBlock = event.target.closest('[data-comment-block]');
   const infoButton = event.target.closest('[data-info]');
+  const externalButton = event.target.closest('[data-external]');
   const loginProvider = event.target.closest('[data-login-provider]');
 
   if (loginProvider) {
@@ -1130,6 +1147,11 @@ document.addEventListener('click', event => {
     return;
   }
 
+  if (externalButton) {
+    openExternal(externalButton.dataset.external);
+    return;
+  }
+
   if (infoButton) {
     showInfo(infoButton.dataset.info);
     return;
@@ -1152,8 +1174,7 @@ document.addEventListener('click', event => {
   else if (action === 'like-current') requireMember({ type: 'like-post', postId: state.currentPostId });
   else if (action === 'focus-comment') document.getElementById('comment-input').focus();
   else if (action === 'submit-comment') submitComment();
-  else if (action === 'share-current') shareCurrent(getPost(state.currentPostId)?.title || '요매거진');
-  else if (action === 'share-magazine') shareCurrent(magazines[state.currentMagazineIndex]?.title || '요매거진');
+  else if (action === 'share-app') shareApp();
   else if (action === 'clear-search') {
     state.searchQuery = '';
     document.getElementById('search-input').value = '';

@@ -103,7 +103,6 @@
         <div class="thread-actions" data-ui="PostDetailCard_actionList">
           <button class="thread-action" type="button" id="detail-like" data-action="like-current" aria-label="게시글 좋아요"></button>
           <button class="thread-action" type="button" id="detail-comment-count" data-action="focus-comment" aria-label="댓글 입력으로 이동"></button>
-          <button class="thread-action" type="button" id="detail-share" data-action="share-current" aria-label="공유"></button>
         </div>
       </article>
       <div class="section-head comment-section-head"><h2>댓글</h2><span class="section-meta">오래된 댓글순</span></div>
@@ -166,12 +165,27 @@
         <button type="button" data-open="likes">좋아요한 글 <span class="chevron">›</span></button>
       </section>
 
-      <section class="menu-group" aria-label="설정과 정보" data-ui="MyPageInfoMenu">
-        <button type="button" data-action="open-os-settings">알림 설정 <span class="chevron">›</span></button>
-        <button type="button" data-info="community-rules">커뮤니티 이용규칙 <span class="chevron">›</span></button>
-        <button type="button" data-info="terms">서비스 이용약관 <span class="chevron">›</span></button>
-        <button type="button" data-info="privacy">개인정보 처리방침 <span class="chevron">›</span></button>
-        <div class="menu-row">앱 버전 <span class="menu-value">1.0.0 · 최신 버전</span></div>
+      <section class="menu-group" aria-label="설정과 연결" data-ui="MyPageSettingMenu">
+        <button type="button" data-action="open-os-settings" data-ui="MyPageSettingMenu_notificationButton">알림 설정 <span class="chevron">›</span></button>
+        <button type="button" data-info="community-rules" data-ui="MyPageSettingMenu_rulesButton">커뮤니티 이용규칙 <span class="chevron">›</span></button>
+        <button type="button" data-action="share-app" data-ui="MyPageShareButton">요니버스 앱 공유하기
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></span>
+        </button>
+        <button type="button" data-external="instagram" data-ui="MyPageExternalButton_instagram">요매거진 Instagram 이동
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></span>
+        </button>
+        <button type="button" data-external="marpple" data-ui="MyPageExternalButton_marpple">마플샵 이동
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></span>
+        </button>
+        <button type="button" data-external="kakao" data-ui="MyPageExternalButton_kakao">요니버스 카카오 문의톡으로 이동
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></span>
+        </button>
+      </section>
+
+      <section class="menu-group" aria-label="약관과 정보" data-ui="MyPageInfoMenu">
+        <button type="button" data-info="terms" data-ui="MyPageInfoMenu_termsButton">서비스 이용약관 <span class="chevron">›</span></button>
+        <button type="button" data-info="privacy" data-ui="MyPageInfoMenu_privacyButton">개인정보 처리방침 <span class="chevron">›</span></button>
+        <div class="menu-row" data-ui="MyPageInfoMenu_appVersionRow">앱 버전 <span class="menu-value">1.0.0 · 최신 버전</span></div>
       </section>
     </main>
 
@@ -217,7 +231,6 @@
         <span class="hero-eyebrow">요매거진</span>
         <h1 id="magazine-detail-title"></h1>
         <p id="magazine-detail-body"></p>
-        <button class="secondary-button" type="button" data-action="share-magazine">공유하기</button>
       </article>
     </main>
 

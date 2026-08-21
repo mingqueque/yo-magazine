@@ -693,6 +693,16 @@ textarea { min-height: 160px; resize: none; line-height: var(--line-body); }
 }
 .menu-group > :last-child { border-bottom: 0; }
 .menu-value { margin-left: auto; color: var(--color-text-secondary); font-size: var(--font-label); }
+.menu-icon { margin-left: auto; display: grid; place-items: center; color: var(--color-text-subtle); }
+.menu-icon svg {
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 .account-card { display: grid; gap: var(--space-12); padding: var(--space-16) 0; border-bottom: 8px solid var(--color-surface-soft); }
 .account-row { min-height: 34px; display: flex; align-items: center; justify-content: space-between; gap: var(--space-14); color: var(--color-text-secondary); font-size: var(--font-body); }
