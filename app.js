@@ -5,7 +5,7 @@ const categories = [
   '재회',
   '이별/권태기/장기연애',
   '연애 잡담',
-  '결혼 고민'
+  '결혼'
 ];
 
 const icons = {
@@ -82,7 +82,7 @@ const posts = [
     userId: 'user_d',
     category: '이별/권태기/장기연애',
     title: '헤어진 뒤에 맞팔 유지하는 거 다들 가능해요?',
-    body: '헤어진 지 2주 됐는데 서로 언팔은 안 했어요. 새 글 올라올 때마다 마음이 흔들려서 차단까지 해야 하나 고민 중입니다.',
+    body: '헤어진 지 2주 됐는데 서로 언팔은 안 했어요. 새 글 올라올 때마다 마음이 흔들려서 차단까지 해야 할지 망설이고 있습니다.',
     time: '1시간 전',
     hoursAgo: 1,
     order: 7,
@@ -112,7 +112,7 @@ const posts = [
     userId: 'editor',
     editor: true,
     category: '연애 잡담',
-    title: '연애 고민을 나누기 전에 기억하면 좋은 한 가지',
+    title: '연애 이야기를 나누기 전에 기억하면 좋은 한 가지',
     body: '상대의 마음을 단정하기보다 내가 느끼는 감정과 원하는 관계를 먼저 살펴보세요. 조언은 선택지이고 결정은 언제나 여러분의 몫입니다.',
     time: '3시간 전',
     hoursAgo: 3,
@@ -126,9 +126,9 @@ const posts = [
   {
     id: 'post_7',
     userId: 'user_f',
-    category: '결혼 고민',
+    category: '결혼',
     title: '어린 나이에 결혼 얘기 꺼내면 너무 부담일까요',
-    body: '아직 취업 준비도 남았는데 서로 미래 얘기를 자주 하게 돼요. 좋아하는 마음이랑 현실적인 준비는 다른 문제 같아서 고민입니다.',
+    body: '아직 취업 준비도 남았는데 서로 미래 얘기를 자주 하게 돼요. 좋아하는 마음이랑 현실적인 준비는 다른 문제 같아서 생각이 많아집니다.',
     time: '어제',
     hoursAgo: 26,
     order: 4,
@@ -209,7 +209,7 @@ const magazines = [
     image: 'assets/magazine-thumb-1.jpg',
     title: '요매거진 대나무숲 사연을 모집합니다',
     summary: '아무에게도 말하지 못했던 연애 이야기를 익명으로 들려주세요.',
-    body: '친구에게도 꺼내기 어려웠던 연애 고민이 있나요?\n\n요매거진 대나무숲은 이름 없이 마음을 나누는 공간입니다. 보내주신 이야기는 개인정보를 제거한 뒤, 다른 사람의 경험과 조언을 만날 수 있는 콘텐츠로 소개합니다.'
+    body: '친구에게도 꺼내기 어려웠던 이야기가 있나요?\n\n요매거진 대나무숲은 이름 없이 마음을 나누는 공간입니다. 보내주신 이야기는 개인정보를 제거한 뒤, 다른 사람의 경험과 조언을 만날 수 있는 콘텐츠로 소개합니다.'
   },
   {
     image: 'assets/magazine-thumb-2.jpg',
@@ -299,6 +299,7 @@ const state = {
   pendingMemberAction: null,
   reportTarget: null,
   blockTarget: null,
+  commentMenuTarget: null,
   searchQuery: '',
   toastTimer: null
 };
@@ -410,7 +411,7 @@ function renderHome() {
   const pageCount = Math.ceil(list.length / RECENT_LOVE_PAGE_SIZE);
   if (state.recentLovePage >= pageCount) state.recentLovePage = 0;
   const pageStart = state.recentLovePage * RECENT_LOVE_PAGE_SIZE;
-  renderPostList('home', list.slice(pageStart, pageStart + RECENT_LOVE_PAGE_SIZE), { compact: true, emptyText: '최근 3일 안에 올라온 고민이 없습니다.' });
+  renderPostList('home', list.slice(pageStart, pageStart + RECENT_LOVE_PAGE_SIZE), { compact: true, emptyText: '최근 3일 안에 올라온 글이 없습니다.' });
   renderRecentLoveMoreButton(pageCount);
 }
 
@@ -497,12 +498,12 @@ function renderMagazineDetail() {
   document.getElementById('magazine-detail-body').textContent = magazine.body;
 }
 
-function normalCommentNumberMap(post) {
+function commentNumberMap(comments) {
   const map = new Map();
   let next = 1;
-  post.comments.forEach(comment => {
-    if (comment.editor || map.has(comment.userId)) return;
-    map.set(comment.userId, next);
+  comments.forEach(comment => {
+    if (comment.editor) return;
+    map.set(comment.id, next);
     next += 1;
   });
   return map;
@@ -510,12 +511,13 @@ function normalCommentNumberMap(post) {
 
 function renderComments(post) {
   const container = document.getElementById('detail-comments');
-  const numbers = normalCommentNumberMap(post);
   if (!post.comments.length) {
     container.innerHTML = '<div class="empty-state" data-ui="PostCommentList_emptyState">첫 댓글을 남겨보세요.</div>';
     return;
   }
-  container.innerHTML = [...post.comments].sort((a, b) => a.order - b.order).map((comment, index) => {
+  const sortedComments = [...post.comments].sort((a, b) => a.order - b.order);
+  const numbers = commentNumberMap(sortedComments);
+  container.innerHTML = sortedComments.map((comment, index) => {
     const blocked = state.blockedUsers.has(comment.userId);
     const status = blocked ? 'blocked' : comment.status;
     const messages = {
@@ -525,7 +527,7 @@ function renderComments(post) {
     };
     const isException = status !== 'normal';
     const isOwnComment = state.loggedIn && comment.userId === currentUser.id;
-    const author = comment.editor ? '에디터 ✓' : `익명${numbers.get(comment.userId)}`;
+    const author = comment.editor ? '에디터 ✓' : `익명${numbers.get(comment.id)}`;
     const uiName = `PostCommentCard_${index + 1}`;
     return `
       <article class="comment-card${isException ? ' exception' : ''}" data-comment-card="${comment.id}" data-ui="${uiName}">
@@ -535,11 +537,7 @@ function renderComments(post) {
           <div class="comment-actions">
             <button class="thread-action${comment.liked ? ' liked' : ''}" type="button" data-comment-like="${comment.id}" aria-label="댓글 좋아요">${icons.heart}<span>${comment.likes}</span></button>
             ${isOwnComment ? '' : `<div class="comment-menu-wrap">
-              <button class="comment-more" type="button" data-comment-menu="${comment.id}" aria-label="댓글 더보기" aria-expanded="false">${icons.more}</button>
-              <div class="inline-menu" data-inline-menu="${comment.id}" hidden>
-                <button type="button" data-comment-report="${comment.id}">신고하기</button>
-                <button type="button" data-comment-block="${comment.id}">작성자 차단하기</button>
-              </div>
+              <button class="comment-more" type="button" data-comment-menu="${comment.id}" aria-label="댓글 더보기">${icons.more}</button>
             </div>`}
           </div>`}
       </article>`;
@@ -583,7 +581,7 @@ function renderSearch() {
     : [];
   const summary = document.getElementById('search-summary');
   summary.textContent = query ? `게시글 ${results.length}개 · 최신순` : '검색어를 입력해 주세요.';
-  renderPostList('search', results, { emptyText: query ? '검색 결과가 없습니다.' : '제목과 글에서 고민을 찾아보세요.' });
+  renderPostList('search', results, { emptyText: query ? '검색 결과가 없습니다.' : '제목과 글에서 찾아보세요.' });
 }
 
 function renderMyPosts() {
@@ -749,13 +747,13 @@ function closeModal() {
   document.getElementById('modal-panel').innerHTML = '';
   state.reportTarget = null;
   state.blockTarget = null;
+  state.commentMenuTarget = null;
 }
 
 function modalHead(title, description = '') {
   return `
     <div class="modal-head">
       <div class="modal-head-copy"><h2 id="modal-title">${escapeHTML(title)}</h2>${description ? `<p>${escapeHTML(description)}</p>` : ''}</div>
-      <button class="modal-close" type="button" data-action="close-modal" aria-label="닫기">×</button>
     </div>`;
 }
 
@@ -864,8 +862,20 @@ function openPostMenu() {
   openModal(`
     ${modalHead('게시글 더보기')}
     <div class="action-list">
-      <button class="action-button" type="button" data-action="report-post">신고하기 <span>›</span></button>
-      <button class="action-button danger" type="button" data-action="block-post">작성자 차단하기 <span>›</span></button>
+      <button class="action-button" type="button" data-action="block-post">작성자 차단하기</button>
+      <button class="action-button danger" type="button" data-action="report-post">신고하기</button>
+    </div>`);
+}
+
+function openCommentMenu(commentId) {
+  const found = findComment(commentId);
+  if (!found) return;
+  state.commentMenuTarget = { type: 'comment', postId: found.post.id, commentId, userId: found.comment.userId };
+  openModal(`
+    ${modalHead('댓글 더보기')}
+    <div class="action-list">
+      <button class="action-button" type="button" data-action="block-comment">작성자 차단하기</button>
+      <button class="action-button danger" type="button" data-action="report-comment">신고하기</button>
     </div>`);
 }
 
@@ -923,8 +933,6 @@ function updateWriteForm() {
   const body = document.getElementById('write-body');
   enforceLimit(title, 40, '제목은 공백 포함 최대 40자까지 입력할 수 있어요.');
   enforceLimit(body, 2000, '글은 공백 포함 최대 2000자까지 입력할 수 있어요.');
-  document.getElementById('write-title-counter').textContent = `${title.value.length}/40`;
-  document.getElementById('write-body-counter').textContent = `${body.value.length}/2000`;
   document.getElementById('write-submit').disabled = title.value.length < 1 || body.value.length < 1;
 }
 
@@ -957,7 +965,7 @@ function submitPost() {
   state.stack = ['community'];
   renderAllLists();
   show('community', false);
-  toast('고민이 등록되었습니다.');
+  toast('글이 등록되었습니다.');
 }
 
 function updateCommentComposer() {
@@ -1000,7 +1008,7 @@ function submitComment() {
 async function shareApp() {
   const shareData = {
     title: '요니버스',
-    text: '익명으로 연애 고민을 나누는 요니버스',
+    text: '익명으로 연애 이야기를 나누는 요니버스',
     url: window.location.href
   };
   if (navigator.share) {
@@ -1069,15 +1077,6 @@ function browseAsGuest() {
   show('home', false);
 }
 
-function closeInlineMenus(exceptId = '') {
-  document.querySelectorAll('[data-inline-menu]').forEach(menu => {
-    if (menu.dataset.inlineMenu !== exceptId) menu.hidden = true;
-  });
-  document.querySelectorAll('[data-comment-menu]').forEach(button => {
-    if (button.dataset.commentMenu !== exceptId) button.setAttribute('aria-expanded', 'false');
-  });
-}
-
 function initializeObserver() {
   const sentinel = document.querySelector('[data-community-sentinel]');
   if (!('IntersectionObserver' in window)) return;
@@ -1100,8 +1099,6 @@ document.addEventListener('click', event => {
   const magazineButton = event.target.closest('[data-magazine]');
   const commentLike = event.target.closest('[data-comment-like]');
   const commentMenu = event.target.closest('[data-comment-menu]');
-  const commentReport = event.target.closest('[data-comment-report]');
-  const commentBlock = event.target.closest('[data-comment-block]');
   const infoButton = event.target.closest('[data-info]');
   const externalButton = event.target.closest('[data-external]');
   const loginProvider = event.target.closest('[data-login-provider]');
@@ -1113,23 +1110,7 @@ document.addEventListener('click', event => {
 
   if (commentMenu) {
     event.stopPropagation();
-    const id = commentMenu.dataset.commentMenu;
-    const menu = document.querySelector(`[data-inline-menu="${id}"]`);
-    const willOpen = menu.hidden;
-    closeInlineMenus(id);
-    menu.hidden = !willOpen;
-    commentMenu.setAttribute('aria-expanded', String(willOpen));
-    return;
-  }
-
-  if (commentReport || commentBlock) {
-    event.stopPropagation();
-    const id = commentReport?.dataset.commentReport || commentBlock?.dataset.commentBlock;
-    const found = findComment(id);
-    if (!found) return;
-    closeInlineMenus();
-    const target = { type: 'comment', postId: found.post.id, commentId: id, userId: found.comment.userId };
-    requireMember({ type: commentReport ? 'report' : 'block', target });
+    openCommentMenu(commentMenu.dataset.commentMenu);
     return;
   }
 
@@ -1230,13 +1211,22 @@ document.addEventListener('click', event => {
     closeModal();
     requireMember({ type: 'block', target: { type: 'post', postId: post.id, userId: post.userId } });
   }
+  else if (action === 'report-comment') {
+    const target = state.commentMenuTarget;
+    closeModal();
+    if (target) requireMember({ type: 'report', target });
+  }
+  else if (action === 'block-comment') {
+    const target = state.commentMenuTarget;
+    closeModal();
+    if (target) requireMember({ type: 'block', target });
+  }
   else if (action === 'confirm-report') confirmReport();
   else if (action === 'confirm-block') confirmBlock();
   else if (action === 'open-os-settings') openStatusModal('알림 설정', '휴대폰 설정 > 앱 설정 > 알림 권한을 통해 설정해 주세요.');
   else if (action === 'logout') logout();
   else if (action === 'browse-as-guest') browseAsGuest();
   else if (action === 'exit-app') exitApp();
-  else closeInlineMenus();
 });
 
 document.addEventListener('change', event => {
