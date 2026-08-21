@@ -79,6 +79,7 @@
   --radius-card: 7px;
   --radius-magazine-home: 12px;
   --radius-magazine-list: 8px;
+  --radius-long-button: 12px;
   --radius-control: 8px;
   --radius-panel: 10px;
   --radius-sheet: 22px;
@@ -489,7 +490,7 @@ button.hero-slide:hover { filter: brightness(.985); }
   gap: var(--space-6);
   margin-top: var(--space-10);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-long-button);
   background: var(--color-surface);
   color: var(--color-text-primary);
   font-size: var(--font-label);
@@ -509,7 +510,7 @@ button.hero-slide:hover { filter: brightness(.985); }
 .primary-button, .secondary-button, .danger-button {
   width: 100%;
   min-height: var(--size-input);
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-long-button);
   font-size: var(--font-cta);
   font-weight: var(--font-weight-cta);
 }
@@ -518,7 +519,7 @@ button.hero-slide:hover { filter: brightness(.985); }
   height: var(--size-touch);
   margin-top: var(--space-10);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-long-button);
   background: var(--color-surface);
   color: var(--color-text-primary);
   font-size: var(--font-cta);
@@ -593,7 +594,7 @@ button.hero-slide:hover { filter: brightness(.985); }
   justify-content: center;
   margin: var(--space-14) var(--space-16) 0 0;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-long-button);
   background: var(--color-surface);
   color: var(--color-text-primary);
   font-size: var(--font-label);
