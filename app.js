@@ -48,13 +48,14 @@ const posts = [
     order: 10,
     likes: 28,
     liked: false,
-    commentTotal: 17,
+    commentTotal: 18,
     modified: false,
     comments: [
       { id: 'comment_1', userId: 'user_c', body: '저라면 밥 먹었냐고 가볍게 한 번만 더 보내고, 또 애매하면 접을 것 같아요.', time: '10분 전', order: 1, likes: 5, liked: true, status: 'normal', modified: true },
       { id: 'comment_2', userId: 'user_d', body: '', time: '7분 전', order: 2, likes: 0, liked: false, status: 'deleted', modified: false },
       { id: 'comment_3', userId: 'editor', body: '답장 속도보다 대화가 이어지는 방식도 함께 살펴보세요. 불안하다면 한 번은 솔직하게 물어봐도 괜찮아요.', time: '5분 전', order: 3, likes: 11, liked: false, status: 'normal', modified: false, editor: true },
-      { id: 'comment_4', userId: 'user_c', body: '시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.', time: '3분 전', order: 4, likes: 2, liked: true, status: 'normal', modified: false }
+      { id: 'comment_4', userId: 'user_c', body: '시험기간이면 진짜 답장 느려질 수 있어요. 그래도 스토리는 올리는데 답장만 안 하면 한 번 물어볼 듯.', time: '3분 전', order: 4, likes: 2, liked: true, status: 'normal', modified: false },
+      { id: 'comment_editor_virtual_1', userId: 'editor', body: '스토리를 보는 행동만으로 마음이 식었다고 단정하기보다는, 답장을 기다리는 동안 내가 얼마나 불안해지는지도 같이 살펴보면 좋아요.', time: '방금 전', order: 5, likes: 0, liked: false, status: 'normal', modified: false, editor: true }
     ]
   },
   {
@@ -676,9 +677,10 @@ function renderComments(post) {
     const isException = status !== 'normal';
     const isOwnComment = isOwn(comment);
     const author = comment.editor ? '에디터 ✓' : `익명${numbers.get(comment.userId || comment.id)}`;
+    const editorClass = comment.editor ? ' editor-comment' : '';
     const uiName = `PostCommentCard_${index + 1}`;
     return `
-      <article class="comment-card${isException ? ' exception' : ''}" data-comment-card="${comment.id}" data-ui="${uiName}">
+      <article class="comment-card${isException ? ' exception' : ''}${editorClass}" data-comment-card="${comment.id}" data-ui="${uiName}">
         <div class="meta"><strong>${escapeHTML(author)}</strong><span>${escapeHTML(comment.time)}</span></div>
         <div class="post-body">${escapeHTML(isException ? messages[status] : comment.body)}</div>
         ${isException ? '' : `
@@ -1179,9 +1181,14 @@ function updateWriteForm() {
 }
 
 function resizeCommentInput(input = document.getElementById('comment-input')) {
-  input.style.height = 'auto';
   const style = window.getComputedStyle(input);
   const lineHeight = Number.parseFloat(style.lineHeight);
+  if (!input.value.length) {
+    input.style.height = `${lineHeight}px`;
+    input.style.overflowY = 'hidden';
+    return;
+  }
+  input.style.height = 'auto';
   const maxHeight = Math.ceil(lineHeight * 3);
   const height = Math.min(input.scrollHeight, maxHeight);
   input.style.height = `${height}px`;
