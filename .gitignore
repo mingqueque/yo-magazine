@@ -1,0 +1,17 @@
+# macOS 시스템 파일
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# 편집기와 IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# 로그와 임시 파일
+*.log
+.tmp/
