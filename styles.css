@@ -848,7 +848,7 @@ textarea { min-height: 160px; resize: none; line-height: var(--line-body); }
 }
 .notice-card:hover { background: var(--color-surface-soft); }
 .notice-top { display: flex; align-items: center; gap: var(--space-5); color: var(--color-text-primary); font-size: var(--font-caption); line-height: 1.25; }
-.notice-type { font-weight: 800; }
+.notice-type { color: var(--color-brand-main); font-weight: 700; }
 .notice-time { margin-left: auto; color: var(--color-text-secondary); }
 .notice-title {
   display: -webkit-box;

@@ -274,9 +274,8 @@ const magazines = [
 ];
 
 const notifications = [
-  { id: 'notice_seed_push_like', postId: 'post_1', type: '좋아요', target: 'post', time: '지금', title: '용기내서 다음에 만나자고 했어!', body: '오늘 내 글에 좋아요 10개가 달렸어요 💗', push: true },
   { id: 'notice_seed_post_like_1', postId: 'post_1', type: '좋아요', target: 'post', time: '3분 전', title: '용기내서 다음에 만나자고 했어!', body: '내 글에 좋아요가 새로 달렸어요.', sourceId: 'post_1' },
-  { id: 'notice_seed_editor_comment', postId: 'post_1', type: '댓글', target: 'post', time: '3시간 전', title: '아 소개받았는데 너무 맘에 든다ㅎ 결혼할까ㅋ', body: '왜그러세요.', authorLabel: '에디터', sourceId: 'comment_editor_seed' },
+  { id: 'notice_seed_editor_comment', postId: 'post_1', type: '댓글', target: 'post', time: '3시간 전', title: '아 소개받았는데 너무 맘에 든다ㅎ 결혼할까ㅋ', body: '진정하세요. 너무 티내지말고요 상대방이 아마 부담스러워할거예요', authorLabel: '에디터', sourceId: 'comment_editor_seed' },
   { id: 'notice_seed_post_like_2', postId: 'post_8', type: '좋아요', target: 'post', time: '11시간 전', title: '도착 5분 전 떨린다', body: '내 글에 좋아요가 새로 달렸어요.', sourceId: 'post_8' },
   { id: 'notice_seed_comment', postId: 'post_1', type: '댓글', target: 'post', time: '어제', title: '내일 소개팅임 뭐입을까 ㅊㅊ좀', body: '그냥 깔끔하게 입으삼', sourceId: 'comment_seed' },
   { id: 'notice_seed_comment_like', postId: 'post_3', type: '좋아요', target: 'comment', time: '5일 전', category: '이별/권태기/장기연애', title: '괜찮니? 그럴수록 너의 일상에 집중해! 밥도 잘 먹고! 화이팅! 금...', body: '내 댓글에 좋아요가 새로 달렸어요.', sourceId: 'comment_6' }
@@ -402,6 +401,11 @@ function commentCount(post) {
 
 function listCountLabel(count) {
   return count >= 99 ? '99+' : String(count);
+}
+
+function truncateText(value, maxLength) {
+  const chars = Array.from(String(value));
+  return chars.length > maxLength ? `${chars.slice(0, maxLength).join('')}…` : chars.join('');
 }
 
 function markNotificationUnread() {
@@ -797,7 +801,7 @@ function renderNotifications() {
     if (!post) return '';
     const title = notice.title || post.title;
     const category = notice.category || post.category;
-    const body = notice.type === '댓글' ? `“${notice.body}”` : notice.body;
+    const body = notice.type === '댓글' ? `“${truncateText(notice.body, 20)}”` : notice.body;
     const bodyClass = notice.type === '댓글' ? 'notice-body comment-preview' : 'notice-body';
     const author = notice.authorLabel ? `<strong class="notice-author">${escapeHTML(notice.authorLabel)}</strong>` : '';
     return `
