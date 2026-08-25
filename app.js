@@ -1156,7 +1156,7 @@ function openReportDialog(target) {
 function openBlockDialog(target) {
   state.blockTarget = target;
   openModal(`
-    ${modalHead('작성자를 차단할까요?', '이 작성자의 게시글 내용은 보이지 않고, 댓글은 차단 상태로 표시됩니다.')}
+    ${modalHead('작성자를 차단할까요? 복구할 수 없어요.', '이 작성자의 게시글 내용은 보이지 않고, 댓글은 차단 상태로 표시됩니다.')}
     <div class="modal-actions"><button class="cancel" type="button" data-action="close-modal">취소</button><button class="confirm danger" type="button" data-action="confirm-block">차단하기</button></div>`);
 }
 
