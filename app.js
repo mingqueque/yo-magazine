@@ -363,6 +363,7 @@ const rootScreens = new Set(['home', 'community', 'mypage']);
 const RECENT_LOVE_WINDOW_HOURS = 72;
 const RECENT_LOVE_COUNT = 10;
 const RECENT_LOVE_PAGE_SIZE = 5;
+const LAUNCH_SPLASH_DURATION_MS = 1800;
 const KEYBOARD_INSET_THRESHOLD = 80;
 
 function escapeHTML(value) {
@@ -843,12 +844,18 @@ function renderAllLists() {
 function renderTopbarTitle(screenName) {
   const title = document.querySelector('.topbar-title');
   if (screenName === 'home') {
-    title.innerHTML = '<img class="topbar-logo" src="assets/yoniverse-app-logo.svg" alt="요니버스">';
+    title.innerHTML = '<img class="topbar-logo" src="assets/yoniverse-logo-black.png" alt="요니버스">';
     title.setAttribute('aria-label', '요니버스');
     return;
   }
   title.textContent = titles[screenName] || 'Yo!';
   title.removeAttribute('aria-label');
+}
+
+function syncTopbarScrollState(screen = document.querySelector('.screen.active')) {
+  const topbar = document.querySelector('.topbar');
+  const isRootScreen = screen && rootScreens.has(screen.dataset.screen);
+  topbar.classList.toggle('scrolled', Boolean(isRootScreen && screen.scrollTop > 0));
 }
 
 function show(screenName, push = true) {
@@ -874,9 +881,11 @@ function show(screenName, push = true) {
 
   const topbar = document.querySelector('.topbar');
   const isRoot = rootScreens.has(screenName);
+  topbar.classList.toggle('home-mode', screenName === 'home');
   topbar.classList.toggle('subpage', !isRoot);
   topbar.classList.toggle('detail-mode', screenName === 'detail');
   topbar.classList.toggle('magazine-detail-mode', screenName === 'magazine-detail');
+  syncTopbarScrollState(document.querySelector(`.screen[data-screen="${screenName}"]`));
   renderTopbarTitle(screenName);
   document.querySelector('.topbar-search').hidden = !isRoot;
   document.querySelector('.topbar-notification').hidden = !isRoot;
@@ -1721,7 +1730,15 @@ function initialize() {
   updateWithdrawForm();
   updateCommentComposer();
   initializeObserver();
+  document.querySelectorAll('.screen').forEach(screen => {
+    screen.addEventListener('scroll', () => syncTopbarScrollState(screen), { passive: true });
+  });
   show('home', false);
+  const splash = document.querySelector('.launch-splash');
+  window.setTimeout(() => {
+    splash.classList.add('is-hidden');
+    window.setTimeout(() => splash.remove(), 220);
+  }, LAUNCH_SPLASH_DURATION_MS);
 }
 
 initialize();
