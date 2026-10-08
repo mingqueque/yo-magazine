@@ -339,9 +339,8 @@ const state = {
   currentMagazineIndex: 0,
   selectedCategory: '전체',
   communityLimit: 4,
-  communityLoading: false,
   recentLoveIds: [],
-  recentLovePage: 0,
+  recentLoveExpanded: false,
   recentLoveShown: new Set(),
   hasUnreadNotification: true,
   blockedUsers: new Set(),
@@ -359,12 +358,33 @@ const state = {
 
 const rootScreens = new Set(['home', 'community', 'mypage']);
 
-// [요즘 연애] 노출 기준: 최근 3일(72시간) 이내 게시글, 최대 선정 개수와 한 화면 노출 개수
 const RECENT_LOVE_WINDOW_HOURS = 72;
 const RECENT_LOVE_COUNT = 10;
-const RECENT_LOVE_PAGE_SIZE = 5;
+const RECENT_LOVE_COLLAPSED_COUNT = 5;
 const LAUNCH_SPLASH_DURATION_MS = 1800;
 const KEYBOARD_INSET_THRESHOLD = 80;
+const PROTOTYPE_SESSION_KEY = 'yo-magazine-prototype-session-v1';
+
+function restorePrototypeSession() {
+  try {
+    const provider = window.localStorage.getItem(PROTOTYPE_SESSION_KEY);
+    if (provider === '카카오' || provider === 'Apple') {
+      state.loggedIn = true;
+      currentUser.provider = provider;
+    }
+  } catch (_) {
+    // Storage can be unavailable in private browsing; the prototype remains usable.
+  }
+}
+
+function persistPrototypeSession(provider) {
+  try {
+    if (provider) window.localStorage.setItem(PROTOTYPE_SESSION_KEY, provider);
+    else window.localStorage.removeItem(PROTOTYPE_SESSION_KEY);
+  } catch (_) {
+    // Keep the current in-memory session when storage is unavailable.
+  }
+}
 
 function escapeHTML(value) {
   return String(value)
@@ -504,7 +524,6 @@ function renderPostList(target, list, options = {}) {
     : `<div class="empty-state" data-ui="${prefixMap[target]}_emptyState">${escapeHTML(options.emptyText || '표시할 글이 없습니다.')}</div>`;
 }
 
-// 노출 대상: 삭제, 숨김, 차단 작성자 글을 제외한 최근 3일 이내 게시글
 function recentLovePool() {
   return visiblePosts().filter(post => (post.hoursAgo ?? 0) <= RECENT_LOVE_WINDOW_HOURS);
 }
@@ -518,8 +537,6 @@ function shuffled(list) {
   return copy;
 }
 
-// 앱에 새로 진입할 때마다 노출 대상을 다시 선정한다.
-// 이전에 노출받지 않은 게시글을 먼저 채우고, 모두 소진되면 노출 이력을 비우고 다시 랜덤 노출한다.
 function selectRecentLove() {
   const pool = recentLovePool();
   const unseen = pool.filter(post => !state.recentLoveShown.has(post.id));
@@ -532,41 +549,30 @@ function selectRecentLove() {
       .slice(0, RECENT_LOVE_COUNT - picked.length)
       .forEach(post => picked.push(post));
   }
-  // 상세 진입 여부와 관계없이 노출된 시점을 기준으로 이력에 포함한다.
   picked.forEach(post => state.recentLoveShown.add(post.id));
-  state.recentLoveIds = picked
-    .sort((a, b) => b.order - a.order)
-    .map(post => post.id);
-  state.recentLovePage = 0;
+  state.recentLoveIds = picked.sort((a, b) => b.order - a.order).map(post => post.id);
+  state.recentLoveExpanded = false;
 }
 
 function renderHome() {
   const byId = new Map(visiblePosts().map(post => [post.id, post]));
   const list = state.recentLoveIds.map(id => byId.get(id)).filter(Boolean);
-  const pageCount = Math.ceil(list.length / RECENT_LOVE_PAGE_SIZE);
-  if (state.recentLovePage >= pageCount) state.recentLovePage = 0;
-  const pageStart = state.recentLovePage * RECENT_LOVE_PAGE_SIZE;
-  renderPostList('home', list.slice(pageStart, pageStart + RECENT_LOVE_PAGE_SIZE), { compact: true, emptyText: '최근 3일 안에 올라온 글이 없습니다.' });
-  renderRecentLoveMoreButton(pageCount);
+  renderPostList('home', state.recentLoveExpanded ? list : list.slice(0, RECENT_LOVE_COLLAPSED_COUNT), { compact: true, emptyText: '최근 3일 안에 올라온 글이 없습니다.' });
+  renderRecentLoveMoreButton(list.length);
 }
 
-function renderRecentLoveMoreButton(pageCount) {
+function renderRecentLoveMoreButton(count) {
   const button = document.querySelector('.recent-love-more');
   if (!button) return;
-  button.hidden = pageCount < 2;
+  button.hidden = count <= RECENT_LOVE_COLLAPSED_COUNT;
   if (button.hidden) return;
-  const nextPage = (state.recentLovePage + 1) % pageCount;
-  button.innerHTML = `${icons.refresh}<span>${nextPage + 1} / ${pageCount} 보기</span>`;
-  button.setAttribute('aria-label', `요즘 연애 ${nextPage + 1} / ${pageCount} 보기`);
+  button.textContent = state.recentLoveExpanded ? '접기' : '더보기';
+  button.setAttribute('aria-label', `요즘 연애 ${button.textContent}`);
+  button.setAttribute('aria-expanded', String(state.recentLoveExpanded));
 }
 
-function toggleRecentLovePage() {
-  const list = state.recentLoveIds
-    .map(id => getPost(id))
-    .filter(post => post && !post.deleted && !post.hidden && !state.blockedUsers.has(post.userId));
-  const pageCount = Math.ceil(list.length / RECENT_LOVE_PAGE_SIZE);
-  if (pageCount < 2) return;
-  state.recentLovePage = (state.recentLovePage + 1) % pageCount;
+function toggleRecentLove() {
+  state.recentLoveExpanded = !state.recentLoveExpanded;
   renderHome();
 }
 
@@ -590,21 +596,14 @@ function renderCommunity() {
   const list = getCommunityPosts();
   renderPostList('community', list.slice(0, state.communityLimit), { emptyText: '이 카테고리에는 아직 글이 없습니다.' });
   const sentinel = document.querySelector('[data-community-sentinel]');
-  if (state.communityLoading) sentinel.textContent = '게시글을 불러오는 중';
-  else if (state.communityLimit < list.length) sentinel.textContent = '아래로 내려 더 보기';
-  else sentinel.textContent = '';
+  sentinel.textContent = state.communityLimit < list.length ? '아래로 내려 더 보기' : '';
 }
 
 function loadMoreCommunity() {
   const list = getCommunityPosts();
-  if (state.communityLoading || state.communityLimit >= list.length || state.currentScreen !== 'community') return;
-  state.communityLoading = true;
+  if (state.communityLimit >= list.length || state.currentScreen !== 'community') return;
+  state.communityLimit += 4;
   renderCommunity();
-  window.setTimeout(() => {
-    state.communityLimit += 4;
-    state.communityLoading = false;
-    renderCommunity();
-  }, 450);
 }
 
 function renderMagazineRail() {
@@ -854,8 +853,7 @@ function renderTopbarTitle(screenName) {
 
 function syncTopbarScrollState(screen = document.querySelector('.screen.active')) {
   const topbar = document.querySelector('.topbar');
-  const isRootScreen = screen && rootScreens.has(screen.dataset.screen);
-  topbar.classList.toggle('scrolled', Boolean(isRootScreen && screen.scrollTop > 0));
+  topbar.classList.toggle('scrolled', Boolean(screen && screen.scrollTop > 0));
 }
 
 function show(screenName, push = true) {
@@ -1081,6 +1079,7 @@ function performMemberAction(action) {
 function completeLogin(provider) {
   state.loggedIn = true;
   currentUser.provider = provider;
+  persistPrototypeSession(provider);
   closeModal();
   const pending = state.pendingMemberAction;
   state.pendingMemberAction = null;
@@ -1470,6 +1469,7 @@ function showInfo(infoKey) {
 
 function logout() {
   state.loggedIn = false;
+  persistPrototypeSession(null);
   state.pendingMemberAction = null;
   state.stack = ['home'];
   show('home', false);
@@ -1490,6 +1490,7 @@ function completeWithdrawal() {
   const consentChecked = document.getElementById('withdraw-consent').checked;
   if (!reasonChecked || !consentChecked) return;
   state.loggedIn = false;
+  persistPrototypeSession(null);
   state.userStatus = 'withdrawn';
   state.pendingMemberAction = null;
   state.stack = ['withdraw-complete'];
@@ -1613,7 +1614,7 @@ document.addEventListener('click', event => {
     state.stack = ['community'];
     show('community', false);
   }
-  else if (action === 'toggle-recent-love-page') toggleRecentLovePage();
+  else if (action === 'toggle-recent-love') toggleRecentLove();
   else if (action === 'open-post-menu') openPostMenu();
   else if (action === 'share-magazine') shareMagazine();
   else if (action === 'share-current-post') shareCurrentPost();
@@ -1720,6 +1721,7 @@ magazineDetailRail.addEventListener('scroll', () => {
 function initialize() {
   const now = new Date();
   document.getElementById('status-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  restorePrototypeSession();
   selectRecentLove();
   renderCategories();
   renderMagazineRail();

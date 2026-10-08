@@ -122,6 +122,7 @@
 ## Elevation / Shadow
 
 - `--shadow-menu`: 댓글 더보기 메뉴
+- `--shadow-topbar-scroll`: 모든 페이지의 상단 헤더에서 본문 스크롤 시 노출하는 은은한 그림자
 - `--shadow-floating-input`: 상세 화면 하단 댓글 입력창
 - `--shadow-sheet`: OS형 보텀 모달시트
 - 댓글 입력창 placeholder는 프렌들리한 어투의 `댓글로 생각을 남겨주세요`를 사용한다.
